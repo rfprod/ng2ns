@@ -50,11 +50,7 @@ app.use((req, res, next) => {
 			req.session.views = (typeof req.session.views === 'undefined') ? 1 : req.session.views + 1;
 			req.session.viewTimestamp = new Date().getTime();
 		}
-		res.sendFile(cwd + '/public/index.html', {
-			headers: {
-				'Views': req.session.views
-			}
-		});
+		res.sendFile(cwd + '/public/index.html');
 	}
 });
 /*
