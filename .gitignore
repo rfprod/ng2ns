@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# environment variables and logs
+*.env
+.*.env
+*.log
+
+# compiled client app
+public/app/*.js
+public/app/*.js.map
+public/app/**/*.js
+public/app/**/*.js.map
+
+# compiled client tests
+test/client/*.js
+test/client/*.js.map
+
+# built client app files
+public/js/*.min.js
+public/css/*.min.css
+public/fonts/*.*
+!public/fonts/*.gitkeep
+
+# sessions storage
+sessions/*.*
+!sessions/*.gitkeep
