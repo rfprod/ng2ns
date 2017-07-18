@@ -23,7 +23,7 @@ app.use(session({
 	secret: 'secretNG2NODESTARTER',
 	store: new FileStore,
 	resave: true,
-	saveUninitialized: true,
+	saveUninitialized: false,
 	cookie: {
 		maxAge: 1000 * 60 * 60 * 24 * 1 // 1 day 
 	}
@@ -46,6 +46,7 @@ app.use((req, res, next) => {
 	} else {
 		if (typeof req.session.viewTimestamp === 'undefined') {
 			req.session.viewTimestamp = new Date().getTime();
+			req.session.views = 1;
 		} else if (new Date().getTime() - req.session.viewTimestamp > 10000) {
 			req.session.views = (typeof req.session.views === 'undefined') ? 1 : req.session.views + 1;
 			req.session.viewTimestamp = new Date().getTime();

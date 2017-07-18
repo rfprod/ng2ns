@@ -35,7 +35,7 @@ module.exports = function(app, fs, SrvInfo, DBmocks) {
 				if (a.y > b.y) { return -1;}
 				return 0;
 			});
-			if (output.length > 25) { output.length = 25; }
+			if (output.length > 10) { output.length = 10; }
 			res.json(output);
 		});
 	});
