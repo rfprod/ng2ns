@@ -30,6 +30,12 @@ module.exports = function(app, fs, SrvInfo, DBmocks) {
 				};
 				output.push(item);
 			}
+			output.sort((a, b) => {
+				if (a.y < b.y) { return 1;}
+				if (a.y > b.y) { return -1;}
+				return 0;
+			});
+			if (output.length > 25) { output.length = 25; }
 			res.json(output);
 		});
 	});
