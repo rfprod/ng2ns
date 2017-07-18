@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"lib": ["es2015", "dom"],
+		"removeComments": false,
+		"noImplicitAny": false,
+		"suppressImplicitAnyIndexErrors": true
+	},
+	"include": [
+		"public/app",
+		"test/client"
+	],
+	"exclude": [
+		".git",
+		"app",
+		"node_modules",
+		"public/bower_components",
+		"public/css",
+		"public/img",
+		"public/js",
+		"test/*.*",
+		"test/server",
+		"test/e2e"
+	]
+}
