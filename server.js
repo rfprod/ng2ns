@@ -44,7 +44,12 @@ app.use((req, res, next) => {
 	if (/(api|css|fonts|img|js)/.test(req.path)) {
 		return next();
 	} else {
-		req.session.views = (typeof req.session.views === 'undefined') ? 1 : req.session.views + 1;
+		if (typeof req.session.viewTimestamp === 'undefined') {
+			req.session.viewTimestamp = new Date().getTime();
+		} else if (new Date().getTime() - req.session.viewTimestamp > 10000) {
+			req.session.views = (typeof req.session.views === 'undefined') ? 1 : req.session.views + 1;
+			req.session.viewTimestamp = new Date().getTime();
+		}
 		res.sendFile(cwd + '/public/index.html', {
 			headers: {
 				'Views': req.session.views
