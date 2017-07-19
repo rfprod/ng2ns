@@ -75,7 +75,8 @@
 		"traceur": "^0.0.111",
 		"tslint": "^5.0.0",
 		"typescript": "^2.4.1",
-		"zone.js": "^0.8.13"
+		"web-animations-js": "^2.2.5",
+		"zone.js": "0.8.4"
 	},
 	"devDependencies": {
 		"chai": "^4.1.0",
