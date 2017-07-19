@@ -76,9 +76,9 @@ describe('DashboardIntroComponent', () => {
 
 		it('should have variables defined', () => {
 			expect(this.component.title).toBeDefined();
-			expect(this.component.title === 'Ng2NodeMongoCore (N2NMC)').toBeTruthy();
+			expect(this.component.title === 'Ng2NodeStarter (Ng2NS)').toBeTruthy();
 			expect(this.component.description).toBeDefined();
-			expect(this.component.description === 'Angular, NodeJS, MongoDB').toBeTruthy();
+			expect(this.component.description === 'Angular, NodeJS').toBeTruthy();
 			expect(this.component.host).toBeDefined();
 			expect(this.component.host).toEqual(window.location.host);
 			expect(this.component.wsUrl).toEqual('ws://'+this.component.host+'/api/app-diag/dynamic');
