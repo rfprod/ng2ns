@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 	*/
 	// console.log('req.path:', req.path);
 	// console.log('SESSION', req.session);
-	if (/(api|css|fonts|img|js)/.test(req.path)) {
+	if (/(api|css|fonts|img|js|node_modules)/.test(req.path)) {
 		return next();
 	} else {
 		if (typeof req.session.viewTimestamp === 'undefined') {
