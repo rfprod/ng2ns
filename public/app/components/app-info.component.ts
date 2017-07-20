@@ -23,12 +23,7 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 			title: 'Node.js - an open-source, cross-platform runtime environment for developing server-side Web applications.',
 			link: 'https://en.wikipedia.org/wiki/Node.js',
 			img: '/public/img/Node.js_logo.svg',
-		},
-		{
-			title: 'MongoDB - a free and open-source cross-platform document-oriented database.',
-			link: 'https://en.wikipedia.org/wiki/MongoDB',
-			img: '/public/img/MongoDB_logo.svg',
-		},
+		}
 	];
 
 	public ngOnInit() {
