@@ -10,6 +10,13 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 
+/*
+*	Some material components rely on hammerjs
+*	CustomMaterialModule loads exact material modules
+*/
+import '../../node_modules/hammerjs/hammer.js';
+import { CustomMaterialModule } from './custom-material.module';
+
 import { AppComponent } from './app.component';
 import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService } from './translate/index';
 import { AppNavComponent } from './components/app-nav.component';
@@ -28,7 +35,7 @@ declare let $: JQueryStatic;
 
 @NgModule({
 	declarations: [ AppComponent, TranslatePipe, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent, DashboardDetailsComponent, nvD3 ],
-	imports 		: [ BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule.forRoot(APP_ROUTES) ],
+	imports 		: [ BrowserModule, BrowserAnimationsModule, CustomMaterialModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule.forRoot(APP_ROUTES) ],
 	providers 	: [ {provide: LocationStrategy, useClass: PathLocationStrategy}, TRANSLATION_PROVIDERS, TranslateService, EventEmitterService, UserService, UsersListService, ServerStaticDataService, PublicDataService ],
 	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],
 	bootstrap 	: [ AppComponent ],
