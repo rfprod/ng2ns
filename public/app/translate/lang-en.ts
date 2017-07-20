@@ -5,6 +5,7 @@ export const LANG_EN_TRANSLATIONS = {
 	help: 'Help',
 	intro: 'Intro',
 	title: 'Application core',
+	language: 'Language',
 	diag: 'Platform Diagnostics',
 	login: 'Log in',
 	login_instructions: 'Provide an email and a password, please',

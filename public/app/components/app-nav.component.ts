@@ -14,15 +14,17 @@ export class AppNavComponent implements OnInit, OnDestroy {
 
 	public supportedLanguages: any[];
 
-	public switchNavButtons(event, isClick: boolean) {
+	public switchNavButtons(event, path, isClick: boolean) {
 		let route, index;
 		console.log('switchNavButtons:', event);
 		if (isClick) {
 			if (event.target.localName === 'i') {
 				route = event.target.parentElement.href;
-			} else { route = event.target.href; }
-		} else { route = event.route; }
-		const path = route.substring(route.lastIndexOf('/') + 1, route.length);
+			} else { route = (event.target.href) ? event.target.href : 'help'; }
+		} else {
+			route = event.route;
+		}
+		path = (!path) ? route.substring(route.lastIndexOf('/') + 1, route.length) : path;
 		console.log(' >> PATH', path);
 		if (path === 'intro') {
 			index = '1';

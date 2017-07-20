@@ -1,14 +1,14 @@
 <div id="flex-nav">
-	<a (click)="switchNavButtons($event, true);" class="flex-nav-item" [ngClass]="{selected: navButtonsState[0], inactive: !navButtonsState[0]}">
+	<a (click)="switchNavButtons($event, 'help', true);" class="flex-nav-item" [ngClass]="{selected: navButtonsState[0], inactive: !navButtonsState[0]}">
 		<i class="fa fa-question-circle-o"></i> {{ 'help' | translate }}
 	</a>
-	<a [routerLink]="['intro']" (click)="switchNavButtons($event, true)" class="flex-nav-item" [ngClass]="{selected: navButtonsState[1], inactive: !navButtonsState[1]}">
+	<a [routerLink]="['intro']" (click)="switchNavButtons($event, 'intro', true)" class="flex-nav-item" [ngClass]="{selected: navButtonsState[1], inactive: !navButtonsState[1]}">
 		<i class="fa fa-tachometer"></i> {{ 'intro' | translate }}
 	</a>
-	<a [routerLink]="['login']" (click)="switchNavButtons($event, true)" class="flex-nav-item" [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}">
+	<a [routerLink]="['login']" (click)="switchNavButtons($event, 'login', true)" class="flex-nav-item" [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}">
 		<i class="fa fa-user"></i> {{ 'login' | translate }}
 	</a>
-	<a [routerLink]="['data']" (click)="switchNavButtons($event, true)" class="flex-nav-item" [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}">
+	<a [routerLink]="['data']" (click)="switchNavButtons($event, 'data', true)" class="flex-nav-item" [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}">
 		<i class="fa fa-database"></i> {{ 'data' | translate }}
 	</a>
 	<span class="btn-group">
@@ -16,5 +16,27 @@
 	</span>
 </div>
 <md-toolbar>
-	<span>angular material toolbar</span>
+	<span>{{ 'title' | translate}}</span>
+	<span class="spacer"></span>
+	<span class="md-toolbar-tools" flex layout-padding>
+		<button (click)="switchNavButtons($event, 'help', true);" md-button [ngClass]="{selected: navButtonsState[0], inactive: !navButtonsState[0]}">
+			<i class="fa fa-question-circle-o"></i> {{ 'help' | translate }}
+		</button>
+		<button [routerLink]="['intro']" (click)="switchNavButtons($event, 'intro', true)" md-button [ngClass]="{selected: navButtonsState[1], inactive: !navButtonsState[1]}">
+			<i class="fa fa-tachometer"></i> {{ 'intro' | translate }}
+		</button>
+		<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login', true)" md-button [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}">
+			<i class="fa fa-user"></i> {{ 'login' | translate }}
+		</button>
+		<button [routerLink]="['data']" (click)="switchNavButtons($event, 'data', true)" md-button [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}">
+			<i class="fa fa-database"></i> {{ 'data' | translate }}
+		</button>
+		<button md-button [mdMenuTriggerFor]="languageMenu">
+			<i class="fa fa-globe"></i> {{ 'language' | translate }}
+		</button>
+		<md-menu #languageMenu="mdMenu">
+			<button md-menu-item *ngFor="let lang of supportedLanguages" (click)="selectLanguage(lang.key)">{{lang.name}}</button>
+		</md-menu>
+	</span>
+
 </md-toolbar>
