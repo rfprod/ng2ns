@@ -62,7 +62,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
 			console.log('/app-nav consuming event:', message);
 			if (typeof message.route !== 'undefined') {
 				console.log('route is defined');
-				this.switchNavButtons(message, false);
+				this.switchNavButtons(message, null, false);
 				this.subscription.unsubscribe();
 			}
 		});
