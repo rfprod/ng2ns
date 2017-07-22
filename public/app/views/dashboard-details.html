@@ -16,7 +16,7 @@
 </div>
 <div id="dashboard-data" class="padding">
 	<h3>Users</h3>
-	<span fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" class="flex-grid">
+	<span fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutWrap class="flex-grid">
 		<span *ngFor="let user of usersList; let j = index" (mouseenter)="showDetails($event)" (mouseleave)="hideDetails($event)" fxFlex fxFlex.xs="1" fxLayout="row" [ngClass]="{ hidden: hideElement(j)}" class="flex-grid-item">
 			<span fxFlex="33" fxLayout="column" class="flex-list">
 				<div>id: {{user.id}}</div>

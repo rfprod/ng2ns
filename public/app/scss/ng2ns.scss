@@ -15,10 +15,12 @@ $red: #ff0000;
 // other vals
 $boxPadding: 0.5em;
 html {
+	min-height: 100vh;
 	height: auto!important;
 	width: 100%;
 }
 body {
+	min-height: 100vh;
 	height: auto!important;
 	width: 100%;
 	color: $black;
@@ -149,6 +151,7 @@ body {
 	}
 
 	root {
+		min-height: 100vh;
 		height: 100%;
 		width: 100%;
 		display: flex;
