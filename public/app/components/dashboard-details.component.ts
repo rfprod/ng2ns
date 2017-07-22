@@ -37,26 +37,34 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 /*
 *	search
 */
-	private searchValue: string;
+	public searchValue: string;
 	get searchQuery() {
 		return this.searchValue;
 	}
 	set searchQuery(val) {
+		this.searchValue = val;
 		this.emitSearchValueChangeEvent(val);
 	}
 	private emitSearchValueChangeEvent(val) {
 		console.log('searchValue changed to:', val);
 		this.emitter.emitEvent({search: val});
 	}
+	private hideElement(index) {
+		console.log(' > hideElement:', index, this.usersList[index].firstName);
+		const result = this.usersList[index].firstName.indexOf(this.searchValue) === -1;
+		console.log('result', result);
+		return (this.searchValue) ? result : false;
+	}
 
 /*
 *	sort
 */
-	public orderProp = '';
+	public orderProp: string = '';
 	get sortByCriterion() {
 		return this.orderProp;
 	}
 	set sortByCriterion(val) {
+		this.orderProp = val;
 		this.emitOrderPropChangeEvent(val);
 	}
 	private emitOrderPropChangeEvent(val) {
@@ -85,14 +93,11 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 			console.log('/data consuming event:', JSON.stringify(message));
 			if (message.search || message.search === '') {
 				console.log('searching:', message.search);
-				const domElsUsername = this.el.nativeElement.querySelector('ul.listing').querySelectorAll('#full-name');
-				for (const usernameObj of domElsUsername) {
-					if (usernameObj.innerHTML.toLowerCase().indexOf(message.search.toLowerCase()) !== -1) {
-						usernameObj.parentElement.parentElement.style.display = 'block';
-					} else {
-						usernameObj.parentElement.parentElement.style.display = 'none';
-					}
-				}
+				/*
+				*	TODO
+				*	actually this message emission is not needed
+				*	if only one controller that displays data to be sorted is visible at the same time
+				*/
 			}
 			if (message.sort) {
 				/*

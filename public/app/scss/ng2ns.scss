@@ -277,6 +277,9 @@ body {
 				font-size: 0.85em;
 				.flex-grid-item {
 					background: $info;
+					&.hidden {
+						display: none;
+					}
 					.flex-list {
 						padding: 0.5em;
 					}
