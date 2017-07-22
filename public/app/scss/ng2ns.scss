@@ -249,11 +249,6 @@ body {
 		align-self: stretch;
 		display: flex;
 		flex-direction: column;
-		.input-label {
-			&:hover{
-				cursor: default;
-			}
-		}
 		#filters {
 			flex: 0 1 auto;
 			z-index: 2;
@@ -266,6 +261,11 @@ body {
 				flex: 1;
 				text-align: center;
 				min-width: 150px;
+			}
+			md-icon {
+				&:hover {
+					cursor: default;
+				}
 			}
 		}
 		#dashboard-data {
