@@ -218,9 +218,23 @@ body {
 		flex: 1 1 auto;
 		align-self: stretch;
 		#login-form {
-			margin-left: 25vw;
-			margin-right: 25vw;
-			button {
+			@media(max-width: 767px) {
+				margin-left: 10vw;
+				margin-right: 10vw;
+			}
+			@media(min-width: 768px) {
+				margin-left: 25vw;
+				margin-right: 25vw;
+			}
+			@media(min-width: 992px) {
+				margin-left: 25vw;
+				margin-right: 25vw;
+			}
+			@media(mix-width: 1200px) {
+				margin-left: 25vw;
+				margin-right: 25vw;
+			}
+			md-input-container, button {
 				width: 100%;
 			}
 		}
