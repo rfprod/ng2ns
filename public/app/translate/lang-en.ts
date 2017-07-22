@@ -13,5 +13,7 @@ export const LANG_EN_TRANSLATIONS = {
 	password: 'Password',
 	forget_my_address: 'Forget my address',
 	submit: 'Submit',
-	data: 'Data'
+	data: 'Data',
+	name: 'Name',
+	sort_by: 'Sort by'
 };

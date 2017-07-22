@@ -14,4 +14,6 @@ export const LANG_RU_TRANSLATIONS = {
 	forget_my_address: 'Забудь мой адрес',
 	submit: 'Отправить',
 	data: 'Данные',
+	name: 'Имя',
+	sort_by: 'Сортировать по'
 };

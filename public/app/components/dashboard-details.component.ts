@@ -2,8 +2,6 @@ import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { UsersListService } from '../services/users-list.service';
 
-declare var $: JQueryStatic;
-
 @Component({
 	selector: 'dashboard-details',
 	templateUrl: '/public/app/views/dashboard-details.html',
@@ -17,9 +15,6 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 	private subscription: any;
-	private layout: any = {
-		gridColumns: 2
-	};
 	public usersList: any[] = [];
 	public errorMessage: string;
 	private getUsersList(callback) {
@@ -57,7 +52,7 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 /*
 *	sort
 */
-	public orderProp = 'role';
+	public orderProp = '';
 	get sortByCriterion() {
 		return this.orderProp;
 	}

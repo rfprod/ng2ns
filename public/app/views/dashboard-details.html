@@ -1,13 +1,17 @@
 <div id="filters">
 	<span class="flex-item">
-		<span class="input-label"><i class="fa fa-search" aria-hidden="true"></i> Search users:</span> <input [(ngModel)]="searchQuery">
+		<md-input-container>
+			<input mdInput type="text" name="name" [(ngModel)]="searchQuery" placeholder="{{ 'name' | translate }}" />
+			<md-icon mdSuffix class="material-icons">search</md-icon>
+		</md-input-container>
 	</span>
 	<span class="flex-item">
-		<span class="input-label"><i class="fa fa-sort" aria-hidden="true"></i> Sort users by:</span>
-		<select [(ngModel)]="sortByCriterion">
-			<option value="role">Role</option>
-			<option value="registered">Registered</option>
-		</select>
+		<md-select [(ngModel)]="sortByCriterion" floatPlaceholder="auto" placeholder="{{ 'sort_by' | translate }}">
+			<md-option value=""></md-option>
+			<md-option value="role">Role</md-option>
+			<md-option value="registered">Registered</md-option>
+		</md-select>
+		<md-icon mdSuffix class="material-icons">sort</md-icon>
 	</span>
 </div>
 <div id="dashboard-data" class="padding">

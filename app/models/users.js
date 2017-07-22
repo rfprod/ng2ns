@@ -22,8 +22,8 @@ module.exports = {
 					id: i,
 					email: sampleObj.email.replace(/username/, 'username_' + i),
 					role: (i % 2 === 0) ? 'user' : 'admin',
-					registered: new Date().getTime() - 10000000,
-					lastLogin: new Date().getTime() - 500000
+					registered: new Date().getTime() - 100000000,
+					lastLogin: new Date().getTime() - 5000000
 				};
 				for (const key of sampleObjectKeys) {
 					if (!newObject.hasOwnProperty(key) && key !== 'registered' && key !== 'lastLogin') {
