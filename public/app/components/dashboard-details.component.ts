@@ -17,6 +17,9 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 	private subscription: any;
+	private layout: any = {
+		gridColumns: 2
+	};
 	public usersList: any[] = [];
 	public errorMessage: string;
 	private getUsersList(callback) {
@@ -30,16 +33,10 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		);
 	}
 	private showDetails(event) {
-		console.log('mouse enter');
-		const domEl = event.target.querySelector('.details');
-		console.log('domEl:', domEl);
-		domEl.style.display = 'flex';
+		console.log('mouse enter', event);
 	}
 	private hideDetails(event) {
-		console.log('mouse leave');
-		const domEl = event.target.querySelector('.details');
-		console.log('domEl:', domEl);
-		domEl.style.display = 'none';
+		console.log('mouse leave', event);
 	}
 
 /*

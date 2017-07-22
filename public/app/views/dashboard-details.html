@@ -10,22 +10,23 @@
 		</select>
 	</span>
 </div>
-<div class="component-container">
-	<div id="dashboard-data">
-		<h3>Users</h3>
-		<ul class="listing">
-			<li *ngFor="let user of usersList; let j = index" (mouseenter)="showDetails($event)" (mouseleave)="hideDetails($event)">
-				<h3>{{user.id}} <span id="full-name">{{user.firstName}} {{user.lastName}}</span> <span class="badge">role {{user.role}}</span></h3>
-				<span class="item">
-					<p>city: {{user.city}}<br>
-						country: {{user.country}}</p>
-					<span class="details">
-						email: {{user.email}}<br>
-						registered: {{user.registered | date}}<br>
-						last login: {{user.lastLogin | date}}
-					</span>
-				</span>
-			</li>
-		</ul>
-	</div>
+<div id="dashboard-data" class="padding">
+	<h3>Users</h3>
+	<span fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" class="flex-grid">
+		<span *ngFor="let user of usersList; let j = index" (mouseenter)="showDetails($event)" (mouseleave)="hideDetails($event)" fxFlex fxFlex.xs="1" fxLayout="row" class="flex-grid-item">
+			<span fxFlex="33" fxLayout="column" class="flex-list">
+				<div>id: {{user.id}}</div>
+				<div>{{user.firstName}}</div>
+				<div>{{user.lastName}}</div>
+				<div>role: {{user.role}}</div>
+			</span>
+			<span fxFlex fxLayout="column" class="flex-list">
+				<div>{{user.email}}</div>
+				<div>city: {{user.city}}</div>
+				<div>country: {{user.country}}</div>
+				<div>registered: {{user.registered | date}}</div>
+				<div>last login: {{user.lastLogin | date}}</div>
+			</span>
+		</span>
+	</span>
 </div>
