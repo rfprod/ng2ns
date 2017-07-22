@@ -15,11 +15,11 @@ $red: #ff0000;
 // other vals
 $boxPadding: 0.5em;
 html {
-	height: 100%;
+	height: auto!important;
 	width: 100%;
 }
 body {
-	height: 100%;
+	height: auto!important;
 	width: 100%;
 	color: $black;
 	font-family: 'Play', sans-serif;
@@ -138,9 +138,10 @@ body {
 		justify-content: center;
 		width: 100vw;
 		height: 100vh;
-		color: #ffffff;
+		color: $white;
 		text-align: center;
 		z-index: 1000;
+
 		img {
 			width: 20vh;
 			height: auto!important;
@@ -167,6 +168,7 @@ body {
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+
 		.flex-item {
 			flex: 1;
 			text-align: center;
@@ -174,6 +176,7 @@ body {
 			&:hover{
 				background: $lightgrey;
 			}
+
 			img {
 				min-height: 5vh;
 				height: 10vh;
@@ -187,6 +190,7 @@ body {
 	dashboard-intro {
 		flex: 1 1 auto;
 		align-self: stretch;
+
 		#modal {
 			z-index: 10;
 			height: 100vh;
@@ -198,6 +202,7 @@ body {
 			left: 0;
 			background-color: rgba(0,0,0, 0.9);
 			transition: 0.5s;
+
 			.close {
 				float: right;
 				font-size: 5vh;
@@ -212,6 +217,7 @@ body {
 				background: transparent;
 				border: 0;
 			}
+
 			table {
 				font-size: 0.75em;
 			}
@@ -221,6 +227,7 @@ body {
 	dashboard-login {
 		flex: 1 1 auto;
 		align-self: stretch;
+
 		#login-form {
 			@media(max-width: 767px) {
 				margin-left: 10vw;
@@ -249,37 +256,43 @@ body {
 		align-self: stretch;
 		display: flex;
 		flex-direction: column;
+
 		#filters {
 			flex: 0 1 auto;
-			z-index: 2;
 			width: 100%;
 			padding: $boxPadding;
 			display: flex;
 			align-items: center;
 			flex-wrap: wrap;
+
 			.flex-item {
 				flex: 1;
 				text-align: center;
 				min-width: 150px;
 			}
+
 			md-icon {
 				&:hover {
 					cursor: default;
 				}
 			}
 		}
+
 		#dashboard-data {
 			flex: 1 1 auto;
 			align-self: stretch;
 			min-height: 1em;
+
 			.flex-grid {
 				min-height: 100px;
 				font-size: 0.85em;
+
 				.flex-grid-item {
 					background: $info;
 					&.hidden {
 						display: none;
 					}
+
 					.flex-list {
 						padding: 0.5em;
 					}
