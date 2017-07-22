@@ -11,7 +11,7 @@ declare let $: JQueryStatic;
 	template: `
 		<app-nav></app-nav>
 		<router-outlet></router-outlet>
-		<app-info></app-info>
+		<app-info [hidden]="!showAppInfo"></app-info>
 		<span id="spinner" *ngIf="showSpinner"><img src="../public/img/gears.svg"/></span>
 	`,
 	animations: [
@@ -24,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		eventEmitter: undefined,
 		router: undefined
 	};
+	private showAppInfo: boolean = true;
 	private showSpinner: boolean = false;
 
 	public supportedLanguages: any[];
@@ -61,13 +62,23 @@ export class AppComponent implements OnInit, OnDestroy {
 		// listen event emitter control messages
 		this.subscriptions.eventEmitter = this.emitter.getEmitter().subscribe((message) => {
 			console.log('app consuming event:', message);
-			if (message.sys === 'start spinner') { // spinner control message
-				console.log('starting spinner');
-				this.startSpinner();
-			} else if (message.sys === 'stop spinner') { // spinner control message
-				console.log('stopping spinner');
-				this.stopSpinner();
-			} else if (message.lang) { // switch translation message
+			if (message.appInfo) {
+				if (message.appInfo === 'hide') {
+					this.showAppInfo = false;
+				} else if (message.appInfo === 'show') {
+					this.showAppInfo = true;
+				}
+			}
+			if (message.sys) {
+				if (message.sys === 'start spinner') { // spinner control message
+					console.log('starting spinner');
+					this.startSpinner();
+				} else if (message.sys === 'stop spinner') { // spinner control message
+					console.log('stopping spinner');
+					this.stopSpinner();
+				}
+			}
+			if (message.lang) { // switch translation message
 				console.log('switch language', message.lang);
 				if (this.supportedLanguages.filter((item) => item.key === message.lang).length) {
 					// switch language only if it is present in supportedLanguages array

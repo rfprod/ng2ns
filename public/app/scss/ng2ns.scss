@@ -4,7 +4,13 @@ $grey: #d0d0d0;
 $lightgrey: #f0f0f0;
 $red: #ff0000;
 $boxPadding: 0.5em;
+html {
+	height: 100%;
+	width: 100%;
+}
 body {
+	height: 100%;
+	width: 100%;
 	color: $black;
 	font-family: 'Play', sans-serif;
 	font-size: 1.75em;
@@ -31,6 +37,12 @@ body {
 
 	h3:hover, h4:hover, p:hover {cursor: default;}
 
+	.component-container {
+		width: 100%;
+		padding-left: $boxPadding;
+		padding-right: $boxPadding;
+	}
+
 	#spinner {
 		display: flex;
 		position: fixed;
@@ -56,25 +68,21 @@ body {
 		}
 	}
 
-	#flex-nav {
+	root {
+		height: 100%;
+		width: 100%;
 		display: flex;
-		align-items: center;
-		.flex-nav-item {
-			flex: 1;
-			text-align: center;
-			text-decoration: none;
-			&:hover{
-				background: $lightgrey;
-			}
-		}
-		.router-link-active {
-			background-color: $lightgrey;
-		}
+		flex-direction: column;
+	}
+
+	app-nav {
+		width: 100vw;
+		height: auto!important;
+		flex: 0 1 auto;
 	}
 
 	app-info {
-		position:fixed;
-		bottom:0;
+		flex: 0 1 auto;
 		height: 10vh;
 		width: 100%;
 		display: flex;
@@ -98,6 +106,8 @@ body {
 	}
 
 	dashboard-intro {
+		flex: 1 1 auto;
+		align-self: stretch;
 		#modal {
 			z-index: 10;
 			height: 100vh;
@@ -111,8 +121,18 @@ body {
 			transition: 0.5s;
 
 			.close {
-				color: #ffffff;
+				float: right;
 				font-size: 5vh;
+				font-weight: 700;
+				line-height: 1;
+				color: $lightgrey;
+				text-shadow: 0 1px 0 $white;
+				opacity: 0.2;
+				-webkit-appearance: none;
+				padding: 0;
+				cursor: pointer;
+				background: transparent;
+				border: 0;
 			}
 
 			table {
@@ -124,7 +144,14 @@ body {
 		}
 	}
 
+	dashboard-login {
+		flex: 1 1 auto;
+		align-self: stretch;
+	}
+
 	dashboard-details {
+		flex: 1 1 auto;
+		align-self: stretch;
 		.input-label {
 			&:hover{
 				cursor: default;
