@@ -1,18 +1,18 @@
+<div id="filters">
+	<span class="flex-item">
+		<span class="input-label"><i class="fa fa-search" aria-hidden="true"></i> Search users:</span> <input [(ngModel)]="searchQuery">
+	</span>
+	<span class="flex-item">
+		<span class="input-label"><i class="fa fa-sort" aria-hidden="true"></i> Sort users by:</span>
+		<select [(ngModel)]="sortByCriterion">
+			<option value="role">Role</option>
+			<option value="registered">Registered</option>
+		</select>
+	</span>
+</div>
 <div class="component-container">
-	<div id="filters">
-		<span class="flex-item">
-			<span class="input-label"><i class="fa fa-search" aria-hidden="true"></i> Search users:</span> <input [(ngModel)]="searchQuery">
-		</span>
-		<span class="flex-item">
-			<span class="input-label"><i class="fa fa-sort" aria-hidden="true"></i> Sort users by:</span>
-			<select [(ngModel)]="sortByCriterion">
-				<option value="role">Role</option>
-				<option value="registered">Registered</option>
-			</select>
-		</span>
-	</div>
 	<div id="dashboard-data">
-		<legend>Users</legend>
+		<h3>Users</h3>
 		<ul class="listing">
 			<li *ngFor="let user of usersList; let j = index" (mouseenter)="showDetails($event)" (mouseleave)="hideDetails($event)">
 				<h3>{{user.id}} <span id="full-name">{{user.firstName}} {{user.lastName}}</span> <span class="badge">role {{user.role}}</span></h3>

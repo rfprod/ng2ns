@@ -1,8 +1,18 @@
+// bootstrap colors
+$primary: #007ab7;
+$success: #5cb85c;
+$info: #5bc0de;
+$warning: #f0ad4e;
+$danger: #d9534f;
+// colors
 $black: #000000;
 $white: #ffffff;
+$darkgrey: #505050;
 $grey: #d0d0d0;
 $lightgrey: #f0f0f0;
+$extralightgrey: #f2f2f2;
 $red: #ff0000;
+// other vals
 $boxPadding: 0.5em;
 html {
 	height: 100%;
@@ -15,8 +25,24 @@ body {
 	font-family: 'Play', sans-serif;
 	font-size: 1.75em;
 	overflow-x: hidden;
-	textarea {resize: vertical;}
 
+/*
+*	colouring
+*/
+	.primary { color: $primary; }
+	.success { color: $success; }
+	.info { color: $info; }
+	.warning { color: $warning; }
+	.danger { color: $danger; }
+	.primary-bg { background: $primary; }
+	.success-bg { background: $success; }
+	.info-bg { background: $info; }
+	.warning-bg { background: $warning; }
+	.danger-bg { background: $danger; }
+
+/*
+*	DOM elements general
+*/
 	a {
 		text-decoration: none;
 		&:hover, &:focus {
@@ -35,12 +61,70 @@ body {
 		flex: 1 1 auto;
 	}
 
-	h3:hover, h4:hover, p:hover {cursor: default;}
+	h1:hover, h2:hover, h3:hover, h4:hover, p:hover { cursor: default; }
+	h1, h2, h3, h4 {
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
 
+	form {
+		legend {
+			color: $darkgrey;
+			&:hover {
+				cursor: default;
+			}
+		}
+		textarea {
+			resize: vertical;
+		}
+	}
+
+	table {
+		border-collapse: collapse;
+		background: transparent;
+		width: 100%;
+		line-height: 1.8em;
+		border-color: transparent;
+		thead {
+			display: table-row-group;
+			vertical-align: middle;
+		}
+		tbody {
+			display: table-row-group;
+			vertical-align: middle;
+			border-color: transparent;
+		}
+		tr {
+			display: table-row;
+			border: 1px solid;
+			border-left: 0;
+			border-right: 0;
+			border-top: 0;
+		}
+		td {
+			display: table-cell;
+			font-size: 1.1em;
+			padding: 0.5em;
+			&:hover {
+				cursor: default;
+			}
+		}
+	}
+
+/*
+*	layout
+*/
 	.component-container {
 		width: 100%;
 		padding-left: $boxPadding;
 		padding-right: $boxPadding;
+	}
+
+	.full-width {
+		width: 100%;
+	}
+	.pull-right {
+		float: right!important;
 	}
 
 	#spinner {
@@ -53,18 +137,9 @@ body {
 		color: #ffffff;
 		text-align: center;
 		z-index: 1000;
-
 		img {
 			width: 20vh;
 			height: auto!important;
-		}
-	}
-
-	#login-form {
-		margin-left: 25vw;
-		margin-right: 25vw;
-		button {
-			width: 100%;
 		}
 	}
 
@@ -119,7 +194,6 @@ body {
 			left: 0;
 			background-color: rgba(0,0,0, 0.9);
 			transition: 0.5s;
-
 			.close {
 				float: right;
 				font-size: 5vh;
@@ -134,12 +208,8 @@ body {
 				background: transparent;
 				border: 0;
 			}
-
 			table {
 				font-size: 0.75em;
-				td:hover {
-					cursor: default;
-				}
 			}
 		}
 	}
@@ -147,6 +217,13 @@ body {
 	dashboard-login {
 		flex: 1 1 auto;
 		align-self: stretch;
+		#login-form {
+			margin-left: 25vw;
+			margin-right: 25vw;
+			button {
+				width: 100%;
+			}
+		}
 	}
 
 	dashboard-details {
