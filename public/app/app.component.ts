@@ -12,7 +12,9 @@ declare let $: JQueryStatic;
 		<app-nav></app-nav>
 		<router-outlet></router-outlet>
 		<app-info [hidden]="!showAppInfo"></app-info>
-		<span id="spinner" *ngIf="showSpinner"><img src="../public/img/gears.svg"/></span>
+		<span id="spinner" *ngIf="showSpinner">
+			<md-spinner mode="indeterminate"></md-spinner>
+		</span>
 	`,
 	animations: [
 		trigger('empty', [])
