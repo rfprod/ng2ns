@@ -26,6 +26,7 @@ import { AppInfoComponent } from './components/app-info.component';
 import { DashboardIntroComponent } from './components/dashboard-intro.component';
 import { DashboardLoginComponent } from './components/dashboard-login.component';
 import { DashboardDetailsComponent } from './components/dashboard-details.component';
+import { CustomDeferredService } from './services/custom-deferred.service';
 import { EventEmitterService } from './services/event-emitter.service';
 import { UsersListService } from './services/users-list.service';
 import { UserService } from './services/user.service';
@@ -38,7 +39,7 @@ declare let $: JQueryStatic;
 @NgModule({
 	declarations: [ AppComponent, TranslatePipe, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent, DashboardDetailsComponent, nvD3 ],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule.forRoot(APP_ROUTES) ],
-	providers 	: [ {provide: LocationStrategy, useClass: PathLocationStrategy}, TRANSLATION_PROVIDERS, TranslateService, EventEmitterService, UserService, UsersListService, ServerStaticDataService, PublicDataService ],
+	providers 	: [ {provide: LocationStrategy, useClass: PathLocationStrategy}, TRANSLATION_PROVIDERS, TranslateService, CustomDeferredService, EventEmitterService, UserService, UsersListService, ServerStaticDataService, PublicDataService ],
 	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],
 	bootstrap 	: [ AppComponent ],
 })

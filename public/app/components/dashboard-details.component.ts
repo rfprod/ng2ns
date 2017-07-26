@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
+import { CustomDeferredService } from '../services/custom-deferred.service';
 import { UsersListService } from '../services/users-list.service';
 
 @Component({
@@ -17,15 +18,28 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 	private subscription: any;
 	public usersList: any[] = [];
 	public errorMessage: string;
-	private getUsersList(callback) {
+	private getUsersList(callback?: any): Promise<boolean> {
+		/*
+		*	this function can be provided a callback function to be executed after data is retrieved
+		*	or
+		*	callback can be chained with .then()
+		*/
+		const def = new CustomDeferredService<boolean>();
 		this.usersListService.getUsersList().subscribe(
-			(data) => this.usersList = data,
-			(error) => this.errorMessage = error as any,
+			(data) => {
+				this.usersList = data;
+				def.resolve(true);
+			},
+			(error) => {
+				this.errorMessage = error as any;
+				def.reject(false);
+			},
 			() => {
 				console.log('getUserList done');
 				callback(this.usersList);
 			}
 		);
+		return def.promise;
 	}
 	private showDetails(event) {
 		console.log('mouse enter', event);
@@ -118,8 +132,21 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 				}
 			}
 		});
+
+		/*
+		*	functions sequence with callbacks
+		*
 		this.getUsersList((userlList) => {
 			console.log('users list:', userlList);
+			this.emitSpinnerStopEvent();
+		});
+		*/
+
+		/*
+		*	functions chaining with .then()
+		*/
+		this.getUsersList().then(() => {
+			console.log('all models updated');
 			this.emitSpinnerStopEvent();
 		});
 	}
