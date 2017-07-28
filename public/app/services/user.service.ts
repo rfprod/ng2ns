@@ -26,6 +26,10 @@ export class UserService {
 		return this.model;
 	}
 
+	public isLoggedIn(): string {
+		return this.model.token;
+	}
+
 	public SaveUser(newValues): void {
 		console.log('SaveUser', newValues);
 		if (newValues.hasOwnProperty('email')) {

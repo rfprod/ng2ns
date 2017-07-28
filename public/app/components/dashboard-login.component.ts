@@ -5,8 +5,6 @@ import { UserService } from '../services/user.service';
 import { ServerStaticDataService } from '../services/server-static-data.service';
 import { PublicDataService } from '../services/public-data.service';
 
-declare let $: JQueryStatic;
-
 @Component({
 	selector: 'dashboard-login',
 	templateUrl: '/public/app/views/dashboard-login.html',
@@ -41,7 +39,7 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		console.log('SUBMIT', this.loginForm);
 		if (this.loginForm.valid) {
 			this.errorMessage = null;
-			this.userService.SaveUser({ email: this.loginForm.controls.email.value });
+			this.userService.SaveUser({ email: this.loginForm.controls.email.value, token: 'mockedToken' });
 		} else {
 			this.errorMessage = 'Invalid form input';
 		}
@@ -60,7 +58,6 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		console.log('ngOnInit: DashboardLoginComponent initialized');
 		this.emitSpinnerStartEvent();
-		this.emitter.emitEvent({route: '/login'});
 		this.emitter.emitEvent({appInfo: 'hide'});
 		this.emitSpinnerStopEvent();
 	}

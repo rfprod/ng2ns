@@ -99,16 +99,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
 		// set default language
 		this.selectLanguage('en');
-
+		/*
 		this.subscriptions.router = this.router.events.subscribe((event) => {
 			console.log(' > ROUTER EVENT:', event);
 		});
+		*/
 	}
 
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: AppComponent destroyed');
 		this.subscriptions.eventEmitter.unsubscribe();
-		this.subscriptions.router.unsubscribe();
+		// this.subscriptions.router.unsubscribe();
 	}
 
 }

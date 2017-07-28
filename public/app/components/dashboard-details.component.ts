@@ -36,7 +36,7 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 			},
 			() => {
 				console.log('getUserList done');
-				callback(this.usersList);
+				if (callback) { callback(this.usersList); }
 			}
 		);
 		return def.promise;
@@ -101,7 +101,6 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		console.log('ngOnInit: DashboardDetailsComponent initialized');
 		this.emitSpinnerStartEvent();
-		this.emitter.emitEvent({route: '/data'});
 		this.emitter.emitEvent({appInfo: 'hide'});
 		this.subscription = this.emitter.getEmitter().subscribe((message) => {
 			console.log('/data consuming event:', JSON.stringify(message));

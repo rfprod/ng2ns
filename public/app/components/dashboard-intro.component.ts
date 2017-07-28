@@ -4,7 +4,6 @@ import { ServerStaticDataService } from '../services/server-static-data.service'
 import { PublicDataService } from '../services/public-data.service';
 
 declare let d3: any;
-declare let $: JQueryStatic;
 
 @Component({
 	selector: 'dashboard-intro',
@@ -117,7 +116,6 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		console.log('ngOnInit: DashboardIntroComponent initialized');
 		this.emitSpinnerStartEvent();
-		this.emitter.emitEvent({route: '/intro'});
 		this.emitter.emitEvent({appInfo: 'show'});
 
 		this.ws.onopen = (evt) => {
