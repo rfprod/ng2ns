@@ -21,7 +21,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	public switchNavButtons(event, path) {
 		let index;
 		console.log('switchNavButtons:', event);
-		const route = event.route || event.url;
+		const route = (event.route) ? event.route : (typeof event.urlAfterRedirects === 'string') ? event.urlAfterRedirects : event.url;
 		path = (!path) ? route.substring(route.lastIndexOf('/') + 1, route.length) : path;
 		console.log(' >> PATH', path);
 		if (path === 'intro') {
