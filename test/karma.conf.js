@@ -69,11 +69,15 @@ module.exports = function(config){
 			'karma-redirect-preprocessor',
 			'karma-chrome-launcher',
 		//    'karma-firefox-launcher',
+			'karma-sourcemap-loader',
+			'karma-coverage',
 			'karma-jasmine'
 		],
 
 		preprocessors: {
-			'public/**/*.html': ['redirect']
+			'public/**/*.html': ['redirect'],
+			'public/app/**/!(*.spec).js': ['coverage'],
+			'public/app/**/*.js': ['sourcemap']
 		},
 
 		redirectPreprocessor: {
@@ -82,7 +86,13 @@ module.exports = function(config){
 			// prependPrefix: ''
 		},
 
-		// reporters: [],
+		reporters: ['progress', 'coverage'],
+		coverageReporter: {
+			dir: 'logs/',
+			reporters: [
+				{ type: 'json', subdir: 'coverage'}
+			]
+		},
 
 		failOnEmptyTestSuite: false, // overrides the error, warn instead - by default returns error if there're no tests defined
 

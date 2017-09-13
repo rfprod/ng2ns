@@ -30,6 +30,10 @@ app.use(session({
 }));
 
 app.use('/public', express.static(cwd + '/public'));
+if (process.env.DEV_MODE) {
+	console.log('\n# > DEV_MODE variable present > Node.js will serve /logs with coverage report\n');
+	app.use('/logs', express.static(cwd + '/logs'));
+}
 app.use((req, res, next) => {
 	/*
 	*	this is required for angular to load urls properly when user requests url directly, e.g.
@@ -41,7 +45,13 @@ app.use((req, res, next) => {
 	*/
 	// console.log('req.path:', req.path);
 	// console.log('SESSION', req.session);
-	if (/(api|css|fonts|img|js|node_modules)/.test(req.path)) {
+	const regX = (process.env.DEV_MODE) ? /(api|css|fonts|logs|img|js|node_modules)/ : /(api|css|fonts|img|js|node_modules)/;
+	/*
+	*	in DEV_MODE (when env variable value is set)
+	*	node does not serve angular app if path includes a word 'logs' - root for different logs and reports
+	*	WARNING: this exposes all /logs folder with all of its contents
+	*/
+	if (regX.test(req.path)) {
 		return next();
 	} else {
 		if (typeof req.session.viewTimestamp === 'undefined') {

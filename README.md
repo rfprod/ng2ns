@@ -25,6 +25,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./test/e2e` - end to end tests
   * `./test/server` - server tests
 * `./sessions` - FileStore sessions storage
+* `./logs` - logs and reports
 
 # Start
 
@@ -53,7 +54,14 @@ Create a file named `.env` in the root directory. This file should contain:
 ```
 PORT=8080
 APP_URL=http://localhost:8080/
+DEV_MODE=true
 ```
+
+`PORT` is used by the server if defined.
+
+`APP_URL` may be used by the server if it should form urls to client app and return it to user.
+
+`DEV_MODE` is a variable which defines if coverage report should be served to user upon requesting path `host/logs/coverage/html-report/index.html`, for local environment the url path is it is `http://localhost:8080/logs/coverage/html-report/index.html`. If coverage report should `NOT` be served, don't set this variable at all or remove part `=true`, server does not check its value, only presence.
 
 #### Openshift deployment requires env variables setup via rhc
 
@@ -75,6 +83,20 @@ To start the app, execute in the terminal while in the project folder (dependenc
 npm start
 ```
 
+executing this command will:
+
+* install the required project dependencies
+* build both `js` and `css` bundles
+* copy required fonts to a defined location to make it accessible by the app
+* make required changes to static json files if any
+* start the app
+
+to build the app manually, typescript should be compiled first, then the app can be built, execute:
+
+```
+tsc && gulp build
+```
+
 Now open your browser and type in the address bar
 
 ```
@@ -85,6 +107,12 @@ Ng2NS is up and running.
 
 ### Testing
 
+`HeadlessChrome` note: in initial configuration for client unit and e2e tests to work you will have to export an environment variable for headless Chrome by appending it to `~/.bashrc`, its value should be set to one of the following options, depending on what you have installed: `chromium-browser, chromium, google-chrome`
+
+```
+export CHROME_BIN=chromium-browser
+```
+
 #### Server
 
 To test the server execute the following command in the terminal window while in your project's folder when the server is running:
@@ -94,12 +122,6 @@ $ npm run server-test
 ```
 
 #### Client Unit
-
-`HeadlessChrome`: in initial configuration for client unit tests to work you will have to export an environment variable for headless Chrome by appending it to `~/.bashrc`, its value should be set to one of the following options, depending on what you have installed: `chromium-browser, chromium, google-chrome`
-
-```
-export CHROME_BIN=chromium-browser
-```
 
 To test the client execute the following command in the terminal window while in your project's folder:
 
@@ -115,6 +137,37 @@ for single test
 $ npm run client-test-single-run
 ```
 
+single run execution generates a coverage html-report from generated json data, reports location
+
+  * `./logs`
+    * `./logs/coverage` - json data
+      * `./logs/coverage/html-report` - html-report generated from json data
+
+#### Coverage report
+
+to generate a coverage report for client code execute (should be preceeded by unit tests execution so that json data exists)
+
+```
+npm run client-coverage-report
+```
+
+previously generated coverage reports are cleared automatically before single run tests execution
+
+to remove previously generated coverage reports manually use
+
+```
+npm run clear-reports
+```
+
+##### How to read a coverage report
+
+* `Statements` - how much statements of the program module have beed executed
+* `Branches` - how much branches of the control flow of the program module have been executed (if else statements)
+* `Functions` - how much functions of the program module have beed executed
+* `Lines` - how much executable lines in the source code have been executed
+
+for more details see [`istanbul code coverage tool`](https://gotwarlost.github.io/istanbul)
+
 #### Client E2E
 
 ```
@@ -128,6 +181,13 @@ To lint the code execute the following command in the terminal window while in y
 ```
 $ npm run lint
 ```
+
+#### NPM scripts and Gulp tasks
+
+most command needed for manual interaction with the project were listed above, full lists can be checked here:
+
+* NPM scripts: [`package.json`](package.json) - `scripts` object
+* Gulp tasks: [`gulpfile.js`](gulpfile.js)
 
 ### The OpenShift cartridges documentation
 
