@@ -15,7 +15,7 @@ describe('Ng2NMC e2e: ', function() {
 			expect(url).toMatch('\/intro$');
 		});
 
-		var navButtons = element.all(by.css('#flex-nav'));
+		var navButtons = element.all(by.css('root'));
 		expect(navButtons.count()).toBe(1);
 	});
 

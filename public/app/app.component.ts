@@ -71,11 +71,11 @@ export class AppComponent implements OnInit, OnDestroy {
 					this.showAppInfo = true;
 				}
 			}
-			if (message.sys) {
-				if (message.sys === 'start spinner') { // spinner control message
+			if (message.spinner) {
+				if (message.spinner === 'start') { // spinner control message
 					console.log('starting spinner');
 					this.startSpinner();
-				} else if (message.sys === 'stop spinner') { // spinner control message
+				} else if (message.spinner === 'stop') { // spinner control message
 					console.log('stopping spinner');
 					this.stopSpinner();
 				}

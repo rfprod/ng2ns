@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { ServerStaticDataService } from '../services/server-static-data.service';
 import { PublicDataService } from '../services/public-data.service';
@@ -31,6 +31,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			x: (d) => d.key,
 			y: (d) => d.y,
 			showLabels: true,
+			labelSunbeamLayout: false,
 			pie: {
 				startAngle: (d) => d.startAngle / 2 - Math.PI / 2,
 				endAngle: (d) => d.endAngle / 2 - Math.PI / 2,
@@ -87,7 +88,10 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	}
 	private getPublicData(callback) {
 		this.publicDataService.getData().subscribe(
-			(data) => this.appUsageData = data,
+			(data) => {
+				this.nvd3.clearElement();
+				this.appUsageData = data;
+			},
 			(error) => this.errorMessage = error as any,
 			() => {
 				console.log('getPublicData done, data:', this.appUsageData);
@@ -98,11 +102,11 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 
 	private emitSpinnerStartEvent() {
 		console.log('root spinner start event emitted');
-		this.emitter.emitEvent({sys: 'start spinner'});
+		this.emitter.emitEvent({spinner: 'start'});
 	}
 	private emitSpinnerStopEvent() {
 		console.log('root spinner stop event emitted');
-		this.emitter.emitEvent({sys: 'stop spinner'});
+		this.emitter.emitEvent({spinner: 'stop'});
 	}
 
 	private showModal: boolean = false;
@@ -112,6 +116,8 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		} else { this.ws.send(JSON.stringify({action: 'get'})); }
 		this.showModal = (!this.showModal) ? true : false;
 	}
+
+	@ViewChild ('chart') private nvd3: any;
 
 	public ngOnInit() {
 		console.log('ngOnInit: DashboardIntroComponent initialized');

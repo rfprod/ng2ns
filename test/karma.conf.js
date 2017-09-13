@@ -7,6 +7,7 @@ module.exports = function(config){
 			'node_modules/jquery/dist/jquery.js',
 			'node_modules/d3/d3.js',
 			'node_modules/nvd3/build/nv.d3.js',
+			{ pattern: 'node_modules/ng2-nvd3/build/**', included: false, watched: false },
 
 			'node_modules/core-js/client/shim.js',
 			'node_modules/reflect-metadata/Reflect.js',
@@ -26,6 +27,7 @@ module.exports = function(config){
 			{ pattern: 'systemjs.config.extras.js', included: false, watched: false },
 			{ pattern: 'node_modules/traceur/bin/traceur.js', included: false, watched: false },
 			
+			'node_modules/hammerjs/hammer.js',
 			{ pattern: 'node_modules/@angular/**', included: false, watched: false },
 			
 			{ pattern: 'node_modules/rxjs/**', included: false, watched: false },
@@ -63,11 +65,22 @@ module.exports = function(config){
 		// browsers: ['Chrome'],
 		// browsers : ['Firefox'],
 		
-		plugins : [
-		    'karma-chrome-launcher',
+		plugins: [
+			'karma-redirect-preprocessor',
+			'karma-chrome-launcher',
 		//    'karma-firefox-launcher',
 			'karma-jasmine'
 		],
+
+		preprocessors: {
+			'public/**/*.html': ['redirect']
+		},
+
+		redirectPreprocessor: {
+			// stripPrefix: '',
+			// stripSuffix: '',
+			// prependPrefix: ''
+		},
 
 		// reporters: [],
 
