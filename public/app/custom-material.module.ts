@@ -1,24 +1,47 @@
-import { NgModule} from '@angular/core';
-import { MaterialModule, MdToolbarModule, MdMenuModule, MdSidenavModule, MdButtonModule, MdCheckboxModule, MdTooltipModule } from '@angular/material';
+import { NgModule } from '@angular/core';
+import {
+	// form controls
+	MdAutocompleteModule, MdCheckboxModule, MdDatepickerModule, MdInputModule, MdSelectModule, MdSliderModule,
+	// navigation
+	MdMenuModule, MdSidenavModule, MdToolbarModule,
+	// layout
+	MdListModule, MdGridListModule, MdCardModule, MdStepperModule, MdTabsModule, MdExpansionModule,
+	// buttons and indicators
+	MdButtonModule, MdButtonToggleModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdProgressBarModule,
+	// popups and modals
+	MdDialogModule, MdTooltipModule, MdSnackBarModule,
+	// data table
+	MdTableModule, MdSortModule, MdPaginatorModule
+} from '@angular/material';
 
 @NgModule({
 	imports: [
-		MaterialModule, // all at once
-		/*
-		* or selected manually (the list is not full)
-		MdToolbarModule, MdMenuModule, MdSidenavModule,
-		MdButtonModule, MdCheckboxModule,
-		MdTooltipModule, ...
-		*/
+		// form controls
+		MdAutocompleteModule, MdCheckboxModule, MdDatepickerModule, MdInputModule, MdSelectModule, MdSliderModule,
+		// navigation
+		MdMenuModule, MdSidenavModule, MdToolbarModule,
+		// layout
+		MdListModule, MdGridListModule, MdCardModule, MdStepperModule, MdTabsModule, MdExpansionModule,
+		// buttons and indicators
+		MdButtonModule, MdButtonToggleModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdProgressBarModule,
+		// popups and modals
+		MdDialogModule, MdTooltipModule, MdSnackBarModule,
+		// data table
+		MdTableModule, MdSortModule, MdPaginatorModule
 	],
 	exports: [
-		MaterialModule, // all at once
-		/*
-		*	or selected manually (the list is not full)
-		MdToolbarModule, MdMenuModule, MdSidenavModule,
-		MdButtonModule, MdCheckboxModule,
-		MdTooltipModule, ...
-		*/
+		// form controls
+		MdAutocompleteModule, MdCheckboxModule, MdDatepickerModule, MdInputModule, MdSelectModule, MdSliderModule,
+		// navigation
+		MdMenuModule, MdSidenavModule, MdToolbarModule,
+		// layout
+		MdListModule, MdGridListModule, MdCardModule, MdStepperModule, MdTabsModule, MdExpansionModule,
+		// buttons and indicators
+		MdButtonModule, MdButtonToggleModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdProgressBarModule,
+		// popups and modals
+		MdDialogModule, MdTooltipModule, MdSnackBarModule,
+		// data table
+		MdTableModule, MdSortModule, MdPaginatorModule
 	]
 })
 export class CustomMaterialModule {}

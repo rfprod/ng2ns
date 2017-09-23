@@ -17,7 +17,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../node_modules/hammerjs/hammer.js';
-import { MaterialModule } from '@angular/material';
+import { CustomMaterialModule } from '../../public/app/custom-material.module';
 
 import { DashboardIntroComponent } from '../../public/app/components/dashboard-intro.component';
 
@@ -81,7 +81,7 @@ describe('DashboardIntroComponent', () => {
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ TranslatePipe, NvD3Component, DashboardIntroComponent, NvD3Component ],
-			imports: [ NoopAnimationsModule, MaterialModule, FlexLayoutModule ],
+			imports: [ NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule ],
 			providers: [
 				EventEmitterService,
 				{ provide: TranslateService, useClass: MockTranslateService },
