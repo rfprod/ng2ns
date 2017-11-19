@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"description": "Application Core: Angular, NodeJS",
 	"private": true,
-	"main": "server.js",
+	"main": "main.js",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/rfprod/ng2ns"
@@ -15,6 +15,7 @@
 	"keywords": [
 		"OpenShift",
 		"openshift",
+		"Electron",
 		"Node",
 		"Express",
 		"Angular",
@@ -24,8 +25,8 @@
 		"application"
 	],
 	"engines": {
-		"node": ">= 0.6.0",
-		"npm": ">= 1.0.0"
+		"node": ">= 7.9.0",
+		"npm": ">= 4.2.0"
 	},
 	"dependencies": {
 		"@angular/animations": "4.4.3",
@@ -81,11 +82,16 @@
 		"tslint": "^5.7.0",
 		"typescript": "^2.5.2",
 		"web-animations-js": "^2.3.1",
-		"zone.js": "^0.8.17"
+		"zone.js": "^0.8.17",
+		"electron-squirrel-startup": "^1.0.0"
 	},
 	"devDependencies": {
 		"chai": "^4.1.2",
 		"cheerio": "^1.0.0-rc.2",
+		"electron": "^1.7.9",
+		"electron-installer-debian": "^0.7.1",
+		"electron-packager": "^9.1.0",
+		"electron-winstaller": "^2.6.3",
 		"eslint": "^4.7.2",
 		"karma-chrome-launcher": "^2.2.0",
 		"karma-coverage": "^1.1.1",
@@ -118,6 +124,8 @@
 		"update-webdriver": "webdriver-manager update",
 		"preprotractor": "npm run update-webdriver",
 		"protractor": "protractor test/protractor.conf.js",
+		"electron": "electron .",
+		"electron-clear-dist": "rm -rf ./desktop",
 		"tsc": "tsc",
 		"tsc:w": "tsc -w"
 	}

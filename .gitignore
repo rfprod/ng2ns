@@ -30,3 +30,6 @@ public/fonts/*.*
 # sessions storage
 sessions/*.*
 !sessions/*.gitkeep
+
+# desktop builds
+desktop/

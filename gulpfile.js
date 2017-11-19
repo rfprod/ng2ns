@@ -38,6 +38,66 @@ function killProcessByName(name) {
 	});
 }
 
+gulp.task('create-env-development', (done) => {
+	/*
+	*	create .env file for development
+	*/
+	const pkg = require('./package.json');
+	fs.readFile('./.env', (err, data) => {
+		const env = 'PORT=8080\nAPP_URL=http://localhost:8080/\nAPP_VERSION=' + pkg.version + '\nDEV_MODE=true\n';
+		if (err) {
+			createEnvFile(env, done);
+		} else {
+			if (data.toString() === env) {
+				console.log('# > ENV > .env file is correct');
+				done();
+			} else {
+				createEnvFile(env, done);
+			}
+		}
+	});
+});
+
+gulp.task('create-env-development-cluster', (done) => {
+	/*
+	*	create .env file for development
+	*/
+	const pkg = require('./package.json');
+	fs.readFile('./.env', (err, data) => {
+		const env = 'PORT=8080\nAPP_URL=http://localhost:8080/\nAPP_VERSION=' + pkg.version + '\nDEV_MODE=false\n';
+		if (err) {
+			createEnvFile(env, done);
+		} else {
+			if (data.toString() === env) {
+				console.log('# > ENV > .env file is correct');
+				done();
+			} else {
+				createEnvFile(env, done);
+			}
+		}
+	});
+});
+
+gulp.task('create-env-electron', (done) => {
+	/*
+	*	create .env file for electron
+	*/
+	const pkg = require('./package.json');
+	fs.readFile('./.env', (err, data) => {
+		const env = 'PORT=8080\nAPP_URL=http://localhost:8080/\nAPP_VERSION=' + pkg.version + '\nELECTRON=true\nNODE_ENV=production';
+		if (err) {
+			createEnvFile(env, done);
+		} else {
+			if (data.toString() === env) {
+				console.log('# > ENV > .env file is correct');
+				done();
+			} else {
+				createEnvFile(env, done);
+			}
+		}
+	});
+});
+
 gulp.task('server', () => {
 	if (node) node.kill();
 	node = spawn('node', ['server.js'], {stdio: 'inherit'});
@@ -240,11 +300,140 @@ gulp.task('lint', (done) => {
 });
 
 gulp.task('default', (done) => {
-	runSequence('server', 'build', 'lint', 'watch', done);
+	runSequence('create-env-development', 'server', 'build', 'lint', 'watch', done);
 });
 
 gulp.task('production-start', (done) => {
-	runSequence('server', 'build', done);
+	runSequence('create-env-production', 'server', 'build', done);
+});
+
+/*
+*	build electron app dist for windows, linux
+*
+*	requires mono installation for Ubuntu, see here http://www.mono-project.com/download/
+*
+*	NOTE before packing/building: package.json must contain
+*	{...
+*		"main": "main.js",
+*	...}
+*
+*	after installation execute: gulp electron-packager-win
+*
+*	after previous task is completed execute: gulp electron-winstaller
+*
+*	or use a single sequence of tasks, execure: gulp build-electron-win
+*
+*	NOTE: considering using electron-forge to build the app? don't, it it really sucks
+*
+*	when running on windows port 8080 may be in use, execute the following:
+*	netstat -ano | findstr 8080
+*	taskkill /F /PID <fond_task_PID>
+*
+*	to be able to run electron on windows the following packages are required
+*	- https://www.microsoft.com/en-us/download/confirmation.aspx?id=48145
+*
+*	electronPackagerIgnore holds array of regexps to be ignored on electron app packaging
+*/
+const electronPackagerIgnore = [ // exclude
+	/\/desktop/, // builds and dists
+	/\/public\/app\/(components|directives|scss|services|translate|.*\.ts|.*\.js)/, // client app source code
+	/\/logs/, // logs
+	/\/node_modules\/(@angular|gulp.*|karma.*|jasmine.*|mocha.*|@types|(remap-)?istanbul)/, // not needed node_modules
+	/\/test\/(client|e2e|server\/.*\.js|.*\.js)/, // tests source code
+	/\/topoData/, // intermediary project build files
+	/\/Dockerfile\.*/, // docker configs
+	/\/\.(dockerignore|editorconfig|eslintignore|eslintrc\.json|gitattributes|gitignore)/, // configuration files matching pattern: .config_filename
+	/\/(tsconfig|tslint|jsdoc)\.json/, // json configuration
+	/\/README\.md/, // readme
+	/\/.*\.sh/, // bash scripts
+	/\/systemjs\..*/ // systemjs configs
+	// /\/package(-lock)?\.json/ // package.json and package-lock.json
+];
+gulp.task('electron-packager-win', (done) => {
+	const electronPackager = require('electron-packager');
+	electronPackager({
+		dir: './',
+		out: './desktop/win/build',
+		ignore: electronPackagerIgnore,
+		overwrite: true,
+		asar: true,
+		arch: 'x64',
+		platform: 'win32',
+		win32metadata: {
+			'requested-execution-level': 'requireAdministrator' // asInvoker, hightstAvailable, requireAdministrator
+		}
+	}).then(
+		(appPaths) => {
+			console.log(`package successful, appPaths ${appPaths}`);
+			done();
+		},
+		(error) => {
+			console.log(`error packaging electron app ${error}`);
+			throw error;
+		}
+	);
+});
+gulp.task('electron-packager-nix', (done) => {
+	const electronPackager = require('electron-packager');
+	electronPackager({
+		dir: './',
+		out: './desktop/nix/build',
+		ignore: electronPackagerIgnore,
+		overwrite: true,
+		asar: true,
+		arch: 'x64',
+		platform: 'linux'
+	}).then(
+		(appPaths) => {
+			console.log(`package successful, appPaths ${appPaths}`);
+			done();
+		},
+		(error) => {
+			console.log(`error packaging electron app ${error}`);
+			throw error;
+		}
+	);
+});
+gulp.task('electron-winstaller', (done) => {
+	const electronWinstaller = require('electron-winstaller');
+	electronWinstaller.createWindowsInstaller({
+		appDirectory: './desktop/win/build/ng2nwtn-win32-x64',
+		outputDirectory: './desktop/win/dist',
+		authors: 'TechnoNIKOL'
+	}).then(
+		() => {
+			console.log('build successful');
+			done();
+		},
+		(error) => {
+			console.log(`error building electron app for windows ${error}`);
+			throw error;
+		}
+	);
+});
+gulp.task('electron-debinstaller', (done) => {
+	const electronDebInstaller = require('electron-installer-debian');
+	electronDebInstaller({
+		src: './desktop/nix/build/ng2nwtn-linux-x64',
+		dest: './desktop/nix/dist',
+		maintainer: 'TechnoNIKOL',
+		arch: 'amd64',
+		categories: ['Internet'],
+		lintianOverrides: ['changelog-file-missing-in-native-package']
+	}, (error, options) => {
+		if (error) {
+			console.log(`error building electron app for debian ${error}`);
+			throw error;
+		}
+		console.log(`successful build with options ${options}`);
+		done();
+	});
+});
+gulp.task('build-electron-win', (done) => {
+	runSequence('create-env-electron', 'electron-packager-win', 'electron-winstaller', done);
+});
+gulp.task('build-electron-deb', (done) => {
+	runSequence('create-env-electron', 'electron-packager-nix', 'electron-debinstaller', done);
 });
 
 process.on('exit', () => {

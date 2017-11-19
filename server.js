@@ -17,7 +17,7 @@ if (!process.env.OPENSHIFT_MONGODB_DB_HOST) {
 
 process.title = 'ng2nodestarter';
 
-const cwd = process.cwd();
+const cwd = __dirname;
 
 app.use(session({
 	secret: 'secretNG2NODESTARTER',
@@ -94,10 +94,10 @@ const DBmocks = {
 	users: require('./app/models/users').users()
 };
 
-routes(app, fs, SrvInfo, DBmocks);
+routes(app, cwd, fs, SrvInfo, DBmocks);
 
 const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-	ip = process.env.OPENSHIFT_NODEJS_IP; // "127.0.0.1" is not specified here on purpose, this env var should be included in .openshift.env
+	ip = process.env.OPENSHIFT_NODEJS_IP;
 
 function terminator (sig) {
 	if (typeof sig === 'string') {
@@ -120,7 +120,7 @@ if (!ip) {
 	});
 } else {
 	/*
-	*   deployment - OPENSHIFT SPECIFIC
+	*   deployment - TODO migrate to Openshift v3
 	*/
 	(() => {
 		/*
@@ -138,7 +138,7 @@ if (!ip) {
 		});
 	})();
 
-	if (cluster.isMaster) {
+	if (cluster.isMaster && process.env.DEV_MODE === 'false') {
 		const workersCount = os.cpus().length;
 		console.log(`\n# > START > PRODUCTION > Node.js listening on ${ip}:${port}...\n`);
 		console.log(`Cluster setup, workers count: ${workersCount}`);

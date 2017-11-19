@@ -1,6 +1,16 @@
 'use-strict';
 
+/**
+ * Users Mock module
+ * @module app/mocks/users
+ * @see module/app/mocks/barrel
+ */
+
 module.exports = {
+	/**
+	 * Returns mocked users list
+	 * @return {array} Users list
+	 */
 	users: () => {
 		const sampleObj = {
 			id:	'0',

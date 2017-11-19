@@ -1,29 +1,50 @@
 'use strict';
 
-const path = process.cwd();
+/**
+ * Server Routes module
+ * @module app/routes/index
+ * @param {object} app Express application
+ * @param {object} fs Filesystem access module
+ * @param {object} SrvInfo Server information
+ * @param {object} DBmocks Database mocks
+ */
+module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 
-module.exports = function(app, fs, SrvInfo, DBmocks) {
-
+	/**
+	 * Serves Application root (index page).
+	 * @name Public index
+	 * @path {GET} /
+	 * @code {200}
+	 * @response {html} index.html Application index file
+	 */
 	app.get('/', (req, res) => {
-		res.sendFile(path + '/public/index.html', {
+		res.sendFile(cwd + '/public/index.html', {
 			headers: {
 				'Views': req.session.views
 			}
 		});
 	});
 
+	/**
+	 * Returns user sessions codes list with views count.
+	 * This endpoint is used for d3 chart demonstration purposes.
+	 * @name App-diag usage
+	 * @path {GET} /api/app-diag/usage
+	 * @code {200}
+	 * @response {array} [] Array of objects
+	 */
 	app.get('/api/app-diag/usage', (req, res) => {
 		/*
 		*	reports user sessions codes list with views count
 		*/
 		let filesList;
-		fs.readdir(path + '/sessions', (err, data) => {
+		fs.readdir(cwd + '/sessions', (err, data) => {
 			if (err) throw err;
 			// console.log('data', data);
 			filesList = data.filter(item => item !== '.gitkeep');
 			const output = [];
 			for (const file of filesList) {
-				const contents = JSON.parse(fs.readFileSync(path + '/sessions/' + file).toString());
+				const contents = JSON.parse(fs.readFileSync(cwd + '/sessions/' + file).toString());
 				const item = {
 					key: file.substring(0, 6),
 					y: contents.views
@@ -40,6 +61,13 @@ module.exports = function(app, fs, SrvInfo, DBmocks) {
 		});
 	});
 
+	/**
+	 * Returns static server diagnostic data.
+	 * @name App-diag static
+	 * @path {GET} /api/app-diag/static
+	 * @code {200}
+	 * @response {object} {} Object with array of key/value pairs
+	 */
 	app.get('/api/app-diag/static', (req, res) => {
 		res.format({
 			'application/json': () => {
@@ -48,6 +76,13 @@ module.exports = function(app, fs, SrvInfo, DBmocks) {
 		});
 	});
 
+	/**
+	 * Returns dynamic server diagnostic data.
+	 * @name App-diag dynamic
+	 * @path {WS} /api/app-diag/dynamic
+	 * @code {200}
+	 * @response {object} {} Object with array of key/value pairs
+	 */
 	app.ws('/api/app-diag/dynamic', (ws) => {
 		console.log('websocket opened /app-diag/dynamic');
 		let sender = null;
@@ -78,7 +113,13 @@ module.exports = function(app, fs, SrvInfo, DBmocks) {
 		ws.on('error', () => {console.log('Persistent websocket: ERROR');});
 	});
 
-	// api mock
+	/**
+	 * Returns mocked users list.
+	 * @name Users List
+	 * @path {GET} /api/users
+	 * @code {200}
+	 * @response {array} [] Array of objects
+	 */
 	app.get('/api/users', (req, res) => {
 		res.json(DBmocks.users);
 	});

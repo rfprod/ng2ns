@@ -1,6 +1,34 @@
+'use strict';
+
+/**
+ * Server Info module
+ * @module app/utils/srv-info
+ */
+
 const os = require('os'),
 	exec = require('child_process').execSync;
 
+/**
+ * @function npmVersion
+ * @description Returns installed NPM version
+ * @return {string} installed NPM version or 'N/A' if the app is packed in Electron or if npm --version returns error
+ */
+function npmVersion() {
+	require('dotenv').load();
+	if (process.env.ELECTRON) return 'N/A';
+	let version;
+	try {
+		version = exec('npm --version').toString().replace(os.EOL, '');
+	} catch (e) {
+		version = 'N/A';
+	}
+	return version;
+}
+
+/**
+ * Returns Static server data
+ * @return {array} Static server data
+ */
 exports.static = () => {
 	return [
 		{
@@ -8,7 +36,7 @@ exports.static = () => {
 			value: process.version.replace('v', '')
 		},{
 			name: 'NPM Version',
-			value: exec('npm --version').toString().replace(os.EOL, '')
+			value: npmVersion()
 		},{
 			name: 'OS Type',
 			value: os.type()
@@ -28,6 +56,10 @@ exports.static = () => {
 	];
 };
 
+/**
+ * Returns Dymanic server data
+ * @return {array} Dynamic server data
+ */
 exports.dynamic = () => {
 	return [
 		{

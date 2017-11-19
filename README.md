@@ -26,6 +26,16 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./test/server` - server tests
 * `./sessions` - FileStore sessions storage
 * `./logs` - logs and reports
+* `./desktop` - electron builds and installers
+  * `./desktop/nix`
+    * `./desktop/nix/build` - linux build
+    * `./desktop/nix/dist` - linux installer
+  * `./desktop/win`
+    * `./desktop/win/build` - windows build
+    * `./desktop/win/dist` - windows installer
+  * `./desktop/osx`
+    * `./desktop/osx/build` - osx build
+    * `./desktop/osx/dist` - osx installer
 
 # Start
 
@@ -49,12 +59,67 @@ This will install the Ng2NS components into the `Ng2NS` directory in your projec
 
 ### Local Environment Variables
 
-Create a file named `.env` in the root directory. This file should contain:
+Create a file named `.env` in the root directory manually or use a gulp task
+
+```
+gulp create-env-development
+```
+
+or
+
+```
+gulp create-env-development-cluster
+```
+
+or
+
+```
+gulp create-env-electron
+```
+
+or
+
+```
+gulp create-env-production
+```
+
+This `.env` file should contain
+
+for development environment without nodejs cluster
 
 ```
 PORT=8080
 APP_URL=http://localhost:8080/
+APP_VERSION=1.0.0
 DEV_MODE=true
+```
+
+for development environment with nodejs cluster
+
+```
+PORT=8080
+APP_URL=http://localhost:8080/
+APP_VERSION=1.0.0
+DEV_MODE=false
+```
+
+for electron environment
+
+```
+PORT=8080
+APP_URL=http://localhost:8080/
+APP_VERSION=1.0.0
+ELECTRON=true
+NODE_ENV=production
+```
+
+for production environment
+
+```
+PORT=8080
+APP_URL=http://app-url
+APP_VERSION=1.0.0
+NODE_ENV=production
 ```
 
 `PORT` is used by the server if defined.
@@ -62,6 +127,67 @@ DEV_MODE=true
 `APP_URL` may be used by the server if it should form urls to client app and return it to user.
 
 `DEV_MODE` is a variable which defines if coverage report should be served to user upon requesting path `host/logs/coverage/html-report/index.html`, for local environment the url path is it is `http://localhost:8080/logs/coverage/html-report/index.html`. If coverage report should `NOT` be served, don't set this variable at all or remove part `=true`, server does not check its value, only presence.
+
+`ELECTRON` tells server to use control flow specific for electron where applicable.
+
+`NODE_ENV` tells `npm` to pass installing devDependencies.
+
+#### Prerequisites
+
+development environment may need to use a NodeJS version compatible which Electron, which is `7.9.0` by the moment of writing this note, NodeJS versions switching may require node-sass rebuild
+
+```
+sudo npm rebuild node-sass --force
+```
+
+dependencies must be installed
+
+```
+npm install
+```
+
+application must be build and packed for required platform
+
+```
+tsc && gulp build && gulp electron-packager-win
+```
+
+```
+tsc && gulp build && gulp electron-packager-nix
+```
+
+to create installers for windows or debian after packaging use
+
+```
+tsc && gulp build && gulp build-electron-win
+```
+
+```
+tsc && gulp build && gulp build-electron-deb
+```
+
+#### Electron build
+
+Electron app builds are created by gulp tasks and are stored in
+
+* `./desktop`
+  * `./desktop/nix`
+    * `./desktop/nix/build` - linux build (task - `gulp electron-packager-nix`)
+    * `./desktop/nix/dist` - linux installer (task - `gulp TODO`)
+  * `./desktop/win`
+    * `./desktop/win/build` - windows build (task - `gulp electron-packager-win`)
+    * `./desktop/win/dist` - windows installer (task - `gulp electron-winstaller`)
+  * `./desktop/osx`
+    * `./desktop/osx/build` - osx build (task - `gulp TODO`)
+    * `./desktop/osx/dist` - osx installer (task - `gulp TODO`)
+
+#### Electron start
+
+to start Electron app execute the following command form the project root
+
+```
+npm run electron
+```
 
 #### Openshift deployment requires env variables setup via rhc
 
