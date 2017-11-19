@@ -1,47 +1,59 @@
 import { NgModule } from '@angular/core';
 import {
 	// form controls
-	MdAutocompleteModule, MdCheckboxModule, MdDatepickerModule, MdInputModule, MdSelectModule, MdSliderModule,
+	MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
 	// navigation
-	MdMenuModule, MdSidenavModule, MdToolbarModule,
+	MatMenuModule, MatSidenavModule, MatToolbarModule,
 	// layout
-	MdListModule, MdGridListModule, MdCardModule, MdStepperModule, MdTabsModule, MdExpansionModule,
+	MatListModule, MatGridListModule, MatCardModule, MatStepperModule, MatTabsModule, MatExpansionModule,
 	// buttons and indicators
-	MdButtonModule, MdButtonToggleModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdProgressBarModule,
+	MatButtonModule, MatButtonToggleModule, MatChipsModule, MatIconModule, MatProgressSpinnerModule, MatProgressBarModule,
 	// popups and modals
-	MdDialogModule, MdTooltipModule, MdSnackBarModule,
+	MatDialogModule, MatTooltipModule, MatSnackBarModule,
 	// data table
-	MdTableModule, MdSortModule, MdPaginatorModule
+	MatTableModule, MatSortModule, MatPaginatorModule,
+	// misc
+	MatOptionModule, MatRippleModule
+
 } from '@angular/material';
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
 	imports: [
 		// form controls
-		MdAutocompleteModule, MdCheckboxModule, MdDatepickerModule, MdInputModule, MdSelectModule, MdSliderModule,
+		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
 		// navigation
-		MdMenuModule, MdSidenavModule, MdToolbarModule,
+		MatMenuModule, MatSidenavModule, MatToolbarModule,
 		// layout
-		MdListModule, MdGridListModule, MdCardModule, MdStepperModule, MdTabsModule, MdExpansionModule,
+		MatListModule, MatGridListModule, MatCardModule, MatStepperModule, MatTabsModule, MatExpansionModule,
 		// buttons and indicators
-		MdButtonModule, MdButtonToggleModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdProgressBarModule,
+		MatButtonModule, MatButtonToggleModule, MatChipsModule, MatIconModule, MatProgressSpinnerModule, MatProgressBarModule,
 		// popups and modals
-		MdDialogModule, MdTooltipModule, MdSnackBarModule,
+		MatDialogModule, MatTooltipModule, MatSnackBarModule,
 		// data table
-		MdTableModule, MdSortModule, MdPaginatorModule
+		MatTableModule, MatSortModule, MatPaginatorModule,
+		// misc
+		MatOptionModule, MatRippleModule,
+		// cdk
+		CdkTableModule
 	],
 	exports: [
 		// form controls
-		MdAutocompleteModule, MdCheckboxModule, MdDatepickerModule, MdInputModule, MdSelectModule, MdSliderModule,
+		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
 		// navigation
-		MdMenuModule, MdSidenavModule, MdToolbarModule,
+		MatMenuModule, MatSidenavModule, MatToolbarModule,
 		// layout
-		MdListModule, MdGridListModule, MdCardModule, MdStepperModule, MdTabsModule, MdExpansionModule,
+		MatListModule, MatGridListModule, MatCardModule, MatStepperModule, MatTabsModule, MatExpansionModule,
 		// buttons and indicators
-		MdButtonModule, MdButtonToggleModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdProgressBarModule,
+		MatButtonModule, MatButtonToggleModule, MatChipsModule, MatIconModule, MatProgressSpinnerModule, MatProgressBarModule,
 		// popups and modals
-		MdDialogModule, MdTooltipModule, MdSnackBarModule,
+		MatDialogModule, MatTooltipModule, MatSnackBarModule,
 		// data table
-		MdTableModule, MdSortModule, MdPaginatorModule
+		MatTableModule, MatSortModule, MatPaginatorModule,
+		// misc
+		MatOptionModule, MatRippleModule,
+		// cdk
+		CdkTableModule
 	]
 })
 export class CustomMaterialModule {}

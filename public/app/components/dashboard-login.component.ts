@@ -8,6 +8,9 @@ import { PublicDataService } from '../services/public-data.service';
 @Component({
 	selector: 'dashboard-login',
 	templateUrl: '/public/app/views/dashboard-login.html',
+	host: {
+		class: 'mat-body-1'
+	}
 })
 export class DashboardLoginComponent implements OnInit, OnDestroy {
 	constructor(

@@ -1,6 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
 
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
+// import 'rxjs/add/operator/first';
+
 @Component({
 	selector: 'app-info',
 	template: `
@@ -8,10 +12,13 @@ import { EventEmitterService } from '../services/event-emitter.service';
 			<img src="{{badge.img}}"/>
 		</a>
 	`,
+	host: {
+		class: 'mat-body-1'
+	}
 })
 export class AppInfoComponent implements OnInit, OnDestroy {
 	constructor(private emitter: EventEmitterService) {}
-	private subscription: any;
+	private ngUnsubscribe: Subject<void> = new Subject();
 	private hideInfo: boolean = true;
 	private badges = [ // tslint:disable-line
 		{
@@ -28,7 +35,7 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 
 	public ngOnInit() {
 		console.log('ngOnInit: AppInfoComponent initialized');
-		this.subscription = this.emitter.getEmitter().subscribe((message) => {
+		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
 			// console.log('app-info consuming event:', message);
 			if (message.appInfo === 'hide') { this.hideInfo = true; }
 			if (message.appInfo === 'show') { this.hideInfo = false; }
@@ -36,6 +43,7 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: AppInfoComponent destroyed');
-		this.subscription.unsubscribe();
+		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.complete();
 	}
 }

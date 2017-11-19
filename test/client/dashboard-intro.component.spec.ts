@@ -14,6 +14,7 @@ import { TranslateService, TranslatePipe, TRANSLATIONS } from '../../public/app/
 import { ServerStaticDataService } from '../../public/app/services/server-static-data.service';
 import { PublicDataService } from '../../public/app/services/public-data.service';
 import { Observable } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../node_modules/hammerjs/hammer.js';
@@ -125,6 +126,7 @@ describe('DashboardIntroComponent', () => {
 	});
 
 	it('should have variables defined', () => {
+		expect(this.component.ngUnsubscribe).toEqual(jasmine.any(Subject));
 		expect(this.component.title).toBeDefined();
 		expect(this.component.title === 'Ng2NodeStarter (Ng2NS)').toBeTruthy();
 		expect(this.component.description).toBeDefined();

@@ -3,11 +3,18 @@ import { EventEmitterService } from '../services/event-emitter.service';
 import { ServerStaticDataService } from '../services/server-static-data.service';
 import { PublicDataService } from '../services/public-data.service';
 
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/first';
+
 declare let d3: any;
 
 @Component({
 	selector: 'dashboard-intro',
 	templateUrl: '/public/app/views/dashboard-intro.html',
+	host: {
+		class: 'mat-body-1'
+	}
 })
 export class DashboardIntroComponent implements OnInit, OnDestroy {
 	constructor(
@@ -18,7 +25,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	) {
 		console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
-	private subscription: any;
+	private ngUnsubscribe: Subject<void> = new Subject();
 	public title: string = 'Ng2NodeStarter (Ng2NS)';
 	public description: string = 'Angular, NodeJS';
 	public host: string = window.location.host;
@@ -77,7 +84,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	public ws = new WebSocket(this.wsUrl);
 	public errorMessage: string;
 	private getServerStaticData(callback) {
-		this.serverStaticDataService.getData().subscribe(
+		this.serverStaticDataService.getData().first().subscribe(
 			(data) => this.serverData.static = data,
 			(error) => this.errorMessage = error as any,
 			() => {
@@ -87,7 +94,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		);
 	}
 	private getPublicData(callback) {
-		this.publicDataService.getData().subscribe(
+		this.publicDataService.getData().first().subscribe(
 			(data) => {
 				this.nvd3.clearElement();
 				this.appUsageData = data;
@@ -150,11 +157,10 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			console.log('websocket closed:', evt);
 		};
 
-		this.subscription = this.emitter.getEmitter().subscribe((message) => {
+		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
 			console.log('/intro consuming event:', message);
 			if (message.sys === 'close websocket') {
 				console.log('closing webcosket');
-				this.subscription.unsubscribe();
 				this.ws.close();
 			}
 		});
@@ -168,7 +174,8 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: DashboardIntroComponent destroyed');
-		this.subscription.unsubscribe();
+		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.complete();
 		this.ws.close();
 	}
 }

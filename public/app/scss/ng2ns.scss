@@ -14,17 +14,69 @@ $extralightgrey: #f2f2f2;
 $red: #ff0000;
 // other vals
 $boxPadding: 0.5em;
+
+/* required in case of self hosting of material-design-icons */
+	@font-face {
+		font-family: 'Material Icons';
+		font-style: normal;
+		font-weight: 400;
+		src: url(../fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+		src: local('Material Icons'),
+			local('MaterialIcons-Regular'),
+			url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
+			url(../fonts/MaterialIcons-Regular.woff) format('woff'),
+			url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
+	}
+	.material-icons {
+		font-family: 'Material Icons';
+		font-weight: normal;
+		font-style: normal;
+		font-size: 24px;  /* Preferred icon size */
+		display: inline-block;
+		line-height: 1;
+		text-transform: none;
+		letter-spacing: normal;
+		word-wrap: normal;
+		white-space: nowrap;
+		direction: ltr;
+
+		/* Support for all WebKit browsers. */
+		-webkit-font-smoothing: antialiased;
+		/* Support for Safari and Chrome. */
+		text-rendering: optimizeLegibility;
+
+		/* Support for Firefox. */
+		-moz-osx-font-smoothing: grayscale;
+
+		/* Support for IE. */
+		font-feature-settings: 'liga';
+
+		&:hover {
+			cursor: default;
+		}
+	}
+	button {
+		.material-icons {
+			&:hover {
+				cursor: pointer;
+			}
+		}
+	}
+/* required in case of self hosting of material-design-icons */
+
 html {
-	min-height: 100vh;
-	height: auto!important;
+	height: 100vh;
 	width: 100%;
+	margin: 0;
+	padding: 0;
 }
 body {
-	min-height: 100vh;
+	display: block;
 	height: auto!important;
 	width: 100%;
+	margin: 0;
+	padding: 0;
 	color: $black;
-	font-family: 'Play', sans-serif;
 	font-size: 1.75em;
 	overflow-x: hidden;
 
@@ -116,22 +168,6 @@ body {
 /*
 *	layout
 */
-	.component-container {
-		width: 100%;
-		padding-left: $boxPadding;
-		padding-right: $boxPadding;
-	}
-
-	.full-width {
-		width: 100%;
-	}
-	.pull-right {
-		float: right!important;
-	}
-	.padding {
-		padding-left: $boxPadding;
-		padding-right: $boxPadding;
-	}
 
 	#spinner {
 		display: flex;
@@ -143,8 +179,9 @@ body {
 		color: $white;
 		text-align: center;
 		z-index: 1000;
+		background: rgba(0, 0, 0, 0.15);
 
-		img {
+		mat-spinner {
 			width: 20vh;
 			height: auto!important;
 		}
@@ -166,9 +203,10 @@ body {
 
 	app-info {
 		flex: 0 1 auto;
-		height: 10vh;
+		min-height: 10vh;
 		width: 100%;
 		display: flex;
+		background: transparent;
 		justify-content: space-around;
 		align-items: center;
 
@@ -193,16 +231,20 @@ body {
 	dashboard-intro {
 		flex: 1 1 auto;
 		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		padding-left: $boxPadding;
+		padding-right: $boxPadding;
 
 		#modal {
 			z-index: 10;
-			height: 100vh;
-			width: 100vw;
 			padding: 60px 25px 25px 25px;
-			color: #ffffff;
+			color: $white;
 			position: fixed;
 			top: 0;
 			left: 0;
+			right: 0;
+			bottom: 0;
 			background-color: rgba(0,0,0, 0.9);
 			transition: 0.5s;
 
@@ -222,7 +264,35 @@ body {
 			}
 
 			table {
-				font-size: 0.75em;
+				border-collapse: collapse;
+				background: transparent;
+				width: 100%;
+				line-height: 1.8em;
+				border-color: transparent;
+				thead {
+					display: table-row-group;
+					vertical-align: middle;
+				}
+				tbody {
+					display: table-row-group;
+					vertical-align: middle;
+					border-color: transparent;
+				}
+				tr {
+					display: table-row;
+					border: 1px solid;
+					border-left: 0;
+					border-right: 0;
+					border-top: 0;
+				}
+				td {
+					display: table-cell;
+					font-size: 1.1em;
+					padding: 0.5em;
+					&:hover {
+						cursor: default;
+					}
+				}
 			}
 		}
 	}
@@ -230,6 +300,10 @@ body {
 	dashboard-login {
 		flex: 1 1 auto;
 		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 
 		#login-form {
 			@media(max-width: 767px) {
@@ -248,7 +322,7 @@ body {
 				margin-left: 25vw;
 				margin-right: 25vw;
 			}
-			md-input-container, button {
+			mat-form-field, button {
 				width: 100%;
 			}
 		}

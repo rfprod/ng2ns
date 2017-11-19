@@ -1,23 +1,27 @@
 <div id="filters">
 	<span class="flex-item">
-		<md-input-container>
-			<input mdInput type="text" name="name" [(ngModel)]="searchQuery" placeholder="{{ 'name' | translate }}" />
-			<md-icon mdSuffix class="material-icons">search</md-icon>
-		</md-input-container>
+		<mat-form-field>
+			<input matInput type="text" name="searchQuery" [(ngModel)]="searchQuery" placeholder="{{ 'name' | translate }}" />
+			<mat-icon matSuffix class="material-icons">search</mat-icon>
+		</mat-form-field>
 	</span>
 	<span class="flex-item">
-		<md-select [(ngModel)]="sortByCriterion" floatPlaceholder="auto" placeholder="{{ 'sort_by' | translate }}">
-			<md-option value=""></md-option>
-			<md-option value="role">Role</md-option>
-			<md-option value="registered">Registered</md-option>
-		</md-select>
-		<md-icon mdSuffix class="material-icons">sort</md-icon>
+		<mat-form-field>
+			<mat-select type="select" name="sortByCriterion" [(ngModel)]="sortByCriterion" floatPlaceholder="auto">
+				<mat-option value="">None</mat-option>
+				<mat-option value="role">Role</mat-option>
+				<mat-option value="registered">Registered</mat-option>
+			</mat-select>
+			<mat-placeholder>
+				<mat-icon matSuffix class="material-icons">sort</mat-icon> {{ 'sort_by' | translate }}
+			</mat-placeholder>
+		</mat-form-field>
 	</span>
 </div>
-<div id="dashboard-data" class="padding">
+<div id="dashboard-data">
 	<h3>Users</h3>
 	<span fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutWrap class="flex-grid">
-		<span *ngFor="let user of usersList; let j = index" (mouseenter)="showDetails($event)" (mouseleave)="hideDetails($event)" fxFlex fxFlex.xs="1" fxLayout="row" [ngClass]="{ hidden: hideElement(j)}" class="flex-grid-item">
+		<span *ngFor="let user of usersList; let j = index" (mouseenter)="mouseEntered($event)" (mouseleave)="mouseLeft($event)" fxFlex fxFlex.xs="1" fxLayout="row" fxHide="{{hideElement(j)}}" class="flex-grid-item">
 			<span fxFlex="33" fxLayout="column" class="flex-list">
 				<div>id: {{user.id}}</div>
 				<div>{{user.firstName}}</div>

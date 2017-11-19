@@ -1,21 +1,32 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { CustomDeferredService } from '../services/custom-deferred.service';
+
+import { TranslateService } from '../translate/translate.service';
+
 import { UsersListService } from '../services/users-list.service';
+
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/first';
 
 @Component({
 	selector: 'dashboard-details',
 	templateUrl: '/public/app/views/dashboard-details.html',
+	host: {
+		class: 'mat-body-1'
+	}
 })
 export class DashboardDetailsComponent implements OnInit, OnDestroy {
 	constructor(
 		public el: ElementRef,
 		private emitter: EventEmitterService,
-		private usersListService: UsersListService
+		private usersListService: UsersListService,
+		private translateService: TranslateService
 	) {
-		console.log('this.el.nativeElement:', this.el.nativeElement);
+		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
-	private subscription: any;
+	private ngUnsubscribe: Subject<void> = new Subject();
 	public usersList: any[] = [];
 	public errorMessage: string;
 	private getUsersList(callback?: any): Promise<boolean> {
@@ -25,7 +36,7 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		*	callback can be chained with .then()
 		*/
 		const def = new CustomDeferredService<boolean>();
-		this.usersListService.getUsersList().subscribe(
+		this.usersListService.getUsersList().first().subscribe(
 			(data) => {
 				this.usersList = data;
 				def.resolve(true);
@@ -41,27 +52,22 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		);
 		return def.promise;
 	}
-	private showDetails(event) {
+	private mouseEntered(event) {
 		console.log('mouse enter', event);
 	}
-	private hideDetails(event) {
+	private mouseLeft(event) {
 		console.log('mouse leave', event);
 	}
 
 /*
 *	search
 */
-	public searchValue: string;
-	get searchQuery() {
+	private searchValue: string;
+	private get searchQuery(): string {
 		return this.searchValue;
 	}
-	set searchQuery(val) {
+	private set searchQuery(val: string) {
 		this.searchValue = val;
-		this.emitSearchValueChangeEvent(val);
-	}
-	private emitSearchValueChangeEvent(val) {
-		console.log('searchValue changed to:', val);
-		this.emitter.emitEvent({search: val});
 	}
 	private hideElement(index) {
 		console.log(' > hideElement:', index, this.usersList[index].firstName);
@@ -73,17 +79,31 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 /*
 *	sort
 */
-	public orderProp: string = '';
-	get sortByCriterion() {
-		return this.orderProp;
+	private sortValue: string;
+	private get sortByCriterion(): string {
+		return this.sortValue;
 	}
-	set sortByCriterion(val) {
-		this.orderProp = val;
-		this.emitOrderPropChangeEvent(val);
+	private set sortByCriterion(val: string) {
+		if (this.sortValue !== val) { // sort if value changed
+			this.sortValue = val;
+			this.performSorting(val);
+		}
 	}
-	private emitOrderPropChangeEvent(val) {
-		console.log('orderProp changed to:', val);
-		this.emitter.emitEvent({sort: val});
+	private performSorting(val: string): void {
+		if (val === 'registered') {
+			this.usersList.sort((a, b) => parseInt(a[val], 10) - parseInt(b[val], 10));
+		} else if (val === 'role') {
+			this.usersList.sort((a, b) => {
+				if (a[val] < b[val]) { return -1; }
+				if (a[val] > b[val]) { return 1; }
+				return 0;
+			});
+		} else if (val === '') {
+			/*
+			*	sort by id if sorting is set to none
+			*/
+			this.usersList.sort((a, b) => parseInt(a.id, 10) - parseInt(b.id, 10));
+		}
 	}
 
 /*
@@ -102,34 +122,9 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		console.log('ngOnInit: DashboardDetailsComponent initialized');
 		this.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'hide'});
-		this.subscription = this.emitter.getEmitter().subscribe((message) => {
+		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
 			console.log('/data consuming event:', JSON.stringify(message));
-			if (message.search || message.search === '') {
-				console.log('searching:', message.search);
-				/*
-				*	TODO
-				*	actually this message emission is not needed
-				*	if only one controller that displays data to be sorted is visible at the same time
-				*/
-			}
-			if (message.sort) {
-				/*
-				* sorting rules
-				*/
-				console.log('sorting by:', message.sort);
-				if (message.sort === 'registered') {
-					this.usersList.sort((a, b) => {
-						return b.registered - a.registered;
-					});
-				}
-				if (message.sort === 'role') {
-					this.usersList.sort((a, b) => {
-						if (a.role < b.role) { return -1; }
-						if (a.role > b.role) { return 1; }
-						return 0;
-					});
-				}
-			}
+			// TODO
 		});
 
 		/*
@@ -151,6 +146,7 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: DashboardDetailsComponent destroyed');
-		this.subscription.unsubscribe();
+		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.complete();
 	}
 }

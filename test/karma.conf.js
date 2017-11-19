@@ -21,6 +21,7 @@ module.exports = function(config){
 			'node_modules/zone.js/dist/fake-async-test.js',
 
 			'node_modules/systemjs/dist/system.src.js',
+			{ pattern: 'node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css' },
 
 			{ pattern: 'systemjs.config.js', included: false, watched: false },
 			{ pattern: 'systemjs.karma.config.js', included: false, watched: false },

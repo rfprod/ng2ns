@@ -15,26 +15,35 @@ const gulp = require('gulp'),
 	cssnano = require('gulp-cssnano'),
 	autoprefixer = require('gulp-autoprefixer'),
 	systemjsBuilder = require('gulp-systemjs-builder'),
+	fs = require('fs'),
 	spawn = require('child_process').spawn,
 	exec = require('child_process').exec;
 let node,
 	tsc;
 
 function killProcessByName(name) {
-	exec('ps -e | grep ' + name, (error, stdout, stderr) => {
+	exec('pgrep ' + name, (error, stdout, stderr) => {
 		if (error) throw error;
 		if (stderr) console.log('stderr:', stderr);
 		if (stdout) {
 			//console.log('killing running processes:', stdout);
-			const runningProcessesIDs = stdout.match(/\d{3,6}/);
+			const runningProcessesIDs = stdout.match(/\d+/);
 			runningProcessesIDs.forEach((id) => {
-				exec('kill ' + id, (error, stdout, stderr) => {
+				exec('kill -9 ' + id, (error, stdout, stderr) => {
 					if (error) throw error;
 					if (stderr) console.log('stdout:', stdout);
 					if (stdout) console.log('stderr:', stderr);
 				});
 			});
 		}
+	});
+}
+
+function createEnvFile(env, done) {
+	fs.writeFile('./.env', env, (err) => {
+		if (err) throw err;
+		console.log('# > ENV > .env file was created');
+		done();
 	});
 }
 
@@ -194,15 +203,23 @@ gulp.task('pack-vendor-js', () => {
 	*	components related to design, styling, data visualization etc.
 	*/
 	return gulp.src([
-		// sequence is essential
-		'./node_modules/jquery/dist/jquery.js',
-		'./node_modules/bootstrap/dist/js/bootstrap.js',
+		/*
+		*	add paths to required third party js files
+		*
+		*	note: sequence is essential
+		*/
 
-		'./node_modules/d3/d3.js',
-		'./node_modules/nvd3/build/nv.d3.js',
+		// angular requirements
+		'./node_modules/core-js/client/shim.js',
 		'./node_modules/zone.js/dist/zone.min.js',
 		'./node_modules/reflect-metadata/Reflect.js',
-		'./node-modules/web-animations-js/web-animations.min.js'
+		'./node-modules/web-animations-js/web-animations.min.js',
+
+		'./node_modules/jquery/dist/jquery.js',
+
+		// angular dependency
+		'./node_modules/d3/d3.js',
+		'./node_modules/nvd3/build/nv.d3.js'
 	])
 		.pipe(plumber())
 		.pipe(concat('vendor-bundle.js'))
@@ -214,7 +231,6 @@ gulp.task('pack-vendor-js', () => {
 
 gulp.task('pack-vendor-css', () => {
 	return gulp.src([
-		'./node_modules/bootstrap/dist/css/bootstrap.css',
 		'./node_modules/nvd3/build/nv.d3.css',
 		'./node_modules/components-font-awesome/css/font-awesome.css',
 		/*
@@ -235,8 +251,12 @@ gulp.task('pack-vendor-css', () => {
 
 gulp.task('move-vendor-fonts', () => {
 	return gulp.src([
-		'./node_modules/bootstrap/dist/fonts/*.*',
-		'./node_modules/components-font-awesome/fonts/*.*'
+		'./node_modules/components-font-awesome/fonts/*.*',
+		// material design icons
+		'./node_modules/material-design-icon-fonts/iconfont/*.eot',
+		'./node_modules/material-design-icon-fonts/iconfont/*.woff2',
+		'./node_modules/material-design-icon-fonts/iconfont/*.woff',
+		'./node_modules/material-design-icon-fonts/iconfont/*.ttf'
 	])
 		.pipe(gulp.dest('./public/fonts'));
 });
