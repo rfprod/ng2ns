@@ -132,6 +132,8 @@ NODE_ENV=production
 
 `NODE_ENV` tells `npm` to pass installing devDependencies.
 
+### Electron
+
 #### Prerequisites
 
 development environment may need to use a NodeJS version compatible which Electron, which is `7.9.0` by the moment of writing this note, NodeJS versions switching may require node-sass rebuild
