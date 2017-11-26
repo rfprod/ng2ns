@@ -35,6 +35,7 @@
 	},
 	"globals": {
 		"angular": true,
-		"$": true
+		"$": true,
+		"System": true
 	}
 }

@@ -1,5 +1,7 @@
 # Ng2NodeStarter (Ng2NS)
 
+![build](https://travis-ci.org/rfprod/ng2ns.svg?branch=master)
+
 ## Overview
 
 Ng2NodeStarter - application core based on NodeJS and Angular.
@@ -36,8 +38,6 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./desktop/osx`
     * `./desktop/osx/build` - osx build
     * `./desktop/osx/dist` - osx installer
-
-# Start
 
 ### Requirements
 

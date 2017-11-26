@@ -19,11 +19,15 @@ const gulp = require('gulp'),
 	spawn = require('child_process').spawn,
 	exec = require('child_process').exec;
 let node,
-	tsc;
+	tsc,
+	protractor;
 
 function killProcessByName(name) {
 	exec('pgrep ' + name, (error, stdout, stderr) => {
-		if (error) throw error;
+		if (error) {
+			// throw error;
+			console.log('killProcessByName, error', error);
+		}
 		if (stderr) console.log('stderr:', stderr);
 		if (stdout) {
 			//console.log('killing running processes:', stdout);
@@ -107,7 +111,7 @@ gulp.task('create-env-electron', (done) => {
 	});
 });
 
-gulp.task('server', () => {
+gulp.task('server', (done) => {
 	if (node) node.kill();
 	node = spawn('node', ['server.js'], {stdio: 'inherit'});
 	node.on('close', (code) => {
@@ -115,14 +119,17 @@ gulp.task('server', () => {
 			gulp.log('Error detected, waiting for changes...');
 		}
 	});
+	done();
 });
 
-gulp.task('tsc', () => {
+gulp.task('tsc', (done) => {
 	if (node) tsc.kill();
 	tsc = spawn('tsc', [], {stdio: 'inherit'});
 	tsc.on('close', (code) => {
 		if (code === 8) {
 			gulp.log('Error detected, waiting for changes...');
+		} else {
+			done();
 		}
 	});
 });
@@ -149,7 +156,6 @@ gulp.task('client-unit-test', (done) => {
 			throw new Error('=====\nKarma > Tests Failed\n=====\n', results);
 		}
 		console.log('=====\nKarma > Complete With No Failures\n=====\n', results);
-
 		done();
 	});
 
@@ -174,11 +180,15 @@ gulp.task('client-unit-test-single-run', (done) => {
 		} else {
 			console.log('=====\nKarma > Complete With No Failures\n=====\n', results);
 		}
-
 		done();
 	});
 
 	server.start();
+});
+
+gulp.task('client-e2e-test', () => {
+	if (protractor) protractor.kill();
+	protractor = spawn('npm', ['run', 'protractor'], {stdio: 'inherit'});
 });
 
 gulp.task('build-system-js', () => {
@@ -291,34 +301,46 @@ gulp.task('tslint', () => {
 		}));
 });
 
+gulp.task('lint', (done) => {
+	runSequence('eslint', 'tslint', done);
+});
+
+/*
+*	watchers
+*/
 gulp.task('watch', () => {
-	gulp.watch(['./server.js', './app/config/*.js', './app/models/*.js', './app/routes/*.js', './app/utils/*.js'], ['server']); // watch server and database changes and restart server
+	gulp.watch(['./server.js', './app/**/*.js'], ['server']); // watch server and changes and restart server
 	gulp.watch(['./public/app/*.js', './public/app/**/*.js'], ['build-system-js']); // watch app js changes and build system
-	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch app css changes, pack css, minify and put in respective folder
-	//gulp.watch(['./public/app/*.js','./test/client/*.js','./test/karma.conf.js','./test/karma.test-shim.js'], ['client-unit-test']); //watch unit test changes and run tests
-	gulp.watch(['./test/server/test.js'], ['server-test']); // watch server tests changes and run tests
-	gulp.watch(['./app/**', './public/js/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch files to be linted or eslint config files and lint on change
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './tslint.json'], ['tslint']); // watch files to be linted or eslint config files and lint on change
+	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch scss changes and process
+	gulp.watch(['./test/server/*.js'], ['server-test']); // watch server tests changes and run tests
+	gulp.watch(['./app/**/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
 });
 
 gulp.task('watch-and-lint', () => {
-	gulp.watch(['./app/**', './public/js/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch files to be linted or eslint config files and lint on change
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './tslint.json'], ['tslint']); // watch files to be linted or eslint config files and lint on change
+	gulp.watch(['./app/**/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
 });
 
 gulp.task('watch-client-and-test', () => {
-	gulp.watch(['./public/app/*.ts','./test/client/*.ts'], ['tsc']); //watch unit test changes and run tests
-	gulp.watch(['./public/app/*.js','./test/client/*.js','./test/karma.conf.js','./test/karma.test-shim.js'], ['client-unit-test']); //watch unit test changes and run tests
+	gulp.watch(['./public/app/*.ts','./test/client/**/*.ts'], ['tsc']); // watch unit test changes and run tests
+	gulp.watch(['./public/app/*.js','./test/client/**/*.js','./test/karma.conf.js','./test/karma.test-shim.js'], ['client-unit-test']); //watch unit test changes and run tests
+});
+
+/*
+*	build sequences
+*/
+gulp.task('compile-and-build', (done) => {
+	runSequence('tsc', 'build-system-js', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
 });
 
 gulp.task('build', (done) => {
 	runSequence('build-system-js', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
 });
 
-gulp.task('lint', (done) => {
-	runSequence('eslint', 'tslint', done);
-});
-
+/*
+*	start sequences
+*/
 gulp.task('default', (done) => {
 	runSequence('create-env-development', 'server', 'build', 'lint', 'watch', done);
 });
@@ -340,19 +362,13 @@ gulp.task('production-start', (done) => {
 *	after installation execute: gulp electron-packager-win
 *
 *	after previous task is completed execute: gulp electron-winstaller
-*
 *	or use a single sequence of tasks, execure: gulp build-electron-win
-*
-*	NOTE: considering using electron-forge to build the app? don't, it it really sucks
 *
 *	when running on windows port 8080 may be in use, execute the following:
 *	netstat -ano | findstr 8080
 *	taskkill /F /PID <fond_task_PID>
 *
-*	to be able to run electron on windows the following packages are required
-*	- https://www.microsoft.com/en-us/download/confirmation.aspx?id=48145
-*
-*	electronPackagerIgnore holds array of regexps to be ignored on electron app packaging
+*	electronPackagerIgnore is an array of regexps to be ignored on electron app packaging
 */
 const electronPackagerIgnore = [ // exclude
 	/\/desktop/, // builds and dists

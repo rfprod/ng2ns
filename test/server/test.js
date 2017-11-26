@@ -26,7 +26,7 @@ describe('/ endpoint', function() {
 			
 			const $ = cheerio.load(body);
 			assert.equal(1, $('title').length);
-			expect(str($('title').html()).contains('Ng2NodeMongoCore')).to.be.ok;
+			expect(str($('title').html()).contains('Ng2NodeStarter')).to.be.ok;
 			assert.equal(1, $('root').length);
 			
 			done();
