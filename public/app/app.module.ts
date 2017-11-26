@@ -12,6 +12,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 import { AuthGuardGeneral } from './services/auth-guard-general.service';
+import { AnonimousGuard } from './services/anonimous-guard.service';
 
 /*
 *	Some material components rely on hammerjs
@@ -31,6 +32,7 @@ import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService } from './transl
 
 import { CustomDeferredService } from './services/custom-deferred.service';
 import { EventEmitterService } from './services/event-emitter.service';
+import { WebsocketService } from './services/websocket.service';
 
 import { UsersListService } from './services/users-list.service';
 import { UserService } from './services/user.service';
@@ -42,7 +44,7 @@ import { NvD3Component } from 'ng2-nvd3';
 @NgModule({
 	declarations: [ AppComponent, TranslatePipe, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent, DashboardDetailsComponent, NvD3Component ],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule.forRoot(APP_ROUTES) ],
-	providers 	: [ {provide: APP_BASE_HREF, useValue: '/'}, {provide: LocationStrategy, useClass: PathLocationStrategy}, { provide: 'Window', useValue: window }, TRANSLATION_PROVIDERS, TranslateService, CustomDeferredService, EventEmitterService, UserService, AuthGuardGeneral, UsersListService, ServerStaticDataService, PublicDataService ],
+	providers 	: [ {provide: APP_BASE_HREF, useValue: '/'}, {provide: LocationStrategy, useClass: PathLocationStrategy}, { provide: 'Window', useValue: window }, TRANSLATION_PROVIDERS, TranslateService, CustomDeferredService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral, AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService ],
 	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],
 	bootstrap 	: [ AppComponent ],
 })

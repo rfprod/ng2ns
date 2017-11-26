@@ -9,15 +9,18 @@
 	// packages locations
 	var map = {
 		'app': 																	'./base/public/app',
+		'mocks': 																'./base/test/client/mocks',
 		'ng2-nvd3': 														'npm:ng2-nvd3/build',
 		'rxjs/Rx': 															'npm:rxjs/bundles/Rx.js',
 		'rxjs': 																'npm:rxjs',
 		'rxjs/operators': 											'npm:rxjs/operators',
+		'tslib': 																'npm:tslib/tslib.js',
 		'traceur': 															'npm:traceur/bin',
 		'@angular/animations': 									'npm:@angular/animations/bundles/animations.umd.js',
 		'@angular/animations/browser': 					'npm:@angular/animations/bundles/animations-browser.umd.js',
 		'@angular/core': 												'npm:@angular/core/bundles/core.umd.js',
 		'@angular/common': 											'npm:@angular/common/bundles/common.umd.js',
+		'@angular/common/http': 								'npm:@angular/common/bundles/common-http.umd.js',
 		'@angular/compiler': 										'npm:@angular/compiler/bundles/compiler.umd.js',
 		'@angular/forms': 											'npm:@angular/forms/bundles/forms.umd.js',
 		'@angular/http': 												'npm:@angular/http/bundles/http.umd.js',
@@ -47,6 +50,7 @@
 	// how to load packages
 	var packages = {
 		'app': 												{ main: 'app', defaultExtension: 'js' },
+		'mocks': 											{ main: 'index', defaultExtension: 'js' },
 		'ng2-nvd3': 									{ main: 'index', defaultExtension: 'js' },
 		'rxjs': 											{ defaultExtension: 'js' },
 		'rxjs/operators': 						{ main: 'index', defaultExtension: 'js' },

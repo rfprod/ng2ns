@@ -23,7 +23,7 @@ export class UserService {
 		console.log(' >> USER SERVICE CONSTRUCTOR, model', this.model);
 	}
 
-	public getUser(): Observable<object> {
+	public getUser(): any {
 		return this.model;
 	}
 

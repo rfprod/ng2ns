@@ -9,6 +9,7 @@ export const LANG_RU_TRANSLATIONS = {
 	diag: 'Диагностика платформы',
 	login: 'Вход в систему',
 	login_instructions: 'Пожалуйста, введите адрес эл. почты и пароль',
+	logout: 'Выход',
 	email: 'Эл. почта',
 	password: 'Пароль',
 	forget_my_address: 'Забудь мой адрес',

@@ -1,9 +1,16 @@
 import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { EventEmitterService } from '../services/event-emitter.service';
 import { UserService } from '../services/user.service';
+
 import { ServerStaticDataService } from '../services/server-static-data.service';
 import { PublicDataService } from '../services/public-data.service';
+
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/first';
 
 @Component({
 	selector: 'dashboard-login',
@@ -17,6 +24,7 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		public el: ElementRef,
 		private emitter: EventEmitterService,
 		private fb: FormBuilder,
+		private router: Router,
 		private userService: UserService,
 		private serverStaticDataService: ServerStaticDataService,
 		private publicDataService: PublicDataService
@@ -30,6 +38,7 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 			password: ['', Validators.compose([Validators.required, Validators.minLength(1)])]
 		});
 	}
+	private ngUnsubscribe: Subject<void> = new Subject();
 	private loginForm: FormGroup;
 	private resetForm() {
 		this.loginForm.reset({
@@ -43,6 +52,7 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		if (this.loginForm.valid) {
 			this.errorMessage = null;
 			this.userService.SaveUser({ email: this.loginForm.controls.email.value, token: 'mockedToken' });
+			this.router.navigate(['data']);
 		} else {
 			this.errorMessage = 'Invalid form input';
 		}
@@ -66,5 +76,7 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: DashboardLoginComponent destroyed');
+		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.complete();
 	}
 }

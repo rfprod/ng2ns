@@ -2,90 +2,41 @@
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Http, BaseRequestOptions, Response, ResponseOptions, Headers } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { NvD3Component } from 'ng2-nvd3';
-import { EventEmitterService } from '../../public/app/services/event-emitter.service';
 
-import { TranslateService, TranslatePipe, TRANSLATIONS } from '../../public/app/translate/index';
+import { EventEmitterService } from '../../../public/app/services/event-emitter.service';
 
-import { ServerStaticDataService } from '../../public/app/services/server-static-data.service';
-import { PublicDataService } from '../../public/app/services/public-data.service';
+import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
+
+import { ServerStaticDataService } from '../../../public/app/services/server-static-data.service';
+import { PublicDataService } from '../../../public/app/services/public-data.service';
+import { WebsocketService } from '../../../public/app/services/websocket.service';
+
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import '../../node_modules/hammerjs/hammer.js';
-import { CustomMaterialModule } from '../../public/app/custom-material.module';
+import '../../../node_modules/hammerjs/hammer.js';
+import { CustomMaterialModule } from '../../../public/app/custom-material.module';
 
-import { DashboardIntroComponent } from '../../public/app/components/dashboard-intro.component';
+import { DashboardIntroComponent } from '../../../public/app/components/dashboard-intro.component';
 
 describe('DashboardIntroComponent', () => {
-
-	class MockTranslateService extends TranslateService {
-		constructor() {
-			super(TRANSLATIONS);
-		}
-		private _curLang: string;
-		public get currentLanguage(): string {
-			return this._curLang;
-		}
-		public use(key: string): void {
-			this._curLang = key;
-		}
-	}
-
-	class MockServerStaticDataService extends ServerStaticDataService {
-		constructor() {
-			super(null);
-		}
-		getServerStaticData() {
-			console.log('getServerStaticData: return test data');
-			return Observable.of([
-				{
-					name: 'dyn name 1',
-					value: 'dyn value 1'
-				},{
-					name: 'dyn name 2',
-					value: 'dyn value 2'
-				},{
-					name: 'dyn name 3',
-					value: 'dyn value 3'
-				},{
-					name: 'dyn name 4',
-					value: 'dyn value 4'
-				}
-			]);
-		};
-	}
-
-	class MockPublicDataService extends PublicDataService {
-		constructor() {
-			super(null);
-		}
-		getPublicData() {
-			console.log('getPublicData: return test data');
-			return Observable.of([
-				{
-					name: 'dyn name 1',
-					value: 'dyn value 1'
-				},{
-					name: 'dyn name 2',
-					value: 'dyn value 2'
-				}
-			]);
-		};
-	}
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ TranslatePipe, NvD3Component, DashboardIntroComponent, NvD3Component ],
-			imports: [ NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule ],
+			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule ],
 			providers: [
+				{ provide: 'Window', useValue: { location: { host: 'localhost', protocol: 'http' } } },
 				EventEmitterService,
-				{ provide: TranslateService, useClass: MockTranslateService },
+				TRANSLATION_PROVIDERS,
+				TranslateService,
 				BaseRequestOptions,
 				MockBackend,
 				{ provide: Http,
@@ -102,7 +53,11 @@ describe('DashboardIntroComponent', () => {
 					useFactory: (http) => new ServerStaticDataService(http),
 					deps: [Http]
 				},
-				{ provide: Window, useValue: { location: { host: 'localhost', protocol: 'http' } } }
+				{
+					provide: WebsocketService,
+					useFactory: (window) => new WebsocketService(window),
+					deps: ['Window']
+				}
 			],
 			schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 		}).compileComponents().then(() => {
@@ -131,9 +86,6 @@ describe('DashboardIntroComponent', () => {
 		expect(this.component.title === 'Ng2NodeStarter (Ng2NS)').toBeTruthy();
 		expect(this.component.description).toBeDefined();
 		expect(this.component.description === 'Angular, NodeJS').toBeTruthy();
-		expect(this.component.host).toBeDefined();
-		expect(this.component.host).toEqual(window.location.host);
-		expect(this.component.wsUrl).toEqual('ws://'+this.component.host+'/api/app-diag/dynamic');
 		expect(this.component.chartOptions).toEqual(jasmine.any(Object));
 		expect(this.component.chartOptions.chart).toBeDefined();
 		expect(this.component.chartOptions.chart).toEqual({
@@ -164,7 +116,9 @@ describe('DashboardIntroComponent', () => {
 			static: jasmine.any(Array),
 			dynamic: jasmine.any(Array)
 		});
-		expect(this.component.ws).toBeDefined();
+		expect(this.component.wsEndpoint).toBeDefined();
+		expect(this.component.wsEndpoint).toEqual('/api/app-diag/dynamic');
+		expect(this.component.ws).toEqual(jasmine.any(WebSocket));
 		expect(this.component.getServerStaticData).toBeDefined();
 		expect(this.component.getPublicData).toBeDefined();
 		expect(this.component.emitSpinnerStartEvent).toBeDefined();

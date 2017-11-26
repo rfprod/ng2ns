@@ -8,8 +8,11 @@
 		<button [routerLink]="['intro']" (click)="switchNavButtons($event, 'intro')" mat-button [ngClass]="{selected: navButtonsState[1], inactive: !navButtonsState[1]}" [fxHide.xs]="true" [fxHide.sm]="true">
 			<i class="fa fa-tachometer"></i> {{ 'intro' | translate }}
 		</button>
-		<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login')" mat-button [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}" [fxHide.xs]="true" [fxHide.sm]="true">
+		<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login')" mat-button [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}" [fxHide.xs]="true" [fxHide.sm]="true" *ngIf="!userService.getUser().token">
 			<i class="fa fa-user"></i> {{ 'login' | translate }}
+		</button>
+		<button (click)="logOut()" mat-button [fxHide.xs]="true" [fxHide.sm]="true" *ngIf="userService.getUser().token">
+			<i class="fa fa-user"></i> {{ 'logout' | translate }}
 		</button>
 		<button [routerLink]="['data']" (click)="switchNavButtons($event, 'data')" mat-button [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}" [fxHide.xs]="true" [fxHide.sm]="true">
 			<i class="fa fa-database"></i> {{ 'data' | translate }}
@@ -31,8 +34,11 @@
 			<button [routerLink]="['intro']" (click)="switchNavButtons($event, 'intro')" mat-menu-item [ngClass]="{selected: navButtonsState[1], inactive: !navButtonsState[1]}">
 				<i class="fa fa-tachometer"></i> {{ 'intro' | translate }}
 			</button>
-			<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login')" mat-menu-item [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}">
+			<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login')" mat-menu-item [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}" *ngIf="!userService.getUser().token">
 				<i class="fa fa-user"></i> {{ 'login' | translate }}
+			</button>
+			<button (click)="logOut()" mat-button *ngIf="userService.getUser().token">
+				<i class="fa fa-user"></i> {{ 'logout' | translate }}
 			</button>
 			<button [routerLink]="['data']" (click)="switchNavButtons($event, 'data')" mat-menu-item [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}">
 				<i class="fa fa-database"></i> {{ 'data' | translate }}

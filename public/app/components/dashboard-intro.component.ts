@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+
 import { EventEmitterService } from '../services/event-emitter.service';
 import { ServerStaticDataService } from '../services/server-static-data.service';
 import { PublicDataService } from '../services/public-data.service';
+import { WebsocketService } from '../services/websocket.service';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -20,6 +22,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	constructor(
 		public el: ElementRef,
 		private emitter: EventEmitterService,
+		private websocket: WebsocketService,
 		private serverStaticDataService: ServerStaticDataService,
 		private publicDataService: PublicDataService
 	) {
@@ -28,8 +31,6 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 	private ngUnsubscribe: Subject<void> = new Subject();
 	public title: string = 'Ng2NodeStarter (Ng2NS)';
 	public description: string = 'Angular, NodeJS';
-	public host: string = window.location.host;
-	public wsUrl: string = (this.host.indexOf('localhost') !== -1) ? 'ws://' + this.host + '/api/app-diag/dynamic' : 'ws://' + this.host + ':8000/api/app-diag/dynamic';
 	public chartOptions: object = {
 		chart: {
 			type: 'pieChart',
@@ -81,7 +82,8 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		static: [],
 		dynamic: [],
 	};
-	public ws = new WebSocket(this.wsUrl);
+	public wsEndpoint: string = '/api/app-diag/dynamic';
+	public ws = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
 	public errorMessage: string;
 	private getServerStaticData(callback) {
 		this.serverStaticDataService.getData().first().subscribe(

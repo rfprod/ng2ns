@@ -30,11 +30,12 @@ module.exports = function(config){
 			
 			'node_modules/hammerjs/hammer.js',
 			{ pattern: 'node_modules/@angular/**', included: false, watched: false },
-			
 			{ pattern: 'node_modules/rxjs/**', included: false, watched: false },
+			{ pattern: 'node_modules/tslib/**', included: false, watched: false },
+			{ pattern: 'node_modules/traceur/**', included: false, watched: false },
 
 			'test/karma.test-shim.js',
-			{ pattern: 'test/client/*.js', included: false, watched: false },
+			{ pattern: 'test/client/**', included: false, watched: false },
 
 			{ pattern: 'public/app/**', included: false, watched: false }
 		],

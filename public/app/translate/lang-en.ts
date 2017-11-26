@@ -9,6 +9,7 @@ export const LANG_EN_TRANSLATIONS = {
 	diag: 'Platform Diagnostics',
 	login: 'Log in',
 	login_instructions: 'Provide an email and a password, please',
+	logout: 'Log out',
 	email: 'Email',
 	password: 'Password',
 	forget_my_address: 'Forget my address',

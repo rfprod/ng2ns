@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+
 import { EventEmitterService } from '../services/event-emitter.service';
+import { UserService } from '../services/user.service';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
@@ -16,6 +18,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private emitter: EventEmitterService,
+		private userService: UserService,
 		private router: Router
 	) {}
 
@@ -57,6 +60,12 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		*/
 		console.log('close websocket event emitted');
 		this.emitter.emitEvent({sys: 'close websocket'});
+	}
+
+	private logOut() {
+		const token = this.userService.getUser().token;
+		this.userService.SaveUser({ token: '' });
+		this.router.navigate(['']);
 	}
 
 	public selectLanguage(key: string) {
