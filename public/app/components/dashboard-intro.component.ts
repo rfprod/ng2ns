@@ -83,43 +83,43 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		dynamic: [],
 	};
 	public wsEndpoint: string = '/api/app-diag/dynamic';
-	public ws = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
+	public ws: WebSocket = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
 	public errorMessage: string;
-	private getServerStaticData(callback) {
+	private getServerStaticData(callback): void {
 		this.serverStaticDataService.getData().first().subscribe(
-			(data) => this.serverData.static = data,
-			(error) => this.errorMessage = error as any,
+			(data: any): void => this.serverData.static = data,
+			(error: any): void => this.errorMessage = error as any,
 			() => {
 				console.log('getServerStaticData done, data:', this.serverData.static);
 				callback(this);
 			}
 		);
 	}
-	private getPublicData(callback) {
+	private getPublicData(callback): void {
 		this.publicDataService.getData().first().subscribe(
-			(data) => {
+			(data: any): void => {
 				this.nvd3.clearElement();
 				this.appUsageData = data;
 			},
-			(error) => this.errorMessage = error as any,
-			() => {
+			(error: any): void => this.errorMessage = error as any,
+			(): void => {
 				console.log('getPublicData done, data:', this.appUsageData);
 				callback(this);
 			}
 		);
 	}
 
-	private emitSpinnerStartEvent() {
+	private emitSpinnerStartEvent(): void {
 		console.log('root spinner start event emitted');
 		this.emitter.emitEvent({spinner: 'start'});
 	}
-	private emitSpinnerStopEvent() {
+	private emitSpinnerStopEvent(): void {
 		console.log('root spinner stop event emitted');
 		this.emitter.emitEvent({spinner: 'stop'});
 	}
 
 	private showModal: boolean = false;
-	private toggleModal() {
+	private toggleModal(): void {
 		if (this.showModal) {
 			this.ws.send(JSON.stringify({action: 'pause'}));
 		} else { this.ws.send(JSON.stringify({action: 'get'})); }
@@ -128,12 +128,12 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 
 	@ViewChild ('chart') private nvd3: any;
 
-	public ngOnInit() {
+	public ngOnInit(): void {
 		console.log('ngOnInit: DashboardIntroComponent initialized');
 		this.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'show'});
 
-		this.ws.onopen = (evt) => {
+		this.ws.onopen = (evt: any): void => {
 			console.log('websocket opened:', evt);
 			/*
 			*	ws connection is established, but data is requested
@@ -142,26 +142,26 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			*/
 			// this.ws.send(JSON.stringify({action: 'get'}));
 		};
-		this.ws.onmessage = (message) => {
+		this.ws.onmessage = (message: any): void => {
 			console.log('websocket incoming message:', message);
 			this.serverData.dynamic = [];
-			const data = JSON.parse(message.data);
+			const data: any = JSON.parse(message.data);
 			for (const d in data) {
 				if (data[d]) { this.serverData.dynamic.push(data[d]); }
 			}
 			console.log('this.serverData.dynamic:', this.serverData.dynamic);
 		};
-		this.ws.onerror = (evt) => {
+		this.ws.onerror = (evt: any): void => {
 			console.log('websocket error:', evt);
 			this.ws.close();
 		};
-		this.ws.onclose = (evt) => {
+		this.ws.onclose = (evt: any): void => {
 			console.log('websocket closed:', evt);
 		};
 
 		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
 			console.log('/intro consuming event:', message);
-			if (message.sys === 'close websocket') {
+			if (message.websocket === 'close') {
 				console.log('closing webcosket');
 				this.ws.close();
 			}
@@ -174,7 +174,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		});
 
 	}
-	public ngOnDestroy() {
+	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: DashboardIntroComponent destroyed');
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();

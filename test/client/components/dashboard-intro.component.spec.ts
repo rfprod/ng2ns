@@ -138,5 +138,14 @@ describe('DashboardIntroComponent', () => {
 		expect(this.eventEmitterSrv.emitEvent).toHaveBeenCalledWith({ spinner: 'stop' });
 	});
 
+	it('should be properly destroyed', () => {
+		this.component.ngOnInit();
+		spyOn(this.component.ngUnsubscribe, 'next').and.callThrough();
+		spyOn(this.component.ngUnsubscribe, 'complete').and.callThrough();
+		this.component.ngOnDestroy();
+		expect(this.component.ngUnsubscribe.next).toHaveBeenCalled();
+		expect(this.component.ngUnsubscribe.complete).toHaveBeenCalled();
+	});
+
 });
 

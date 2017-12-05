@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { EventEmitterService } from '../services/event-emitter.service';
@@ -17,6 +17,7 @@ import 'rxjs/add/operator/takeUntil';
 export class AppNavComponent implements OnInit, OnDestroy {
 
 	constructor(
+		private el: ElementRef,
 		private emitter: EventEmitterService,
 		private userService: UserService,
 		private router: Router
@@ -25,16 +26,19 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	private ngUnsubscribe: Subject<void> = new Subject();
 	public navButtonsState: boolean[] = [false, false, false, false];
 
-	public supportedLanguages: any[];
+	public supportedLanguages: any[] = [
+		{ key: 'en', name: 'English' },
+		{ key: 'ru', name: 'Russian' }
+	];
 
-	public switchNavButtons(event: any, path?: string) {
+	public switchNavButtons(event: any, path?: string): void {
 		/*
 		*	accepts router event, and optionally path which contains name of activated path
 		*	if path parameter is passed, event parameter will be ignored
 		*/
-		let index;
+		let index: string;
 		console.log('switchNavButtons:', event);
-		const route = (event.route) ? event.route : (typeof event.urlAfterRedirects === 'string') ? event.urlAfterRedirects : event.url;
+		const route: string = (event.route) ? event.route : (typeof event.urlAfterRedirects === 'string') ? event.urlAfterRedirects : event.url;
 		// remove args from route if present
 		path = (!path) ? route.replace(/\?.*$/, '').substring(route.lastIndexOf('/') + 1, route.length) : path;
 		console.log(' >> PATH', path);
@@ -53,26 +57,26 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		console.log('navButtonsState:', this.navButtonsState);
 	}
 
-	public stopWS() {
+	public stopWS(): void {
 		/*
 		*	this function should be executed before user is sent to any external resource
 		*	on click on an anchor object if a resource is loaded in the same tab
 		*/
 		console.log('close websocket event emitted');
-		this.emitter.emitEvent({sys: 'close websocket'});
+		this.emitter.emitEvent({websocket: 'close'});
 	}
 
-	private logOut() {
+	private logOut(): void {
 		const token = this.userService.getUser().token;
 		this.userService.SaveUser({ token: '' });
 		this.router.navigate(['']);
 	}
 
-	public selectLanguage(key: string) {
+	public selectLanguage(key: string): void {
 		this.emitter.emitEvent({lang: key});
 	}
 
-	public ngOnInit() {
+	public ngOnInit(): void {
 		console.log('ngOnInit: AppNavComponent initialized');
 
 		this.router.events.takeUntil(this.ngUnsubscribe).subscribe((event: any) => {
@@ -80,22 +84,11 @@ export class AppNavComponent implements OnInit, OnDestroy {
 			if (event instanceof NavigationEnd) {
 				console.log(' > ROUTER > NAVIGATION END, event', event);
 				this.switchNavButtons(event);
-
-				/*
-				*	TODO
-				*	close toaster on navigation end later if needed
-				*/
 			}
 		});
-
-		// init supported languages
-		this.supportedLanguages = [
-			{ key: 'en', name: 'English' },
-			{ key: 'ru', name: 'Russian' }
-		];
 	}
 
-	public ngOnDestroy() {
+	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppNavComponent destroyed');
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
