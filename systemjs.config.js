@@ -51,7 +51,7 @@
 		'app': 												{ main: 'app', defaultExtension: 'js' },
 		'ng2-nvd3': 									{ main: 'index', defaultExtension: 'js' },
 		'rxjs': 											{ defaultExtension: 'js' },
-		'rxjs/operators': 						{ main: 'index', defaultExtension: 'js' },
+		'rxjs/operators': 						{ main: '../operators', defaultExtension: 'js' },
 		'traceur': 										{ main: 'traceur', defaultExtension: 'js' }
 	};
 
