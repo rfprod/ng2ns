@@ -192,6 +192,40 @@ to start Electron app execute the following command form the project root
 npm run electron
 ```
 
+#### Docker
+
+##### build
+
+```
+sudo docker build -t repo-name/ng2ns -f ./Dockerfile .
+```
+
+##### start
+
+```
+sudo docker run -d --rm --name ng2ns -p 8080:8080 repo-name/ng2ns:latest
+```
+
+##### stop
+
+```
+sudo docker stop ng2ns
+```
+
+#### remove
+
+search by id
+
+```
+sudo docker image ls
+```
+
+then execute
+
+```
+sudo docker image rm IMAGE_ID
+```
+
 #### Openshift deployment requires env variables setup via rhc
 
 for example
@@ -317,6 +351,12 @@ most command needed for manual interaction with the project were listed above, f
 
 * NPM scripts: [`package.json`](package.json) - `scripts` object
 * Gulp tasks: [`gulpfile.js`](gulpfile.js)
+
+### Docker documentation
+
+* [`Docker documentation`](https://docs.docker.com)
+* [`Docker documentation: Engine command-line reference`](https://docs.docker.com/engine/reference/commandline/docker/)
+* [`Docker documentation: Configure and use Docker`](https://docs.docker.com/engine/reference/commandline/docker/)
 
 ### The OpenShift cartridges documentation
 
