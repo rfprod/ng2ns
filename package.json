@@ -108,7 +108,7 @@
 		"ws": "^3.3.3"
 	},
 	"scripts": {
-		"prestart": "npm install",
+		"prestart": "npm install && npm run clear-ts-build",
 		"start": "bash npm-start.sh",
 		"development-start": "tsc && concurrently \"gulp\" \"npm run tsc:w\"",
 		"production-start": "gulp production-start",
