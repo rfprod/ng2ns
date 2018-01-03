@@ -226,18 +226,6 @@ then execute
 sudo docker image rm IMAGE_ID
 ```
 
-#### Openshift deployment requires env variables setup via rhc
-
-for example
-
-`rhc env set -a ng2ns -e APP_URL=https://Ng2NS-ecapseman.rhcloud.com/`
-
-required vars
-
-```
-APP_URL=application-url
-```
-
 ### Starting the App
 
 To start the app, execute in the terminal while in the project folder (dependencies installation check will be performed before)
