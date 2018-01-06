@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Http, Response } from '@angular/http';
+
+import { CustomHttpHandlersService } from './custom-http-handlers.service';
 
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
@@ -7,27 +9,19 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class ServerStaticDataService {
-	public appDataUrl: string = window.location.origin + '/api/app-diag/static';
-	constructor(private http: Http) {
-		console.log('window.location:', window.location);
-		console.log('window.location.origin:', window.location.origin);
+	constructor(
+		private http: Http,
+		@Inject('Window') private window: Window,
+		private httpHandlers: CustomHttpHandlersService
+	) {
+		console.log('ServerStaticDataService init');
 	}
 
-	public extractData(res: Response) {
-		const body = res.json();
-		return body || {};
-	}
-
-	public handleError(error: any) {
-		const errMsg = (error.message) ? error.message :
-			error.status ? `$[error.status] - $[error.statusText]` : 'Server error';
-		console.log(errMsg);
-		return Observable.throw(errMsg);
-	}
+	private appDataUrl: string = this.window.location.origin + '/api/app-diag/static';
 
 	public getData(): Observable<any[]> { // tslint:disable-line
 		return this.http.get(this.appDataUrl)
-			.map(this.extractData)
-			.catch(this.handleError);
+			.map(this.httpHandlers.extractArray)
+			.catch(this.httpHandlers.handleError);
 	}
 }

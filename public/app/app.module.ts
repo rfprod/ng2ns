@@ -31,6 +31,7 @@ import { DashboardDetailsComponent } from './components/dashboard-details.compon
 import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService } from './translate/index';
 
 import { CustomDeferredService } from './services/custom-deferred.service';
+import { CustomHttpHandlersService } from './services/custom-http-handlers.service';
 import { EventEmitterService } from './services/event-emitter.service';
 import { WebsocketService } from './services/websocket.service';
 
@@ -44,7 +45,7 @@ import { NvD3Component } from 'ng2-nvd3';
 @NgModule({
 	declarations: [ AppComponent, TranslatePipe, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent, DashboardDetailsComponent, NvD3Component ],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule.forRoot(APP_ROUTES) ],
-	providers 	: [ {provide: APP_BASE_HREF, useValue: '/'}, {provide: LocationStrategy, useClass: PathLocationStrategy}, { provide: 'Window', useValue: window }, TRANSLATION_PROVIDERS, TranslateService, CustomDeferredService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral, AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService ],
+	providers 	: [ {provide: APP_BASE_HREF, useValue: '/'}, {provide: LocationStrategy, useClass: PathLocationStrategy}, { provide: 'Window', useValue: window }, TRANSLATION_PROVIDERS, TranslateService, CustomDeferredService, CustomHttpHandlersService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral, AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService ],
 	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],
 	bootstrap 	: [ AppComponent ],
 })

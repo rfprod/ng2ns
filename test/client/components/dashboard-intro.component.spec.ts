@@ -13,6 +13,8 @@ import { EventEmitterService } from '../../../public/app/services/event-emitter.
 
 import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
 
+import { CustomHttpHandlersService } from '../../../public/app/services/custom-http-handlers.service';
+
 import { ServerStaticDataService } from '../../../public/app/services/server-static-data.service';
 import { PublicDataService } from '../../../public/app/services/public-data.service';
 import { WebsocketService } from '../../../public/app/services/websocket.service';
@@ -43,15 +45,16 @@ describe('DashboardIntroComponent', () => {
 					useFactory: (mockedBackend, requestOptions) => new Http(mockedBackend, requestOptions),
 					deps: [MockBackend, BaseRequestOptions]
 				},
+				CustomHttpHandlersService,
 				{
 					provide: PublicDataService,
-					useFactory: (http) => new PublicDataService(http),
-					deps: [Http]
+					useFactory: (http, window, handlers) => new PublicDataService(http, window, handlers),
+					deps: [Http, 'Window', CustomHttpHandlersService]
 				},
 				{
 					provide: ServerStaticDataService,
-					useFactory: (http) => new ServerStaticDataService(http),
-					deps: [Http]
+					useFactory: (http, window, handlers) => new ServerStaticDataService(http, window, handlers),
+					deps: [Http, 'Window', CustomHttpHandlersService]
 				},
 				{
 					provide: WebsocketService,
@@ -148,4 +151,3 @@ describe('DashboardIntroComponent', () => {
 	});
 
 });
-
