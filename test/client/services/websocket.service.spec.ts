@@ -1,46 +1,47 @@
+import { TestBed } from '@angular/core/testing';
+
 import { WebsocketService } from '../../../public/app/services/websocket.service';
 
 describe('WebsocketService', () => {
 
-	let service: WebsocketService;
-	const Window: any = { location: { host: 'localhost', protocol: 'http:' } };
-
-	beforeEach(() => {
-		service = new WebsocketService(Window);
+	beforeEach((done) => {
+		TestBed.configureTestingModule({
+			declarations: [],
+			imports: [],
+			providers: [
+				{ provide: 'Window', useValue: window },
+				WebsocketService
+			],
+			schemas: []
+		}).compileComponents().then(() => {
+			this.service = TestBed.get(WebsocketService) as WebsocketService;
+			done();
+		});
 	});
 
 	it('should be defined', () => {
-		expect(service).toBeDefined();
+		expect(this.service).toBeDefined();
 	});
 
 	it('should have variables and methods defined', () => {
-		/*
-		*	commented variables are private
-		* to be able to test presence of any component must have a public getter for each variable to be tested
-		*
-		*	generateUrl method works with private variables
-		*	if it returns a correct result, private variables are present and have correct values
-		*/
-		// expect(service.host).toBeDefined();
-		// expect(service.wsProtocol).toBeDefined();
-		// expect(service.wsPort).toBeDefined();
-		expect(service.generateUrl).toBeDefined();
+		expect(this.service.host).toBeDefined();
+		expect(this.service.wsProtocol).toBeDefined();
+		expect(this.service.wsPort).toBeDefined();
+		expect(this.service.generateUrl).toEqual(jasmine.any(Function));
 	});
 
 	it('generateUrl must return a valid websocket url according to provided parameters', () => {
-		expect(service.generateUrl('/test')).toEqual('ws://localhost/test');
+		expect(this.service.generateUrl('/test')).toMatch('ws://localhost:[0-9]{4}/test');
 	});
 
 	it('generateUrl must return a valid websocket url according to provided parameters', () => {
-		Window.location.host = 'c9users';
-		service = new WebsocketService(Window);
-		expect(service.generateUrl('/test')).toEqual('ws://c9users/test');
+		this.service.host = 'c9users';
+		expect(this.service.generateUrl('/test')).toEqual('ws://c9users/test');
 	});
 
 	it('generateUrl must return a valid websocket url according to provided parameters', () => {
-		Window.location.host = 'rhcloud';
-		service = new WebsocketService(Window);
-		expect(service.generateUrl('/test')).toEqual('ws://rhcloud:8000/test');
+		this.service.host = 'rhcloud';
+		expect(this.service.generateUrl('/test')).toEqual('ws://rhcloud:8000/test');
 	});
 
 });
