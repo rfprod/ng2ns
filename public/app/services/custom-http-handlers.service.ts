@@ -10,7 +10,7 @@ export class CustomHttpHandlersService {
 		return (res) ? res.json() : {};
 	}
 
-  public extractArray(res: Response): object {
+	public extractArray(res: Response): object {
 		return (res) ? res.json() : [];
 	}
 
