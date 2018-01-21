@@ -13,6 +13,10 @@
 		"typeRoots": ["./node_modules/@types"],
 		"types": ["node", "jasmine", "jquery"]
 	},
+	"angularCompilerOptions": {
+		"fullTemplateTypeCheck": true,
+		"preserveWhiteSpace": false
+	},
 	"include": [
 		"public/app",
 		"test/client"
