@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { CustomDeferredService } from '../services/custom-deferred.service';
+import { MatDatepicker } from '@angular/material';
 
 import { TranslateService } from '../translate/translate.service';
 
@@ -104,6 +105,16 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 			*/
 			this.usersList.sort((a, b) => parseInt(a.id, 10) - parseInt(b.id, 10));
 		}
+	}
+
+/*
+*	datepicker
+*/
+	public pickerDate: string = new Date().toISOString();
+	@ViewChild('datePicker') private datePicker: MatDatepicker<string>;
+	public showDatePicker(event: any): void {
+		console.log('showDatePicker', this.datePicker);
+		this.datePicker.open();
 	}
 
 /*

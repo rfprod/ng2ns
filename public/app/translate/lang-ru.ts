@@ -16,5 +16,6 @@ export const LANG_RU_TRANSLATIONS = {
 	submit: 'Отправить',
 	data: 'Данные',
 	name: 'Имя',
-	sort_by: 'Сортировать по'
+	sort_by: 'Сортировать по',
+	pick_a_date: 'Выберите дату'
 };

@@ -6,6 +6,13 @@
 		</mat-form-field>
 	</span>
 	<span class="flex-item">
+		<mat-form-field fxFlex>
+			<input matInput type="text" name="pickedDate" [matDatepicker]="datePicker" [(ngModel)]="pickedDate" placeholder="{{ 'pick_a_date' | translate }}" (click)="showDatePicker()" readonly="true"/>
+			<mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+			<mat-datepicker #datePicker touchUi="true"></mat-datepicker>
+		</mat-form-field>
+	</span>
+	<span class="flex-item">
 		<mat-form-field>
 			<mat-select type="select" name="sortByCriterion" [(ngModel)]="sortByCriterion" floatPlaceholder="auto">
 				<mat-option value="">None</mat-option>

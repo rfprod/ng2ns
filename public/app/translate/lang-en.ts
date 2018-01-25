@@ -16,5 +16,6 @@ export const LANG_EN_TRANSLATIONS = {
 	submit: 'Submit',
 	data: 'Data',
 	name: 'Name',
-	sort_by: 'Sort by'
+	sort_by: 'Sort by',
+	pick_a_date: 'Pick a date'
 };

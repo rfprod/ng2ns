@@ -44,7 +44,9 @@
 		'@angular/cdk/rxjs': 										'npm:@angular/cdk/bundles/cdk-rxjs.umd.js',
 		'@angular/cdk/scrolling': 							'npm:@angular/cdk/bundles/cdk-scrolling.umd.js',
 		'@angular/cdk/stepper': 								'npm:@angular/cdk/bundles/cdk-stepper.umd.js',
-		'@angular/cdk/table': 									'npm:@angular/cdk/bundles/cdk-table.umd.js'
+		'@angular/cdk/table': 									'npm:@angular/cdk/bundles/cdk-table.umd.js',
+		'@angular/material-moment-adapter': 		'npm:@angular/material-moment-adapter/bundles/material-moment-adapter.umd.js',
+		'moment': 															'npm:moment/min/moment-with-locales.min.js' // reconfig reference: https://github.com/angular/material2/commit/9545427c73627f0cf91b5086efd5d727459fc44f
 	};
 	// how to load packages
 	var packages = {

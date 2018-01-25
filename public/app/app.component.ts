@@ -4,6 +4,8 @@ import { EventEmitterService } from './services/event-emitter.service';
 import { TranslateService } from './translate/index';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
+import { MatIconRegistry, DateAdapter } from '@angular/material';
+
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/first';
@@ -31,6 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
 		private emitter: EventEmitterService,
 		private _translate: TranslateService,
 		private router: Router,
+		private matIconRegistry: MatIconRegistry,
+		private dateAdapter: DateAdapter<any>,
 		@Inject('Window') private window: Window
 	) {
 		console.log('this.el.nativeElement', this.el.nativeElement);
@@ -61,9 +65,23 @@ export class AppComponent implements OnInit, OnDestroy {
 		return key === this._translate.currentLanguage;
 	}
 	public selectLanguage(key: string): void {
-		// set current language
 		if (!this.isCurrentLanguage(key)) {
+			// set current language
 			this._translate.use(key);
+			// set datepickers locale
+			this.setDatepickersLocale(key);
+		}
+	}
+	private setDatepickersLocale(key: string): void {
+		/*
+		*	set datepickers locale
+		*	supported languages: en, ru
+		*/
+		console.log('language change, key', key, 'this.dateAdapter', this.dateAdapter);
+		if (key === 'ru') {
+			this.dateAdapter.setLocale('ru');
+		} else {
+			this.dateAdapter.setLocale('en');
 		}
 	}
 
@@ -102,6 +120,11 @@ export class AppComponent implements OnInit, OnDestroy {
 			}
 		});
 
+		// listen date adapter locale change
+		this.dateAdapter.localeChanges.takeUntil(this.ngUnsubscribe).subscribe(() => {
+			console.log('dateAdapter.localeChanges, changed according to the language');
+		});
+
 		/*
 		* check preferred language, respect preference if dictionary exists
 		*	for now there are only dictionaries only: English, Russian
@@ -111,6 +134,12 @@ export class AppComponent implements OnInit, OnDestroy {
 		const userPreference: string = (nav.language === 'ru-RU' || nav.language === 'ru' || nav.languages[0] === 'ru') ? 'ru' : 'en';
 		// set default language
 		this.selectLanguage(userPreference);
+
+		/*
+		*	register fontawesome for usage in mat-icon by adding directives
+		*	fontSet="fa" fontIcon="fa-icon"
+		*/
+		this.matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
 
 		/*
 		*	TODO:app.component router events

@@ -13,15 +13,41 @@ import {
 	// data table
 	MatTableModule, MatSortModule, MatPaginatorModule,
 	// misc
-	MatOptionModule, MatRippleModule
+	MatOptionModule, MatRippleModule,
+	// icons
+	MatIconRegistry
 
 } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk/table';
+
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
+	/*
+	*	note:
+	*	it is ok not to use forRoot() here to achieve single depencendy injection tree for the MatIconRegistry provider,
+	*	so that all instances of it are the same, because it should be used only once in the app module to register
+	*	all font class aliases.
+	*
+	*	forRoot is used like so when declared:
+	*
+	*	export class SharedModule {
+	*	  static forRoot(): ModuleWithProviders {
+	*	    return {
+	*	      ngModule: SharedModule,
+	*	      providers: [CounterService]
+	*	    };
+	*	  }
+	*	}
+	*
+	* and then imported in the parent module like:
+	*
+	*	SharedModule.forRoot()
+	*
+	*/
+	providers: [ MatIconRegistry ],
 	imports: [
 		// form controls
-		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
+		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatMomentDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
 		// navigation
 		MatMenuModule, MatSidenavModule, MatToolbarModule,
 		// layout
@@ -33,13 +59,11 @@ import { CdkTableModule } from '@angular/cdk/table';
 		// data table
 		MatTableModule, MatSortModule, MatPaginatorModule,
 		// misc
-		MatOptionModule, MatRippleModule,
-		// cdk
-		CdkTableModule
+		MatOptionModule, MatRippleModule
 	],
 	exports: [
 		// form controls
-		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
+		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatMomentDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
 		// navigation
 		MatMenuModule, MatSidenavModule, MatToolbarModule,
 		// layout
@@ -51,9 +75,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 		// data table
 		MatTableModule, MatSortModule, MatPaginatorModule,
 		// misc
-		MatOptionModule, MatRippleModule,
-		// cdk
-		CdkTableModule
+		MatOptionModule, MatRippleModule
 	]
 })
 export class CustomMaterialModule {}
