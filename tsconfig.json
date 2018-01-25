@@ -11,7 +11,8 @@
 		"noImplicitAny": false,
 		"suppressImplicitAnyIndexErrors": true,
 		"typeRoots": ["./node_modules/@types"],
-		"types": ["node", "jasmine", "jquery"]
+		"types": ["node", "jasmine", "jquery"],
+		"allowSyntheticDefaultImports": true
 	},
 	"angularCompilerOptions": {
 		"fullTemplateTypeCheck": true,
