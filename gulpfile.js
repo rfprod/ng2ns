@@ -123,7 +123,7 @@ gulp.task('server', (done) => {
 });
 
 gulp.task('tsc', (done) => {
-	if (node) tsc.kill();
+	if (tsc) tsc.kill();
 	tsc = spawn('tsc', [], {stdio: 'inherit'});
 	tsc.on('close', (code) => {
 		if (code === 8) {
