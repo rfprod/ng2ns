@@ -11,7 +11,7 @@ exports.config = {
 	},
 
 	specs: [
-		'e2e/*.js'
+		'e2e/scenarios.js'
 	],
 
 	capabilities: {
@@ -23,7 +23,7 @@ exports.config = {
 
 	chromeOnly: false,
 
-	directConnect: false,
+	directConnect: true,
 
 	baseUrl: 'http://localhost:8080/',
 
