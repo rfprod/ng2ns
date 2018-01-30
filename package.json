@@ -121,7 +121,7 @@
 		"client-coverage-report": "remap-istanbul -i ./logs/coverage/coverage-final.json -o ./logs/coverage/html-report -t html && echo '# coverage html-report generated, path: ./logs/coverage/html-report'",
 		"clear-reports": "rm -rf ./logs/coverage ./logs/unit && echo '# coverage and unit reports cleared'",
 		"clear-logs": "find ./logs/ -type f -name '*[^.gitkeep]*' -delete && find ./logs/ -type d -empty -name '*[^.gitkeep]*' -delete",
-		"clear-ts-build": "find ./public/app/ ./test/client/ -type f | grep \".js\" | xargs rm",
+		"clear-ts-build": "find ./public/app/ ./test/client/ -type f -name '*.js' -delete",
 		"server-test": "gulp server-test",
 		"lint": "gulp watch-and-lint",
 		"lint-single-run": "gulp lint",

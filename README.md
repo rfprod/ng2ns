@@ -133,6 +133,14 @@ NODE_ENV=production
 
 `NODE_ENV` tells `npm` to pass installing devDependencies.
 
+`IP` define this value to use specific IP address for nodejs server like
+
+```
+...
+IP=127.0.0.1
+...
+```
+
 ### Electron
 
 #### Prerequisites
@@ -345,11 +353,6 @@ most command needed for manual interaction with the project were listed above, f
 * [`Docker documentation`](https://docs.docker.com)
 * [`Docker documentation: Engine command-line reference`](https://docs.docker.com/engine/reference/commandline/docker/)
 * [`Docker documentation: Configure and use Docker`](https://docs.docker.com/engine/reference/commandline/docker/)
-
-### The OpenShift cartridges documentation
-
-* [`cartridge guide`](https://github.com/openshift/origin-server/blob/master/documentation/oo_cartridge_guide.adoc#openshift-origin-cartridge-guide)
-* [`cartridge guide: nodejs`](https://github.com/openshift/origin-server/blob/master/documentation/oo_cartridge_guide.adoc#11-nodejs)
 
 ## Licenses
 

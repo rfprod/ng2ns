@@ -11,9 +11,7 @@ const express = require('express'),
 	fs = require('fs');
 let clusterStop = false;
 
-if (!process.env.OPENSHIFT_MONGODB_DB_HOST) {
-	require('dotenv').load();
-}
+require('dotenv').load();
 
 process.title = 'ng2nodestarter';
 
@@ -96,8 +94,8 @@ const DBmocks = {
 
 routes(app, cwd, fs, SrvInfo, DBmocks);
 
-const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-	ip = process.env.OPENSHIFT_NODEJS_IP;
+const port = process.env.PORT || 8080,
+	ip = process.env.IP;
 
 function terminator (sig) {
 	if (typeof sig === 'string') {
@@ -111,55 +109,47 @@ function terminator (sig) {
 	}
 }
 
-if (!ip) {
+(() => {
 	/*
-	*   development
+	*   termination handlers
 	*/
-	app.listen(port, () => {
-		console.log(`\n# > START > DEVELOPMENT > Node.js listening on port ${port}...\n`);
-	});
-} else {
-	/*
-	*   deployment - TODO migrate to Openshift v3
-	*/
-	(() => {
-		/*
-		*   termination handlers
-		*/
-		process.on('exit', () => { terminator('exit'); });
-		// Removed 'SIGPIPE' from the list - bugz 852598.
-		['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
-			'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
-		].forEach((element) => {
-			process.on(element, () => {
-				clusterStop = true;
-				terminator(element);
-			});
+	process.on('exit', () => { terminator('exit'); });
+	// Removed 'SIGPIPE' from the list - bugz 852598.
+	['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
+		'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
+	].forEach((element) => {
+		process.on(element, () => {
+			clusterStop = true;
+			terminator(element);
 		});
-	})();
+	});
+})();
 
-	if (cluster.isMaster && process.env.DEV_MODE === 'false') {
-		const workersCount = os.cpus().length;
-		console.log(`\n# > START > PRODUCTION > Node.js listening on ${ip}:${port}...\n`);
-		console.log(`Cluster setup, workers count: ${workersCount}`);
-		for (let i = 0; i < workersCount; i++) {
-			console.log('Starting worker',i);
+if (cluster.isMaster && process.env.DEV_MODE === 'false') {
+	const workersCount = os.cpus().length;
+	console.log(`\n# > START > CLUSTER > Node.js listening on ${ip}:${port}...\n`);
+	console.log(`Cluster setup, workers count: ${workersCount}`);
+	for (let i = 0; i < workersCount; i++) {
+		console.log('Starting worker', i);
+		cluster.fork();
+	}
+	cluster.on('online', (worker,error) => {
+		if (error) throw error;
+		console.log('Worker pid',worker.process.pid,'is online');
+	});
+	cluster.on('exit', (worker, code, signal) => {
+		console.log('Worker pid',worker.process.pid,'exited with code',code,'and signal',signal);
+		if (!clusterStop) {
+			console.log('Starting a new worker...');
 			cluster.fork();
 		}
-		cluster.on('online', (worker,error) => {
-			if (error) throw error;
-			console.log('Worker pid',worker.process.pid,'is online');
-		});
-		cluster.on('exit', (worker, code, signal) => {
-			console.log('Worker pid',worker.process.pid,'exited with code',code,'and signal',signal);
-			if (!clusterStop) {
-				console.log('Starting a new worker...');
-				cluster.fork();
-			}
-		});
-	} else {
-		app.listen(port, ip, () => {
-			console.log(`\n# > START > PRODUCTION > Node.js listening on ${ip}:${port}...\n`);
-		});
-	}
+	});
+} else if (ip) {
+	app.listen(port, ip, () => {
+		console.log(`\n# > START > IP > Node.js listening on ${ip}:${port}...\n`);
+	});
+} else {
+	app.listen(port, () => {
+		console.log(`\n# > START > NO IP > Node.js listening on port ${port}...\n`);
+	});
 }
