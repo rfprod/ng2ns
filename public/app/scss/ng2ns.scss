@@ -374,4 +374,37 @@ body {
 			}
 		}
 	}
+
+	dashboard-map {
+		flex: 1 1 auto;
+		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		align-content: flex-start;
+		justify-content: space-evenly;
+
+		.readonly {
+			&:hover {
+				cursor: default;
+			}
+
+			* {
+				&:hover {
+					cursor: default;
+				}
+			}
+		}
+
+		#d3-map-container {
+			width: 100%;
+			min-height: 40%;
+		}
+	}
+
+	.mark { // map marker
+		&:hover {
+			cursor: pointer;
+		}
+	}
 }

@@ -65,8 +65,10 @@ describe('AppNavComponent', () => {
 		it('should have variables and methods defined', () => {
 			expect(this.component.ngUnsubscribe).toEqual(jasmine.any(Subject));
 			expect(this.component.navButtonsState).toEqual(jasmine.any(Array));
-			expect(this.component.navButtonsState.length).toEqual(4);
-			expect(this.component.navButtonsState.reduce((a, b) => !b ? a + 1 : a, 0)).toEqual(4);
+			expect(this.component.navButtonsState.length).toEqual(5);
+			expect(this.component.navButtonsState.reduce((a, b) => !b ? a + 1 : a, 0)).toEqual(5);
+			expect(this.component.hideNavbar).toEqual(jasmine.any(Boolean));
+			expect(this.component.hideNavbar).toBeFalsy();
 			expect(this.component.supportedLanguages).toEqual([
 				{ key: 'en', name: 'English' },
 				{ key: 'ru', name: 'Russian' }
@@ -128,6 +130,18 @@ describe('AppNavComponent', () => {
 			/*
 			for (const [index, state] of this.component.navButtonsState.entries()) {
 				if (index === 3) {
+					expect(state).toBeTruthy();
+				} else {
+					expect(state).toBeFalsy();
+				}
+			}
+			*/
+			this.component.switchNavButtons({ url: 'map'});
+			expect(this.component.hideNavbar).toBeFalsy();
+			expect(this.component.navButtonsState[4]).toBeTruthy();
+			/*
+			for (const [index, state] of this.component.navButtonsState.entries()) {
+				if (index === 4) {
 					expect(state).toBeTruthy();
 				} else {
 					expect(state).toBeFalsy();

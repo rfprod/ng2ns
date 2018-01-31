@@ -8,6 +8,7 @@ const gulp = require('gulp'),
 	eslint = require('gulp-eslint'),
 	tslint = require('gulp-tslint'),
 	plumber = require('gulp-plumber'),
+	replace = require('gulp-replace'),
 	mocha = require('gulp-mocha'),
 	karmaServer = require('karma').Server,
 	uglify = require('gulp-uglify'),
@@ -207,18 +208,48 @@ gulp.task('build-system-js', () => {
 		.pipe(gulp.dest('./public/js'));
 });
 
-gulp.task('pack-vendor-js', () => {
+gulp.task('datamaps-rus-reference-and-worldTopo', () => {
 	/*
-	*	nonangular js bundle
-	*	components related to design, styling, data visualization etc.
+	*
+	*	fixes topo data
+	* an incorrect an key for Russia map in datamaps.rus.js
+	*	changes Datamap.prototype.rusTopo -> substring 'RUS' -> 'rus'
+	*
+	*	adds worldTopo json as a value to respective variable in datamaps.rus.js
+	* replaces dummy string '__WORLD__' with json data from file worldTopo.json
 	*/
+	const worldTopoJSON = fs.readFileSync('./topoData/worldTopo.json', 'utf8').replace(/\n/, '');
+	return gulp.src('./node_modules/datamaps/dist/datamaps.rus.js')
+		.pipe(plumber())
+		.pipe(replace(/RUS/g, (match, offset) => {
+			console.log('Gulp replaced incorrect datamap key for Russia map, match', match, 'at offset', offset);
+			return 'rus';
+		}))
+		.pipe(replace(/RU."/g, (match, offset) => {
+			console.log('Gulp added code for Chukchi Autonomous Region in topo data for Russia, match', match, 'at offset', offset);
+			return 'RU.CHUK"';
+		}))
+		.pipe(replace(/RU./g, (match, offset) => {
+			console.log('Gulp replaced all dots between RU and region name for Russia, match', match, 'at offset', offset);
+			return 'RU-';
+		}))
+		.pipe(replace(/RU-VO/, (match, offset) => {
+			console.log('Gulp replaced erratic code for Arkhangel\'sk, for Russia map, match', match, 'at offset', offset);
+			return 'RU-ARKH';
+		}))
+		.pipe(replace(/.__WORLD__./, (match, offset) => {
+			console.log('Gulp replaced \'__WORLD__\' with worldTopo, match', match, 'at offset', offset);
+			return worldTopoJSON;
+		}))
+		.pipe(plumber.stop())
+		.pipe(gulp.dest('./topoData/'));
+});
+
+gulp.task('pack-vendor-js', () => {
 	return gulp.src([
 		/*
-		*	add paths to required third party js files
-		*
-		*	note: sequence is essential
+		*	add paths to required third party js libraries here
 		*/
-
 		// angular requirements
 		'./node_modules/core-js/client/shim.js',
 		'./node_modules/zone.js/dist/zone.min.js',
@@ -227,9 +258,18 @@ gulp.task('pack-vendor-js', () => {
 
 		'./node_modules/jquery/dist/jquery.js',
 
-		// angular dependency
+		// ng2nvd3 dependency
 		'./node_modules/d3/d3.js',
-		'./node_modules/nvd3/build/nv.d3.js'
+		'./node_modules/nvd3/build/nv.d3.js',
+
+		// datamaps depends on topojson
+		'./node_modules/topojson/build/topojson.js',
+		/*
+		*	take edited and copied datamaps.rus.js instead of original
+		*	see task: datamaps-rus-reference-and-worldTopo
+		*/
+		// './node_modules/datamaps/dist/datamaps.rus.js'
+		'./topoData/datamaps.rus.js'
 	])
 		.pipe(plumber())
 		.pipe(concat('vendor-bundle.js'))
@@ -331,11 +371,11 @@ gulp.task('watch-client-and-test', () => {
 *	build sequences
 */
 gulp.task('compile-and-build', (done) => {
-	runSequence('tsc', 'build-system-js', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
+	runSequence('tsc', 'build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
 });
 
 gulp.task('build', (done) => {
-	runSequence('build-system-js', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
+	runSequence('build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
 });
 
 /*

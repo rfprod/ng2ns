@@ -6,6 +6,7 @@ import { AnonimousGuard } from '../../public/app/services/anonimous-guard.servic
 import { DashboardIntroComponent } from '../../public/app/components/dashboard-intro.component';
 import { DashboardLoginComponent } from '../../public/app/components/dashboard-login.component';
 import { DashboardDetailsComponent } from '../../public/app/components/dashboard-details.component';
+import { DashboardMapComponent } from '../../public/app/components/dashboard-map.component';
 
 describe('APP_ROUTES', () => {
 
@@ -23,6 +24,7 @@ describe('APP_ROUTES', () => {
 			{path: 'intro', component: DashboardIntroComponent},
 			{path: 'login', component: DashboardLoginComponent, canActivate: [AnonimousGuard]},
 			{path: 'data', component: DashboardDetailsComponent, canActivate: [AuthGuardGeneral]},
+			{path: 'map', component: DashboardMapComponent, canActivate: [AuthGuardGeneral]},
 			{path: '', redirectTo: 'intro', pathMatch: 'full'},
 			{path: '**', redirectTo: 'intro'}
 		]);

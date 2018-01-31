@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar *ngIf="!hideNavbar">
 	<span><h1>{{ 'title' | translate}}</h1></span>
 	<span class="spacer"></span>
 	<span class="mat-toolbar-tools">
@@ -16,6 +16,9 @@
 		</button>
 		<button [routerLink]="['data']" (click)="switchNavButtons($event, 'data')" mat-button [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}" [fxHide.xs]="true" [fxHide.sm]="true">
 			<i class="fa fa-database"></i> {{ 'data' | translate }}
+		</button>
+		<button [routerLink]="['map']" (click)="switchNavButtons($event, 'map')" mat-button [ngClass]="{selected: navButtonsState[4], inactive: !navButtonsState[4]}" [fxHide.xs]="true" [fxHide.sm]="true">
+			<i class="fa fa-map"></i> {{ 'map' | translate }}
 		</button>
 		<button mat-button [matMenuTriggerFor]="languageMenu" [fxHide.xs]="true" [fxHide.sm]="true">
 			<i class="fa fa-globe"></i> {{ 'language' | translate }}
@@ -37,11 +40,14 @@
 			<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login')" mat-menu-item [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}" *ngIf="!userService.getUser().token">
 				<i class="fa fa-user"></i> {{ 'login' | translate }}
 			</button>
-			<button (click)="logOut()" mat-button *ngIf="userService.getUser().token">
+			<button (click)="logOut()" mat-menu-item *ngIf="userService.getUser().token">
 				<i class="fa fa-user"></i> {{ 'logout' | translate }}
 			</button>
 			<button [routerLink]="['data']" (click)="switchNavButtons($event, 'data')" mat-menu-item [ngClass]="{selected: navButtonsState[3], inactive: !navButtonsState[3]}">
 				<i class="fa fa-database"></i> {{ 'data' | translate }}
+			</button>
+			<button [routerLink]="['map']" (click)="switchNavButtons($event, 'map')" mat-menu-item [ngClass]="{selected: navButtonsState[4], inactive: !navButtonsState[4]}">
+				<i class="fa fa-map"></i> {{ 'map' | translate }}
 			</button>
 			<hr>
 			<button mat-button *ngFor="let lang of supportedLanguages" (click)="selectLanguage(lang.key)">{{lang.name}}</button>

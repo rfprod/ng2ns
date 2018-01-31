@@ -15,6 +15,11 @@ export const LANG_EN_TRANSLATIONS = {
 	forget_my_address: 'Forget my address',
 	submit: 'Submit',
 	data: 'Data',
+	map: 'Map',
+	world_map: 'World Map',
+	russia_map: 'Russian Federation',
+	country: 'Country',
+	regions: 'Regions',
 	name: 'Name',
 	sort_by: 'Sort by',
 	pick_a_date: 'Pick a date'

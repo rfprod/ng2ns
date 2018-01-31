@@ -24,7 +24,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	) {}
 
 	private ngUnsubscribe: Subject<void> = new Subject();
-	public navButtonsState: boolean[] = [false, false, false, false];
+	public navButtonsState: boolean[] = [false, false, false, false, false];
+
+	public hideNavbar: boolean = false;
 
 	public supportedLanguages: any[] = [
 		{ key: 'en', name: 'English' },
@@ -48,6 +50,8 @@ export class AppNavComponent implements OnInit, OnDestroy {
 			index = '2';
 		} else if (path === 'data') {
 			index = '3';
+		} else if (path === 'map') {
+			index = '4';
 		} else {
 			index = '0';
 		}
