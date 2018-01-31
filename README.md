@@ -39,6 +39,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./desktop/osx`
     * `./desktop/osx/build` - osx build
     * `./desktop/osx/dist` - osx installer
+* `.topoData` - topological data for maps in `json` format
 
 ### Requirements
 
