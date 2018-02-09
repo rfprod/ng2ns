@@ -16,6 +16,8 @@ const gulp = require('gulp'),
 	cssnano = require('gulp-cssnano'),
 	autoprefixer = require('gulp-autoprefixer'),
 	systemjsBuilder = require('gulp-systemjs-builder'),
+	hashsum = require('gulp-hashsum'),
+	crypto = require('crypto'),
 	fs = require('fs'),
 	spawn = require('child_process').spawn,
 	exec = require('child_process').exec;
@@ -44,11 +46,28 @@ function killProcessByName(name) {
 	});
 }
 
+/*
+*	hashsum identifies build
+*
+*	after build SHA1SUMS.json is generated with sha1 sums for different files
+*	then sha256 is calculated using stringified file contents
+*/
+gulp.task('hashsum', () => {
+	return gulp.src(['./public/*', '!./public/SHA1SUMS.json', './public/app/views/**', './public/css/**', './public/fonts/**', './public/img/**', './public/js/**'])
+		.pipe(hashsum({ filename: 'public/SHA1SUMS.json', hash: 'sha1', json: true }));
+});
+
 function createEnvFile(env, done) {
-	fs.writeFile('./.env', env, (err) => {
+	fs.readFile('./public/SHA1SUMS.json', (err, data) => {
 		if (err) throw err;
-		console.log('# > ENV > .env file was created');
-		done();
+		const hash = crypto.createHmac('sha256', data.toString()).digest('hex');
+		console.log('BUILD_HASH', hash);
+		env += 'BUILD_HASH=' + hash + '\n';
+		fs.writeFile('./.env', env, (err) => {
+			if (err) throw err;
+			console.log('# > ENV > .env file was created');
+			done();
+		});
 	});
 }
 
@@ -371,22 +390,22 @@ gulp.task('watch-client-and-test', () => {
 *	build sequences
 */
 gulp.task('compile-and-build', (done) => {
-	runSequence('tsc', 'build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
+	runSequence('tsc', 'build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
 });
 
 gulp.task('build', (done) => {
-	runSequence('build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', done);
+	runSequence('build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
 });
 
 /*
 *	start sequences
 */
 gulp.task('default', (done) => {
-	runSequence('create-env-development', 'server', 'build', 'lint', 'watch', done);
+	runSequence('lint', 'build', 'create-env-development', 'server', 'watch', done);
 });
 
 gulp.task('production-start', (done) => {
-	runSequence('create-env-production', 'server', 'build', done);
+	runSequence('build', 'create-env-production', 'server', done);
 });
 
 /*

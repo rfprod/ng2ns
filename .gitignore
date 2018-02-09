@@ -29,6 +29,7 @@ public/js/*.min.js
 public/css/*.min.css
 public/fonts/*.*
 !public/fonts/*.gitkeep
+public/SHA1SUMS.json
 
 # sessions storage
 sessions/*.*

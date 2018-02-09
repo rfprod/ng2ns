@@ -26,6 +26,30 @@ module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 	});
 
 	/**
+	 * Serves service worker on root path to capture root scope
+	 * @name Service worker
+	 * @path {GET} /service-worker.js
+	 * @code {200}
+	 * @response {js} service-worker.js Service worker
+	 */
+	app.get('/service-worker.js', (req, res) => {
+		res.sendFile(cwd + '/public/service-worker.js');
+	});
+
+	/**
+	 * Returns application build hashsum from .env file.
+	 * Is used by service worker when caching.
+	 * @name App-diag build hashsum
+	 * @path {GET} /api/app-diag/hashsum
+	 * @code {200}
+	 * @response {object} {} Object with hashsum key
+	 */
+	app.get('/api/app-diag/hashsum', (req, res) => {
+		console.log('process.env.BUILD_HASH', process.env.BUILD_HASH);
+		res.json({ hashsum: process.env.BUILD_HASH || 'NA' });
+	});
+
+	/**
 	 * Returns user sessions codes list with views count.
 	 * This endpoint is used for d3 chart demonstration purposes.
 	 * @name App-diag usage
