@@ -8,6 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { EventEmitterService } from '../../public/app/services/event-emitter.service';
 import { CustomDeferredService } from '../../public/app/services/custom-deferred.service';
+import { CustomServiceWorkerService } from '../../public/app/services/custom-service-worker.service';
 
 import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../public/app/translate/index';
 
@@ -37,12 +38,14 @@ describe('AppComponent', () => {
 						location: window.location,
 						navigator: {
 							language: 'en',
-							languages: ['en']
+							languages: ['en'],
+							serviceWorker: window.navigator.serviceWorker
 						}
 					},
 					localStorage: window.localStorage,
-					sessionStorage: window.sessionStorage
+					sessionStorage: window.sessionStorage,
 				},
+				CustomServiceWorkerService,
 				EventEmitterService,
 				TRANSLATION_PROVIDERS,
 				TranslateService,
@@ -53,6 +56,7 @@ describe('AppComponent', () => {
 			this.component = this.fixture.componentInstance;
 			this.emitterService = TestBed.get(EventEmitterService) as EventEmitterService;
 			this.translateService = TestBed.get(TranslateService) as TranslateService;
+			this.serviseWorker = TestBed.get(CustomServiceWorkerService) as CustomServiceWorkerService;
 			done();
 		});
 	});

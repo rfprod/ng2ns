@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, Inject } from '@angular/core'
 import { Router } from '@angular/router';
 import { EventEmitterService } from './services/event-emitter.service';
 import { TranslateService } from './translate/index';
+import { CustomServiceWorkerService } from './services/custom-service-worker.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { MatIconRegistry, DateAdapter } from '@angular/material';
@@ -35,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private matIconRegistry: MatIconRegistry,
 		private dateAdapter: DateAdapter<any>,
+		private serviceWorker: CustomServiceWorkerService,
 		@Inject('Window') private window: Window
 	) {
 		console.log('this.el.nativeElement', this.el.nativeElement);
@@ -153,6 +155,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppComponent destroyed');
+		this.serviceWorker.deinitializeServiceWorker();
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
 	}

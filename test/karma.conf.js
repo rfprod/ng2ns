@@ -42,6 +42,10 @@ module.exports = function(config){
 			{ pattern: 'public/app/**', included: false, watched: false }
 		],
 
+		proxies: {
+			"/service-worker.js": "http://localhost:8080/base/public/service-worker.js"
+		},
+
 		// exclude: [],
 
 		frameworks: ['jasmine'],
