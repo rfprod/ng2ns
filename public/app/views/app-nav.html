@@ -24,7 +24,7 @@
 			<i class="fa fa-globe"></i> {{ 'language' | translate }}
 		</button>
 		<mat-menu #languageMenu="matMenu" [fxHide.xs]="true" [fxHide.sm]="true">
-			<button mat-menu-item *ngFor="let lang of supportedLanguages" (click)="selectLanguage(lang.key)">{{lang.name}}</button>
+			<button mat-menu-item *ngFor="let lang of supportedLanguages" [ngClass]="{selected: isLanguageSelected(lang.key)}" (click)="selectLanguage(lang.key)">{{lang.name}}</button>
 		</mat-menu>
 
 		<button mat-button [matMenuTriggerFor]="mobileMenu" [fxHide.md]="true" [fxHide.lg]="true">
@@ -50,7 +50,7 @@
 				<i class="fa fa-map"></i> {{ 'map' | translate }}
 			</button>
 			<hr>
-			<button mat-button *ngFor="let lang of supportedLanguages" (click)="selectLanguage(lang.key)">{{lang.name}}</button>
+			<button mat-button *ngFor="let lang of supportedLanguages" [ngClass]="{selected: isLanguageSelected(lang.key)}" (click)="selectLanguage(lang.key)">{{lang.name}}</button>
 		</mat-menu>
 	</span>
 </mat-toolbar>

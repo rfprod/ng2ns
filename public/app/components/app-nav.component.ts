@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { EventEmitterService } from '../services/event-emitter.service';
+import { TranslateService } from '../translate/index';
 import { UserService } from '../services/user.service';
 
 import { Subject } from 'rxjs/Subject';
@@ -9,7 +10,7 @@ import 'rxjs/add/operator/takeUntil';
 
 @Component({
 	selector: 'app-nav',
-	templateUrl: '/public/app/views/dashboard-nav.html',
+	templateUrl: '/public/app/views/app-nav.html',
 	host: {
 		class: 'mat-body-1'
 	}
@@ -20,7 +21,8 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		private el: ElementRef,
 		private emitter: EventEmitterService,
 		private userService: UserService,
-		private router: Router
+		private router: Router,
+		private translate: TranslateService
 	) {}
 
 	private ngUnsubscribe: Subject<void> = new Subject();
@@ -78,6 +80,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 
 	public selectLanguage(key: string): void {
 		this.emitter.emitEvent({lang: key});
+	}
+	public isLanguageSelected(key: string): boolean {
+		return key === this.translate.currentLanguage;
 	}
 
 	public ngOnInit(): void {
