@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	constructor(
 		public el: ElementRef,
 		private emitter: EventEmitterService,
-		private _translate: TranslateService,
+		private translate: TranslateService,
 		private router: Router,
 		private matIconRegistry: MatIconRegistry,
 		private dateAdapter: DateAdapter<any>,
@@ -62,12 +62,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	public isCurrentLanguage(key: string): boolean {
 		// check if selected one is a current language
-		return key === this._translate.currentLanguage;
+		return key === this.translate.currentLanguage;
 	}
 	public selectLanguage(key: string): void {
 		if (!this.isCurrentLanguage(key)) {
 			// set current language
-			this._translate.use(key);
+			this.translate.use(key);
 			// set datepickers locale
 			this.setDatepickersLocale(key);
 		}
