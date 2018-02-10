@@ -26,9 +26,9 @@ before_script:
   - sleep 2
 # build app, start it, and run tests
 script:
-  - gulp create-env-development
-  - gulp compile-and-build
   - gulp lint
+  - gulp compile-and-build
+  - gulp create-env-development
   - gulp server & # ampersand is required to run server in background
   - gulp server-test
   - gulp client-unit-test-single-run
