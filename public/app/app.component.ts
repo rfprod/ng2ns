@@ -155,7 +155,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppComponent destroyed');
-		this.serviceWorker.deinitializeServiceWorker();
+		this.serviceWorker.disableServiceWorker();
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
 	}

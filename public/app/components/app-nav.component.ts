@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { EventEmitterService } from '../services/event-emitter.service';
+import { CustomServiceWorkerService } from '../services/custom-service-worker.service';
 import { TranslateService } from '../translate/index';
 import { UserService } from '../services/user.service';
 
@@ -20,9 +21,11 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
+		private serviceWorker: CustomServiceWorkerService,
 		private userService: UserService,
 		private router: Router,
-		private translate: TranslateService
+		private translate: TranslateService,
+		@Inject('Window') private window: Window
 	) {}
 
 	private ngUnsubscribe: Subject<void> = new Subject();
@@ -85,9 +88,27 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		return key === this.translate.currentLanguage;
 	}
 
-	public ngOnInit(): void {
-		console.log('ngOnInit: AppNavComponent initialized');
+	public serviceWorkerRegistered: boolean = true; // registered by default
+	public toggleServiceWorker(): void {
+		if (this.serviceWorkerRegistered) {
+			this.emitter.emitEvent({serviceWorker: 'deinitialize'});
+		} else {
+			this.emitter.emitEvent({serviceWorker: 'initialize'});
+		}
+	}
 
+	private emitterSubscribe(): void {
+		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
+			console.log('AppNavComponent consuming event:', JSON.stringify(message));
+			if (message.serviceWorker === 'registered') {
+				this.serviceWorkerRegistered = true;
+			} else if (message.serviceWorker === 'unregistered') {
+				this.serviceWorkerRegistered = false;
+			}
+		});
+	}
+
+	private routerSubscribe(): void {
 		this.router.events.takeUntil(this.ngUnsubscribe).subscribe((event: any) => {
 			// console.log(' > ROUTER EVENT:', event);
 			if (event instanceof NavigationEnd) {
@@ -95,6 +116,12 @@ export class AppNavComponent implements OnInit, OnDestroy {
 				this.switchNavButtons(event);
 			}
 		});
+	}
+
+	public ngOnInit(): void {
+		console.log('ngOnInit: AppNavComponent initialized');
+		this.emitterSubscribe();
+		this.routerSubscribe();
 	}
 
 	public ngOnDestroy(): void {

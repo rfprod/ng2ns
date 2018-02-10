@@ -8,6 +8,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { EventEmitterService } from '../../../public/app/services/event-emitter.service';
+import { CustomServiceWorkerService } from '../../../public/app/services/custom-service-worker.service';
 import { UserService } from '../../../public/app/services/user.service';
 
 import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
@@ -37,6 +38,7 @@ describe('AppNavComponent', () => {
 				providers: [
 					{ provide: 'Window', useValue: window },
 					EventEmitterService,
+					CustomServiceWorkerService,
 					UserService,
 					TRANSLATION_PROVIDERS,
 					TranslateService,
