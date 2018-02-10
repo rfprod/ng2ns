@@ -94,6 +94,7 @@ PORT=8080
 APP_URL=http://localhost:8080/
 APP_VERSION=1.0.0
 DEV_MODE=true
+BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
 
 for development environment with nodejs cluster
@@ -103,6 +104,7 @@ PORT=8080
 APP_URL=http://localhost:8080/
 APP_VERSION=1.0.0
 DEV_MODE=false
+BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
 
 for electron environment
@@ -113,6 +115,7 @@ APP_URL=http://localhost:8080/
 APP_VERSION=1.0.0
 ELECTRON=true
 NODE_ENV=production
+BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
 
 for production environment
@@ -122,6 +125,7 @@ PORT=8080
 APP_URL=http://app-url
 APP_VERSION=1.0.0
 NODE_ENV=production
+BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
 
 `PORT` is used by the server if defined.
@@ -133,6 +137,8 @@ NODE_ENV=production
 `ELECTRON` tells server to use control flow specific for electron where applicable.
 
 `NODE_ENV` tells `npm` to pass installing devDependencies.
+
+`BUILD_HASH` identifies a client application build, is used as a part of cache name by service workers when managing caches.
 
 `IP` define this value to use specific IP address for nodejs server like
 
