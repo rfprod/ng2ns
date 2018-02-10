@@ -43,10 +43,10 @@ RUN npm uninstall @angular/animations @angular/cdk @angular/common @angular/comp
 	@angular/platform-browser @angular/platform-browser-dynamic @angular/router \
 	@types/core-js @types/jasmine @types/jquery @types/node components-font-awesome \
 	concurrently core-js d3 datamaps electron-squirrel-startup gulp gulp-autoprefixer \
-	gulp-concat gulp-cssnano gulp-eslint gulp-mocha gulp-plumber gulp-rename gulp-replace \
-	gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify gulp-util hammerjs jasmine-core \
-	jquery karma karma-redirect-preprocessor material-design-icon-fonts ng2-nvd3 nvd3 \
-	reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
+	gulp-concat gulp-cssnano gulp-eslint gulp-hashsum gulp-mocha gulp-plumber gulp-rename \
+	gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify gulp-util hammerjs \
+	jasmine-core jquery karma karma-redirect-preprocessor material-design-icon-fonts moment \
+	ng2-nvd3 nvd3 reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
 	web-animations-js zone.js --no-save --only=production
 ## uninstall global dependencies
 RUN npm uninstall -g gulp-cli typescript --save
