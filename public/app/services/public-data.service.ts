@@ -17,7 +17,7 @@ export class PublicDataService {
 		console.log('PublicDataService init');
 	}
 
-	public appDataUrl: string = this.window.location.origin + '/api/app-diag/usage';
+	private appDataUrl: string = this.window.location.origin + '/api/app-diag/usage';
 
 	public getData(): Observable<any[]> { // tslint:disable-line
 		return this.http.get(this.appDataUrl)

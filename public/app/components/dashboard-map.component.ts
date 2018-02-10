@@ -18,7 +18,7 @@ declare let Datamap: any;
 })
 export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	constructor(
-		public el: ElementRef,
+		private el: ElementRef,
 		private emitter: EventEmitterService
 	) {
 		console.log('this.el.nativeElement:', this.el.nativeElement);
@@ -36,7 +36,7 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		country: '' as string,
 		regions: [] as string[]
 	};
-	private selectCountry(value: string, geoID: string): void {
+	public selectCountry(value: string, geoID: string): void {
 		console.log('select country');
 		// do not reselect country if already selected
 		if (this.formData.country !== value) {
@@ -47,7 +47,7 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.selectedGeoIDs.regions = [];
 		}
 	}
-	private selectRegion(value: string, geoID: string): void {
+	public selectRegion(value: string, geoID: string): void {
 		console.log('select region: value =', value, ', geoID =', geoID);
 		let currentlySelectedRegions = this.formData.regions;
 		if (currentlySelectedRegions.split(',').indexOf(value) === -1) {
@@ -88,7 +88,7 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.drawMap();
 		}
 	}
-	private showMarkerToolip(data: any) {
+	public showMarkerToolip(data: any) {
 		/*
 		*	use already existing tooltip
 		*	change inner html and show on marker mouseover event
@@ -98,7 +98,7 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		d3.select('.datamaps-hoverover')
 			.style('display', 'block');
 	}
-	private drawMarkers(datamap: any, s: number = 1): void {
+	public drawMarkers(datamap: any, s: number = 1): void {
 		datamap.svg.selectAll('.mark').remove();
 		datamap.svg.select('.datamaps-subunits').selectAll('.mark')
 			.data(this.factories)
@@ -118,7 +118,7 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 				this.showMarkerToolip(data);
 			});
 	}
-	private drawMap(): void {
+	public drawMap(): void {
 		/*
 		*	remove map if present first
 		*/

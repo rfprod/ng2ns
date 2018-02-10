@@ -75,7 +75,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		this.emitter.emitEvent({websocket: 'close'});
 	}
 
-	private logOut(): void {
+	public logOut(): void {
 		const token = this.userService.getUser().token;
 		this.userService.SaveUser({ token: '' });
 		this.router.navigate(['']);

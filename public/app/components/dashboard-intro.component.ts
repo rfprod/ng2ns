@@ -20,7 +20,7 @@ declare let d3: any;
 })
 export class DashboardIntroComponent implements OnInit, OnDestroy {
 	constructor(
-		public el: ElementRef,
+		private el: ElementRef,
 		private emitter: EventEmitterService,
 		private websocket: WebsocketService,
 		private serverStaticDataService: ServerStaticDataService,
@@ -82,8 +82,8 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		static: [],
 		dynamic: [],
 	};
-	public wsEndpoint: string = '/api/app-diag/dynamic';
-	public ws: WebSocket = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
+	private wsEndpoint: string = '/api/app-diag/dynamic';
+	private ws: WebSocket = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
 	public errorMessage: string;
 	private getServerStaticData(callback): void {
 		this.serverStaticDataService.getData().first().subscribe(
@@ -91,7 +91,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			(error: any): void => this.errorMessage = error as any,
 			() => {
 				console.log('getServerStaticData done, data:', this.serverData.static);
-				callback(this);
+				callback(this.serverData.static);
 			}
 		);
 	}
@@ -104,7 +104,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			(error: any): void => this.errorMessage = error as any,
 			(): void => {
 				console.log('getPublicData done, data:', this.appUsageData);
-				callback(this);
+				callback(this.appUsageData);
 			}
 		);
 	}
@@ -118,8 +118,8 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		this.emitter.emitEvent({spinner: 'stop'});
 	}
 
-	private showModal: boolean = false;
-	private toggleModal(): void {
+	public showModal: boolean = false;
+	public toggleModal(): void {
 		if (this.showModal) {
 			this.ws.send(JSON.stringify({action: 'pause'}));
 		} else { this.ws.send(JSON.stringify({action: 'get'})); }
@@ -167,8 +167,8 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		this.getPublicData((/*scope*/) => {
-			this.getServerStaticData((/*scope*/) => {
+		this.getPublicData((/*publicData*/) => {
+			this.getServerStaticData((/*serverStaticData*/) => {
 				this.emitSpinnerStopEvent();
 			});
 		});

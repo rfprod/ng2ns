@@ -30,7 +30,7 @@ declare let $: JQueryStatic;
 export class AppComponent implements OnInit, OnDestroy {
 
 	constructor(
-		public el: ElementRef,
+		private el: ElementRef,
 		private emitter: EventEmitterService,
 		private translate: TranslateService,
 		private router: Router,
@@ -48,25 +48,25 @@ export class AppComponent implements OnInit, OnDestroy {
 	public showSpinner: boolean = false;
 
 	// spinner controls
-	public startSpinner(): void {
+	private startSpinner(): void {
 		console.log('spinner start');
 		this.showSpinner = true;
 	}
-	public stopSpinner(): void {
+	private stopSpinner(): void {
 		console.log('spinner stop');
 		this.showSpinner = false;
 	}
 
-	public supportedLanguages: any[] = [
+	private supportedLanguages: any[] = [
 		{ key: 'en', name: 'English' },
 		{ key: 'ru', name: 'Russian' }
 	];
 
-	public isCurrentLanguage(key: string): boolean {
+	private isCurrentLanguage(key: string): boolean {
 		// check if selected one is a current language
 		return key === this.translate.currentLanguage;
 	}
-	public selectLanguage(key: string): void {
+	private selectLanguage(key: string): void {
 		if (!this.isCurrentLanguage(key)) {
 			// set current language
 			this.translate.use(key);

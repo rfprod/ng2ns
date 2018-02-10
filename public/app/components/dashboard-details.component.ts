@@ -20,7 +20,7 @@ import 'rxjs/add/operator/first';
 })
 export class DashboardDetailsComponent implements OnInit, OnDestroy {
 	constructor(
-		public el: ElementRef,
+		private el: ElementRef,
 		private emitter: EventEmitterService,
 		private usersListService: UsersListService,
 		private translateService: TranslateService
@@ -53,10 +53,10 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		);
 		return def.promise;
 	}
-	private mouseEntered(event) {
+	public mouseEntered(event) {
 		console.log('mouse enter', event);
 	}
-	private mouseLeft(event) {
+	public mouseLeft(event) {
 		console.log('mouse leave', event);
 	}
 
@@ -64,13 +64,13 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 *	search
 */
 	private searchValue: string;
-	private get searchQuery(): string {
+	public get searchQuery(): string {
 		return this.searchValue;
 	}
-	private set searchQuery(val: string) {
+	public set searchQuery(val: string) {
 		this.searchValue = val;
 	}
-	private hideElement(index) {
+	public hideElement(index) {
 		console.log(' > hideElement:', index, this.usersList[index].firstName);
 		const result = this.usersList[index].firstName.indexOf(this.searchValue) === -1;
 		console.log('result', result);
@@ -81,10 +81,10 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 *	sort
 */
 	private sortValue: string;
-	private get sortByCriterion(): string {
+	public get sortByCriterion(): string {
 		return this.sortValue;
 	}
-	private set sortByCriterion(val: string) {
+	public set sortByCriterion(val: string) {
 		if (this.sortValue !== val) { // sort if value changed
 			this.sortValue = val;
 			this.performSorting(val);
