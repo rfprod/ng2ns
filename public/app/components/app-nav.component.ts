@@ -51,17 +51,27 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		console.log(' >> PATH', path);
 		if (path === 'intro') {
 			index = '1';
+			this.hideNavbar = false;
 		} else if (path === 'login') {
 			index = '2';
+			this.hideNavbar = false;
 		} else if (path === 'data') {
 			index = '3';
+			this.hideNavbar = false;
 		} else if (path === 'map') {
 			index = '4';
+			this.hideNavbar = false;
 		} else {
 			index = '0';
+			this.hideNavbar = false;
+		}
+		// check if user was redirected to /login
+		if (this.router.url === '/login') {
+			index = '2';
+			this.hideNavbar = false;
 		}
 		for (const b in this.navButtonsState) {
-			if (b === index) { this.navButtonsState[b] = true; } else { this.navButtonsState[b] = false; }
+			this.navButtonsState[b] = (b === index) ? true : false;
 		}
 		console.log('navButtonsState:', this.navButtonsState);
 	}

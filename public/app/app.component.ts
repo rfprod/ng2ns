@@ -9,7 +9,6 @@ import { MatIconRegistry, DateAdapter } from '@angular/material';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/first';
 
 declare let $: JQueryStatic;
 
