@@ -71,7 +71,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 			this.hideNavbar = false;
 		}
 		for (const b in this.navButtonsState) {
-			this.navButtonsState[b] = (b === index) ? true : false;
+			if (typeof this.navButtonsState[b] === 'boolean') {
+				this.navButtonsState[b] = (b === index) ? true : false;
+			}
 		}
 		console.log('navButtonsState:', this.navButtonsState);
 	}

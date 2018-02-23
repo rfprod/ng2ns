@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 	*/
 	// console.log('req.path:', req.path);
 	// console.log('SESSION', req.session);
-	const regX = (process.env.DEV_MODE) ? /(api|css|fonts|logs|img|js|node_modules)/ : /(api|css|fonts|img|js|node_modules)/;
+	const regX = (process.env.DEV_MODE) ? /(api|css|webfonts|logs|img|js|node_modules)/ : /(api|css|webfonts|img|js|node_modules)/;
 	/*
 	*	in DEV_MODE (when env variable value is set)
 	*	node does not serve angular app if path includes a word 'logs' - root for different logs and reports

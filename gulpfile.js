@@ -53,7 +53,7 @@ function killProcessByName(name) {
 *	then sha256 is calculated using stringified file contents
 */
 gulp.task('hashsum', () => {
-	return gulp.src(['./public/*', '!./public/SHA1SUMS.json', './public/app/views/**', './public/css/**', './public/fonts/**', './public/img/**', './public/js/**'])
+	return gulp.src(['./public/*', '!./public/SHA1SUMS.json', './public/app/views/**', './public/css/**', './public/webfonts/**', './public/img/**', './public/js/**'])
 		.pipe(hashsum({ filename: 'public/SHA1SUMS.json', hash: 'sha1', json: true }));
 });
 
@@ -301,7 +301,7 @@ gulp.task('pack-vendor-js', () => {
 gulp.task('pack-vendor-css', () => {
 	return gulp.src([
 		'./node_modules/nvd3/build/nv.d3.css',
-		'./node_modules/components-font-awesome/css/font-awesome.css',
+		'./node_modules/components-font-awesome/css/fontawesome-all.css',
 		/*
 		*	Angular material theme should be chosen and loaded here
 		*/
@@ -320,14 +320,14 @@ gulp.task('pack-vendor-css', () => {
 
 gulp.task('move-vendor-fonts', () => {
 	return gulp.src([
-		'./node_modules/components-font-awesome/fonts/*.*',
+		'./node_modules/components-font-awesome/webfonts/*.*',
 		// material design icons
 		'./node_modules/material-design-icon-fonts/iconfont/*.eot',
 		'./node_modules/material-design-icon-fonts/iconfont/*.woff2',
 		'./node_modules/material-design-icon-fonts/iconfont/*.woff',
 		'./node_modules/material-design-icon-fonts/iconfont/*.ttf'
 	])
-		.pipe(gulp.dest('./public/fonts'));
+		.pipe(gulp.dest('./public/webfonts'));
 });
 
 gulp.task('sass-autoprefix-minify-css', () => {

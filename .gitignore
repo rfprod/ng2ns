@@ -27,8 +27,8 @@ test/client/**/*.js.map
 topoData/*.js
 public/js/*.min.js
 public/css/*.min.css
-public/fonts/*.*
-!public/fonts/*.gitkeep
+public/webfonts/*.*
+!public/webfonts/*.gitkeep
 public/SHA1SUMS.json
 
 # sessions storage

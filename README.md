@@ -22,6 +22,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
     * `./public/app/views` - components' templates
   * `./public/css/` - bundled styles (production)
   * `./public/img/` - images
+  * `./public/webfonts/` - fonts
   * `./public/js/` - bundled scripts (production)
 * `./test` - client/server tests
   * `./test/client` - client tests
