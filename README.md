@@ -242,6 +242,55 @@ then execute
 sudo docker image rm IMAGE_ID
 ```
 
+### Global NPM dependencies
+
+the project uses `gulp` task manager, this requires global installation of `gulp-cli`
+
+```
+sudo npm install -g gulp-cli@latest
+```
+
+client application compiles from typescript `typescript`, install it globally
+
+```
+sudo npm install -g typescript@latest
+```
+
+### Project dependencies management
+
+it is recommended to use `npm-check-updates`
+
+install it globally using
+
+```
+sudo npm install -g ncu@latest
+```
+
+execute in terminal while in the project folder and follow instructions
+
+```
+ncu
+```
+
+#### Do not update dependencies
+
+`d3 ^3.5.17` - this is the highest version supported by ng2-nvd3 by now.
+
+#### Vulnerabilities check
+
+first install `Node Security Platform` CLI globally
+
+```
+sudo npm install -g nsp@latest
+```
+
+then execute from the project folder
+
+```
+nsp check
+```
+
+
 ### Starting the App
 
 To start the app, execute in the terminal while in the project folder (dependencies installation check will be performed before)
