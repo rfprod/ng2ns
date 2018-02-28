@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express'),
+	compression = require('compression'),
 	routes = require('./app/routes/index.js'),
 	session = require('express-session'),
 	FileStore = require('session-file-store')(session),
@@ -25,6 +26,14 @@ app.use(session({
 	cookie: {
 		maxAge: 1000 * 60 * 60 * 24 * 1 // 1 day 
 	}
+}));
+
+/*
+*	use compression for all responses
+*/
+app.use(compression({
+	threshold: 0,
+	level: -1
 }));
 
 app.use('/public', express.static(cwd + '/public'));
