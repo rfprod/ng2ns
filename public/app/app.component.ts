@@ -138,9 +138,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
 		/*
 		*	register fontawesome for usage in mat-icon by adding directives
-		*	fontSet="fa" fontIcon="fa-icon"
+		*	fontSet="fab" fontIcon="fa-icon"
+		*	fontSet="fas" fontIcon="fa-icon"
+		*
+		*	note: free plan includes only fab (font-awesome-brands) and fas (font-awesome-solid) groups
+		*
+		*	icons reference: https://fontawesome.com/icons/
 		*/
-		this.matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
+		this.matIconRegistry.registerFontClassAlias('fontawesome-all');
 
 		/*
 		*	TODO:app.component router events
