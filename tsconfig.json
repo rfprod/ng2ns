@@ -11,7 +11,7 @@
 		"noImplicitAny": false,
 		"suppressImplicitAnyIndexErrors": true,
 		"typeRoots": ["./node_modules/@types"],
-		"types": ["node", "jasmine", "jquery"],
+		"types": ["node", "jasmine", "hammerjs", "core-js", "jquery"],
 		"allowSyntheticDefaultImports": true
 	},
 	"angularCompilerOptions": {
