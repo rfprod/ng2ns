@@ -345,13 +345,13 @@ gulp.task('sass-autoprefix-minify-css', () => {
 });
 
 gulp.task('eslint', () => {
-	return gulp.src(['./app/**', './public/js/*.js', './*.js']) // uses ignore list from .eslintignore
+	return gulp.src(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js']) // uses ignore list from .eslintignore
 		.pipe(eslint('./.eslintrc.json'))
 		.pipe(eslint.format());
 });
 
 gulp.task('tslint', () => {
-	return gulp.src(['./public/app/*.ts', './public/app/**/*.ts'])
+	return gulp.src(['./public/app/*.ts', './public/app/**/*.ts', '!./public/app/{scss,views}/', './test/client/**/*.ts'])
 		.pipe(tslint({
 			formatter: 'verbose' // 'verbose' - extended info | 'prose' - brief info
 		}))
@@ -368,17 +368,18 @@ gulp.task('lint', (done) => {
 *	watchers
 */
 gulp.task('watch', () => {
-	gulp.watch(['./server.js', './app/**/*.js'], ['server']); // watch server and changes and restart server
-	gulp.watch(['./public/app/*.js', './public/app/**/*.js'], ['build-system-js']); // watch app js changes and build system
+	gulp.watch(['./server.js', './app/{config,models,routes,utils}/*.js'], ['server']); // watch server and changes and restart server
+	gulp.watch(['./public/app/*.js', './public/app/**/*.js', '!./public/app/{scss,views}/'], ['build-system-js']); // watch app js changes and build system
+	gulp.watch(['./gulpfile.js'], ['pack-vendor-js', 'pack-vendor-css']); // repack vendor js and css in case of gulpfile changes
 	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch scss changes and process
 	gulp.watch(['./test/server/*.js'], ['server-test']); // watch server tests changes and run tests
-	gulp.watch(['./app/**/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
+	gulp.watch(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
 	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
 });
 
 gulp.task('watch-and-lint', () => {
 	gulp.watch(['./app/**/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', '!./public/app/{scss,views}/', './test/client/**/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
 });
 
 gulp.task('watch-client-and-test', () => {
