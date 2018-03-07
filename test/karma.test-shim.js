@@ -56,12 +56,12 @@ System.import('systemConfig')
 /** Optional SystemJS configuration extras. Keep going w/o it */
 function importSystemJsExtras(){
 	return System.import('systemConfigExtras')
-	.catch(function(reason) {
-		console.log(
-			'Warning: System.import could not load the optional "systemjs.config.extras.js". Did you omit it by accident? Continuing without it.'
-		);
-		console.log(reason);
-	});
+		.catch(function(reason) {
+			console.log(
+				'Warning: System.import could not load the optional "systemjs.config.extras.js". Did you omit it by accident? Continuing without it.'
+			);
+			console.log(reason);
+		});
 }
 
 function initTestBed(){
@@ -69,15 +69,14 @@ function initTestBed(){
 		System.import('@angular/core/testing'),
 		System.import('@angular/platform-browser-dynamic/testing')
 	])
+		.then(function (providers) {
+			var coreTesting    = providers[0];
+			var browserTesting = providers[1];
 
-	.then(function (providers) {
-		var coreTesting    = providers[0];
-		var browserTesting = providers[1];
-
-		coreTesting.TestBed.initTestEnvironment(
-			browserTesting.BrowserDynamicTestingModule,
-			browserTesting.platformBrowserDynamicTesting());
-	})
+			coreTesting.TestBed.initTestEnvironment(
+				browserTesting.BrowserDynamicTestingModule,
+				browserTesting.platformBrowserDynamicTesting());
+		});
 }
 
 // Import all spec files and start karma
@@ -90,5 +89,5 @@ function initTesting () {
 			return System.import(moduleName);
 		})
 	)
-	.then(__karma__.start, __karma__.error);
+		.then(__karma__.start, __karma__.error);
 }

@@ -1,6 +1,6 @@
 module.exports = function(config){
-  config.set({
-	  
+	config.set({
+
 		basePath : '../',
 		
 		files : [
@@ -49,9 +49,9 @@ module.exports = function(config){
 		],
 
 		proxies: {
-			"/service-worker.js": "/base/public/service-worker.js",
-			"/public/webfonts/": "/base/public/webfonts/",
-			"/public/img/": "/base/public/img/"
+			'/service-worker.js': '/base/public/service-worker.js',
+			'/public/webfonts/': '/base/public/webfonts/',
+			'/public/img/': '/base/public/img/'
 		},
 
 		// exclude: [],
@@ -78,13 +78,10 @@ module.exports = function(config){
 			}
 		},
 		browsers: ['ChromeHeadless'],
-		// browsers: ['Chrome'],
-		// browsers : ['Firefox'],
 		
 		plugins: [
 			'karma-redirect-preprocessor',
 			'karma-chrome-launcher',
-		//    'karma-firefox-launcher',
 			'karma-sourcemap-loader',
 			'karma-coverage',
 			'karma-jasmine'
@@ -121,5 +118,5 @@ module.exports = function(config){
 		logLevel: config.LOG_DEBUG,
 		colors: true
 
-  });
+	});
 };

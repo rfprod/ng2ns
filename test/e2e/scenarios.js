@@ -12,7 +12,7 @@ describe('Ng2NMC e2e: ', function() {
 		//browser.ignoreSynchronization = true;
 		//browser.waitForAngularEnabled(true);
 		browser.getCurrentUrl().then(function(url) {
-			expect(url).toMatch('\/intro$');
+			expect(url).toMatch('/intro$');
 		});
 
 		var navButtons = element.all(by.css('root'));

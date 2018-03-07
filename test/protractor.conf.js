@@ -5,7 +5,7 @@ exports.config = {
 	onPrepare: function() {
 		browser.driver.get('http://localhost:8080/public/index.html');
 
-		return browser.getProcessedConfig().then((config) => {
+		return browser.getProcessedConfig().then((/*config*/) => {
 			// console.log('config:', config);
 		});
 	},

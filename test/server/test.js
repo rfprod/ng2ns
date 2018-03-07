@@ -12,7 +12,7 @@ const baseUrl = 'http://localhost:'+process.env.PORT;
 
 describe('/ endpoint', function() {
 	it('should load a an angular initialization page', function (done) {
-		request(baseUrl+'/', function (error,response,body) {
+		request(baseUrl+'/', function (error, response/*, body*/) {
 			
 			expect(error).to.be.not.ok;
 			expect(response).to.be.not.a('undefined');
@@ -36,7 +36,7 @@ describe('/ endpoint', function() {
 
 describe('/api/app-diag/hashsum endpoint', function() {
 	it('should deliver app hashsum', function(done) {
-		request(baseUrl+'/api/app-diag/hashsum', function(error, response, body) {
+		request(baseUrl+'/api/app-diag/hashsum', function(error, response/*, body*/) {
 
 			expect(error).to.be.not.ok;
 			expect(response).to.be.not.a('undefined');
@@ -54,7 +54,7 @@ describe('/api/app-diag/hashsum endpoint', function() {
 
 describe('/api/app-diag/static endpoint', function() {
 	it('should deliver static diagnostic information about the app platform', function (done){
-		request(baseUrl+'/api/app-diag/static', function (error,response,body) {
+		request(baseUrl+'/api/app-diag/static', function (error, response/*, body*/) {
 			
 			expect(error).to.be.not.ok;
 			expect(response).to.be.not.a('undefined');
@@ -86,7 +86,7 @@ describe('/api/app-diag/dynamic endpoint', function() {
 			ws.send(JSON.stringify({action: 'get'}));
 		});
 
-		ws.on('message', (data, flags) => {
+		ws.on('message', (data/*, flags*/) => {
 			console.log('ws incoming message', data);
 			expect(data).to.be.ok;
 			const response = JSON.parse(data);

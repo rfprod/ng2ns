@@ -1,9 +1,9 @@
 function getCacheName() {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve/*, reject*/) {
 		fetch(self.registration.scope + 'api/app-diag/hashsum').then(async function(response) {
 			var json = await response.json();
 			resolve('ng2ns-' + json.hashsum);
-		}).catch(function(error) {
+		}).catch(function(/*error*/) {
 			resolve('NA-' + new Date().getTime());
 		});
 	});
@@ -73,7 +73,7 @@ self.addEventListener('activate', function(event) {
 });
 
 function updateCache() {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve/*, reject*/) {
 		getCacheName().then(function(gotCacheName) {
 			console.log('updateCache, compare build hashes');
 			if (cacheName !== gotCacheName) {
@@ -127,22 +127,22 @@ function updateCache() {
 				console.log('updateCache. not need to do that, build hashes are the same');
 				resolve();
 			}
-		})
+		});
 	});
 }
-
+/*
 var proxyBaseUrl = {
 	local: 'http://localhost:8080',
 	remote: 'TODO'
 };
-
+*/
 self.addEventListener('fetch', function(event) {
 	console.log('>> serviceWorker, fetch event', event);
 	var request = event.request;
 	/*
 	*	sample proxy
 	*
-	if (/https:\/\/website\-domain\.pattern\.tld\//.test(request.url)) {
+	if (/https:\/\/website-domain\.pattern\.tld\//.test(request.url)) {
 		console.log('>> serviceWorker, call intercepted, request url', request.url);
 		var newUrl = proxyBaseUrl.local + '/api/proxy?url=' + encodeURIComponent(request.url);
 		var options = {
@@ -168,7 +168,7 @@ self.addEventListener('fetch', function(event) {
 	/*
 	*	check cache, containing static assets, before fetching requests
 	*/
-	if (/service\-worker\-registration\.js$/.test(request.url)) {
+	if (/service-worker-registration\.js$/.test(request.url)) {
 		console.log('>> serviceWorker, should check cache update, this happens on initial page load when worker is already installed');
 		event.waitUntil(updateCache());
 		event.respondWith(fetch(request));
