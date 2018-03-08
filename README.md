@@ -413,4 +413,4 @@ most command needed for manual interaction with the project were listed above, f
 
 ## Licenses
 
-* [`Ng2NS`](LICENSE.md)
+* [`Ng2NS`](LICENSE)
