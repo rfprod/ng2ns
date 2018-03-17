@@ -61,6 +61,7 @@ module.exports = function(config){
 		// preprocessors: {},
 
 		browserNoActivityTimeout: 20000,
+		browserDisconnectTimeout: 20000,
 		customLaunchers: {
 			/*
 			*	this custom launcher requires setting env var CHROME_BIN=chromium-browser
@@ -82,6 +83,7 @@ module.exports = function(config){
 		plugins: [
 			'karma-redirect-preprocessor',
 			'karma-chrome-launcher',
+			'karma-html-reporter',
 			'karma-sourcemap-loader',
 			'karma-coverage',
 			'karma-jasmine'
@@ -99,12 +101,21 @@ module.exports = function(config){
 			// prependPrefix: ''
 		},
 
-		reporters: ['progress', 'coverage'],
+		reporters: ['progress', 'coverage', 'html'],
 		coverageReporter: {
 			dir: 'logs/',
 			reporters: [
 				{ type: 'json', subdir: 'coverage'}
 			]
+		},
+		htmlReporter: {
+			outputDir: 'logs/unit',
+			templatePath: null,
+			focusOnFailures: true,
+			namedFiles: false,
+			pageTitle: 'Ng2NS Client Unit Tests',
+			urlFriendlyName: true,
+			reportName: 'client'
 		},
 
 		failOnEmptyTestSuite: false, // overrides the error, warn instead - by default returns error if there're no tests defined

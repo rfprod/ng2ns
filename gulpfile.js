@@ -154,56 +154,191 @@ gulp.task('tsc', (done) => {
 	});
 });
 
-gulp.task('server-test', () => {
-	return gulp.src(['./test/server/*.js'], { read: false })
-		.pipe(mocha({ reporter: 'spec' }))
-		.on('error', util.log);
-});
-
-gulp.task('client-unit-test', (done) => {
-	const server = new karmaServer({
-		configFile: require('path').resolve('test/karma.conf.js'),
-		singleRun: false
-	});
-
-	server.on('browser_error', (browser, err) => {
-		console.log('=====\nKarma > Run Failed\n=====\n', err);
-		throw err;
-	});
-
-	server.on('run_complete', (browsers, results) => {
-		if (results.failed) {
-			throw new Error('=====\nKarma > Tests Failed\n=====\n', results);
-		}
-		console.log('=====\nKarma > Complete With No Failures\n=====\n', results);
+const logsIndexHTML = `
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="application/javascript">
+			function fitIframeHeight() {
+				var iframe = document.querySelector('iframe');
+				iframe.height = iframe.contentWindow.document.body.scrollHeight;
+			};
+		</script>
+	</head>
+	<body onload="fitIframeHeight()">
+		<h1>Ng2NS Reports and Documentation Index</h1>
+		<iframe src="git-stats.html" width="100%" frameborder=0></iframe>
+		<div>
+			<h2>Reports</h2>
+			<ul>
+				<li>
+					<h3>Server Unit</h3>
+					<ul>
+						<li>
+							<a href="unit/server/index.html" target=_blank>Spec</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<h3>Client Unit</h3>
+					<ul>
+						<li>
+							<a href="unit/client/index.html" target=_blank>Spec</a>
+						</li>
+						<li>
+							<a href="coverage/html-report/index.html" target=_blank>Coverage</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<h3>Client E2E</h3>
+					<ul>
+						<li>
+							<a href="e2e/report/index.html" target=_blank>Spec</a>
+						</li>
+					</ul>
+				</li>
+			</li>
+		</div>
+		<div>
+			<h2>Documentation</h2>
+			<ul>
+				<li>
+					<h3>Server</h3>
+					<ul>
+						<li>
+							<a href="jsdoc/index.html" target=_blank>JSDoc</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<h3>Client</h3>
+					<ul>
+						<li>
+							<a href="typedoc/index.html" target=_blank>TypeDoc</a>
+						</li>
+					</ul>
+				</li>
+			</li>
+		</div>
+	</body>
+</html>
+`;
+gulp.task('generate-logs-index', (done) => {
+	fs.writeFile('./logs/index.html', logsIndexHTML, (err) => {
+		if (err) throw err;
+		console.log('# > LOGS index.html > was created');
 		done();
 	});
+});
 
-	server.start();
+gulp.task('jsdoc-server', () => {
+	const jsdoc = require('gulp-jsdoc3');
+	const config = require('./jsdoc.json');
+	const source = ['./server.js', './app/**/*.js'];
+	return gulp.src(['README.md'].concat(source), {read: false})
+		.pipe(jsdoc(config));
+});
+
+gulp.task('typedoc-client', () => {
+	const typedoc = require('gulp-typedoc');
+	const config = {
+		// typescript options (see typescript docs)
+		module: 'commonjs',
+		target: 'es2015',
+		moduleResolution: 'node',
+		sourceMap: true,
+		emitDecoratorMetadata: true,
+		experimentalDecorators: true,
+		removeComments: false,
+		noImplicitAny: false,
+		suppressImplicitAnyIndexErrors: true,
+		// output options (see typedoc docs: http://typedoc.org/api/index.html)
+		readme: './README.md',
+		out: './logs/typedoc',
+		json: './logs/typedoc/typedoc-output.json',
+		// typedoc options (see typedoc docs: http://typedoc.org/api/index.html)
+		name: 'Ng2NS Client',
+		theme: 'default',
+		//plugins: [], // set to none to use no plugins, omit to use all
+		includeDeclarations: false,
+		ignoreCompilerErrors: true,
+		version: true
+	};
+	return gulp.src(['public/app/**/*.ts'], {read: false})
+		.pipe(typedoc(config));
+});
+
+gulp.task('server-test', () => {
+	return gulp.src(['./test/server/*.js'], { read: false })
+		.pipe(mocha({ reporter: 'good-mocha-html-reporter' })) // spec reporter in terminal without
+		.on('error', util.log)
+		.once('end', () => {
+			if (fs.existsSync('./report.html')) {
+				if (!fs.existsSync('./logs/unit/server')) {
+					fs.mkdirSync('./logs/unit/server');
+				}
+				fs.copyFileSync('./report.html', './logs/unit/server/index.html');
+				fs.unlinkSync('./report.html');
+			}
+		});
+});
+
+let karmaSRV;
+gulp.task('client-unit-test', (done) => {
+	if (!karmaSRV) {
+		karmaSRV = new karmaServer({
+			configFile: require('path').resolve('test/karma.conf.js'),
+			singleRun: false,
+			autoWatch: true
+		});
+
+		karmaSRV.on('browser_error', (browser, err) => {
+			console.log('=====\nKarma > Run Failed\n=====\n', err);
+			throw err;
+		});
+
+		karmaSRV.on('run_complete', (browsers, results) => {
+			if (results.failed) {
+				console.log('=====\nKarma > Tests Failed\n=====\n', results);
+			} else {
+				console.log('=====\nKarma > Complete With No Failures\n=====\n', results);
+			}
+			done();
+		});
+
+		karmaSRV.start();
+	} else {
+		console.log('<<<<< karmaSRV already running >>>>>');
+		karmaSRV.refreshFiles();
+	}
 });
 
 gulp.task('client-unit-test-single-run', (done) => {
-	const server = new karmaServer({
-		configFile: require('path').resolve('test/karma.conf.js'),
-		singleRun: true
-	});
+	if (!karmaSRV) {
+		karmaSRV = new karmaServer({
+			configFile: require('path').resolve('test/karma.conf.js'),
+			singleRun: true
+		});
 
-	server.on('browser_error', (browser, err) => {
-		console.log('=====\nKarma > Run Failed\n=====\n', err);
-		throw err;
-	});
+		karmaSRV.on('browser_error', (browser, err) => {
+			console.log('=====\nKarma > Run Failed\n=====\n', err);
+			throw err;
+		});
 
-	server.on('run_complete', (browsers, results) => {
-		if (results.failed) {
-			// throw new Error('=====\nKarma > Tests Failed\n=====\n', results);
-			console.log('=====\nKarma > Tests Failed\n=====\n', results);
-		} else {
-			console.log('=====\nKarma > Complete With No Failures\n=====\n', results);
-		}
-		done();
-	});
+		karmaSRV.on('run_complete', (browsers, results) => {
+			if (results.failed) {
+				console.log('=====\nKarma > Tests Failed\n=====\n', results);
+			} else {
+				console.log('=====\nKarma > Complete With No Failures\n=====\n', results);
+			}
+			done();
+		});
 
-	server.start();
+		karmaSRV.start();
+	} else {
+		console.log('<<<<< karmaSRV already running >>>>>');
+	}
 });
 
 gulp.task('client-e2e-test', () => {
