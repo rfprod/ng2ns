@@ -276,6 +276,9 @@ gulp.task('server-test', () => {
 		.once('end', () => {
 			if (fs.existsSync('./report.html')) {
 				if (!fs.existsSync('./logs/unit/server')) {
+					if (!fs.existsSync('./logs/unit')) {
+						fs.mkdirSync('./logs/unit');
+					}
 					fs.mkdirSync('./logs/unit/server');
 				}
 				fs.copyFileSync('./report.html', './logs/unit/server/index.html');
