@@ -142,6 +142,11 @@ gulp.task('server', (done) => {
 	done();
 });
 
+gulp.task('server-kill', (done) => {
+	if (node) node.kill();
+	done();
+});
+
 gulp.task('tsc', (done) => {
 	if (tsc) tsc.kill();
 	tsc = spawn('tsc', [], {stdio: 'inherit'});
@@ -438,6 +443,9 @@ gulp.task('pack-vendor-js', () => {
 
 gulp.task('pack-vendor-css', () => {
 	return gulp.src([
+		/*
+		*	add paths to required third party css files
+		*/
 		'./node_modules/nvd3/build/nv.d3.css',
 		'./node_modules/components-font-awesome/css/fontawesome-all.css',
 		/*
@@ -506,23 +514,29 @@ gulp.task('lint', (done) => {
 *	watchers
 */
 gulp.task('watch', () => {
-	gulp.watch(['./server.js', './app/{config,models,routes,utils}/*.js'], ['server']); // watch server and changes and restart server
-	gulp.watch(['./public/app/*.js', './public/app/**/*.js', '!./public/app/{scss,views}/'], ['build-system-js']); // watch app js changes and build system
-	gulp.watch(['./gulpfile.js'], ['pack-vendor-js', 'pack-vendor-css']); // repack vendor js and css in case of gulpfile changes
-	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch scss changes and process
-	gulp.watch(['./test/server/*.js'], ['server-test']); // watch server tests changes and run tests
-	gulp.watch(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
+	gulp.watch(['./server.js', './app/**/*.js'], ['server']); // watch server and database changes, and restart server
+	gulp.watch(['./test/server/*.js'], ['server-test']); // watch server tests changes, and run tests
+	gulp.watch(['./gulpfile.js'], ['pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts']); // watch gulpfile changes, and repack vendor assets
+	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch app scss-source changes, and pack application css bundle
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts', './tslint.json'], ['rebuild-app']); // watch app ts-source chages, and rebuild app js bundle
+	gulp.watch(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js file changes, and lint
 });
 
 gulp.task('watch-and-lint', () => {
-	gulp.watch(['./app/**/*.js', './*.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js files and lint on change
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', '!./public/app/{scss,views}/', './test/client/**/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
+	gulp.watch(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js file changes, and lint
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts', './tslint.json'], ['tslint']); // watch ts files and lint on change
 });
 
 gulp.task('watch-client-and-test', () => {
-	gulp.watch(['./public/app/*.ts','./test/client/**/*.ts'], ['tsc']); // watch unit test changes and run tests
-	gulp.watch(['./public/app/*.js','./test/client/**/*.js','./test/karma.conf.js','./test/karma.test-shim.js'], ['client-unit-test']); //watch unit test changes and run tests
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts'], ['compile-and-test']); // watch app source changes, and compile and test
+	gulp.watch(['./test/karma.conf.js','./test/karma.test-shim.js'], ['client-unit-test']); // watch karma configs changes, and test
+});
+
+/*
+*	test sequences
+*/
+gulp.task('compile-and-test', (done) => {
+	runSequence('tsc', 'client-unit-test', done);
 });
 
 /*
@@ -536,15 +550,19 @@ gulp.task('build', (done) => {
 	runSequence('build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
 });
 
+gulp.task('rebuild-app', (done) => { // should be used in watcher to rebuild the app on *.ts file changes
+	runSequence('tslint', 'tsc', 'build-system-js', 'hashsum', done);
+});
+
 /*
 *	start sequences
 */
 gulp.task('default', (done) => {
-	runSequence('lint', 'build', 'create-env-development', 'server', 'watch', done);
+	runSequence('lint', 'compile-and-build', 'create-env-development', 'server', 'watch', done);
 });
 
 gulp.task('production-start', (done) => {
-	runSequence('build', 'create-env-production', 'server', done);
+	runSequence('compile-and-build', 'create-env-production', 'server', done);
 });
 
 /*
@@ -664,10 +682,10 @@ gulp.task('electron-debinstaller', (done) => {
 	});
 });
 gulp.task('build-electron-win', (done) => {
-	runSequence('create-env-electron', 'electron-packager-win', 'electron-winstaller', done);
+	runSequence('compile-and-build', 'create-env-electron', 'electron-packager-win', 'electron-winstaller', done);
 });
 gulp.task('build-electron-deb', (done) => {
-	runSequence('create-env-electron', 'electron-packager-nix', 'electron-debinstaller', done);
+	runSequence('compile-and-build', 'create-env-electron', 'electron-packager-nix', 'electron-debinstaller', done);
 });
 
 process.on('exit', () => {
