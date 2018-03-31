@@ -1,3 +1,6 @@
+const testUtils = require('./test-utils');
+const headlessChromeFlags = testUtils.headlessChromeFlags();
+
 module.exports = function(config){
 	config.set({
 
@@ -58,8 +61,6 @@ module.exports = function(config){
 
 		frameworks: ['jasmine'],
 
-		// preprocessors: {},
-
 		browserNoActivityTimeout: 20000,
 		browserDisconnectTimeout: 20000,
 		customLaunchers: {
@@ -70,12 +71,7 @@ module.exports = function(config){
 			*/
 			ChromeHeadless: {
 				base: 'Chrome',
-				flags: [
-					'--headless',
-					'--disable-gpu',
-					// Without a remote debugging port Chrome exits immediately
-					'--remote-debugging-port=9222'
-				]
+				flags: headlessChromeFlags
 			}
 		},
 		browsers: ['ChromeHeadless'],

@@ -1,3 +1,6 @@
+const testUtils = require('./test-utils');
+const isDocker = testUtils.isDocker();
+
 exports.config = {
 
 	useAllAngular2AppRoots: true,
@@ -17,7 +20,16 @@ exports.config = {
 	capabilities: {
 		browserName: 'chrome',
 		chromeOptions: {
-			args: [ '--headless', '--disable-gpu', '--window-size=1024x768' ]
+			args: (!isDocker) ? [
+				'--headless',
+				'--disable-gpu',
+				'--window-size=1680x1024'
+			] : [
+				'--headless',
+				'--disable-gpu',
+				'--window-size=1680x1024',
+				'--no-sandbox'
+			]
 		}
 	},
 
