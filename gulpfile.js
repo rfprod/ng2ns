@@ -276,7 +276,7 @@ gulp.task('typedoc-client', () => {
 
 gulp.task('server-test', () => {
 	return gulp.src(['./test/server/*.js'], { read: false })
-		.pipe(mocha({ reporter: 'good-mocha-html-reporter' })) // spec reporter in terminal without
+		.pipe(mocha({ reporter: 'good-mocha-html-reporter' }))
 		.on('error', util.log)
 		.once('end', () => {
 			if (fs.existsSync('./report.html')) {

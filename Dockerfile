@@ -20,11 +20,13 @@ ENV CHROME_BIN=chromium
 RUN Xvfb :99 -screen 0 1680x1024x8 -nolisten tcp & sleep 2
 
 # install and build
-## install global dependencies: gulp-cli, typescript
 ## install all local dependencies
+## rebuild node-sass
+## install global dependencies: gulp-cli, typescript
 ## build application, and create .env file for client application server
-RUN npm install -g gulp-cli typescript && \
-	npm install && \
+RUN npm install && \
+	npm rebuild node-sass --force && \
+	npm install -g gulp-cli typescript && \
 	gulp compile-and-build && gulp create-env-development
 
 # run tests
@@ -35,14 +37,13 @@ RUN gulp server & npm run server-test && npm run client-test-single-run && gulp 
 RUN npm prune --production && \
 	npm uninstall @angular/animations @angular/cdk @angular/common @angular/compiler @angular/core \
 	@angular/flex-layout @angular/forms @angular/http @angular/material @angular/material-moment-adapter \
-	@angular/platform-browser @angular/platform-browser-dynamic @angular/router \
-	@types/core-js @types/hammerjs @types/jasmine @types/jquery @types/node components-font-awesome \
-	concurrently core-js d3 datamaps electron-squirrel-startup gulp gulp-autoprefixer \
-	gulp-concat gulp-cssnano gulp-eslint gulp-hashsum gulp-mocha gulp-plumber gulp-rename \
-	gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify gulp-util hammerjs \
-	jasmine-core jquery karma karma-redirect-preprocessor material-design-icon-fonts moment \
+	@angular/platform-browser @angular/platform-browser-dynamic @angular/router @types/core-js \
+	@types/hammerjs @types/jasmine @types/jquery @types/node components-font-awesome core-js d3 datamaps \
+	electron-squirrel-startup gulp gulp-autoprefixer gulp-concat gulp-cssnano gulp-eslint gulp-hashsum \
+	gulp-mocha gulp-plumber gulp-rename gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify \
+	gulp-util hammerjs jasmine-core jquery karma karma-redirect-preprocessor material-design-icon-fonts moment \
 	ng2-nvd3 nvd3 reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
-	web-animations-js zone.js --no-save --only=production \
+	web-animations-js zone.js --no-save --only=production && \
 	npm uninstall -g gulp-cli typescript --save && \
 	npm cache clean --force
 
