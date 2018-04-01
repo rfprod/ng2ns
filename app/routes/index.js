@@ -4,6 +4,7 @@
  * Server Routes module
  * @module app/routes/index
  * @param {object} app Express application
+ * @param {object} cwd Current working directory
  * @param {object} fs Filesystem access module
  * @param {object} SrvInfo Server information
  * @param {object} DBmocks Database mocks
