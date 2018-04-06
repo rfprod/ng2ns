@@ -136,7 +136,7 @@ gulp.task('server', (done) => {
 	node = spawn('node', ['server.js'], {stdio: 'inherit'});
 	node.on('close', (code) => {
 		if (code === 8) {
-			gulp.log('Error detected, waiting for changes...');
+			console.log('Error detected, waiting for changes...');
 		}
 	});
 	done();
@@ -152,7 +152,7 @@ gulp.task('tsc', (done) => {
 	tsc = spawn('tsc', [], {stdio: 'inherit'});
 	tsc.on('close', (code) => {
 		if (code === 8) {
-			gulp.log('Error detected, waiting for changes...');
+			console.log('Error detected, waiting for changes...');
 		} else {
 			done();
 		}
