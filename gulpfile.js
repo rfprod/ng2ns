@@ -518,7 +518,7 @@ gulp.task('watch', () => {
 	gulp.watch(['./test/server/*.js'], ['server-test']); // watch server tests changes, and run tests
 	gulp.watch(['./gulpfile.js'], ['pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts']); // watch gulpfile changes, and repack vendor assets
 	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch app scss-source changes, and pack application css bundle
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts', './tslint.json'], ['rebuild-app']); // watch app ts-source chages, and rebuild app js bundle
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts', './tslint.json'], ['spawn-rebuild-app']); // watch app ts-source chages, and rebuild app js bundle
 	gulp.watch(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js file changes, and lint
 });
 
@@ -552,6 +552,16 @@ gulp.task('build', (done) => {
 
 gulp.task('rebuild-app', (done) => { // should be used in watcher to rebuild the app on *.ts file changes
 	runSequence('tslint', 'tsc', 'build-system-js', 'hashsum', done);
+});
+
+let rebuildApp;
+gulp.task('spawn-rebuild-app', (done) => {
+	if (rebuildApp) rebuildApp.kill();
+	rebuildApp = spawn('gulp', ['rebuild-app'], {stdio: 'inherit'});
+	rebuildApp.on('close', (code) => {
+		console.log(`rebuildApp closed with code ${code}`);
+	});
+	done();
 });
 
 /*
@@ -688,10 +698,7 @@ gulp.task('build-electron-deb', (done) => {
 	runSequence('compile-and-build', 'create-env-electron', 'electron-packager-nix', 'electron-debinstaller', done);
 });
 
-process.on('exit', () => {
-	if (node) node.kill();
-});
-
-process.on('SIGINT', () => {
-	killProcessByName('gulp');
+process.on('exit', (code) => {
+	console.log(`PROCESS EXIT CODE ${code}`);
+	// killProcessByName('gulp');
 });
