@@ -1,5 +1,3 @@
-'use strict';
-
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
