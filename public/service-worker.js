@@ -10,9 +10,32 @@ function getCacheName() {
 }
 var cacheName;
 
+var staticAssets = [
+	'/public/webfonts/fa-brands-400.svg',
+	'/public/webfonts/fa-brands-400.ttf',
+	'/public/webfonts/fa-brands-400.eot',
+	'/public/webfonts/fa-brands-400.woff',
+	'/public/webfonts/fa-brands-400.woff2',
+	'/public/webfonts/fa-regular-400.svg',
+	'/public/webfonts/fa-regular-400.ttf',
+	'/public/webfonts/fa-regular-400.eot',
+	'/public/webfonts/fa-regular-400.woff',
+	'/public/webfonts/fa-regular-400.woff2',
+	'/public/webfonts/fa-solid-900.svg',
+	'/public/webfonts/fa-solid-900.ttf',
+	'/public/webfonts/fa-solid-900.eot',
+	'/public/webfonts/fa-solid-900.woff',
+	'/public/webfonts/fa-solid-900.woff2',
+	'/public/webfonts/MaterialIcons-Regular.ttf',
+	'/public/webfonts/MaterialIcons-Regular.eot',
+	'/public/webfonts/MaterialIcons-Regular.woff',
+	'/public/webfonts/MaterialIcons-Regular.woff2',
+	'/public/img/Angular_logo.svg',
+	'/public/img/Node.js_logo.svg'
+];
+
 self.addEventListener('install', function(event) {
 	console.log('>> serviceWorker, install event', event);
-	// self.skipWaiting();
 	/*
 	*	use caching then force activation
 	*/
@@ -21,35 +44,7 @@ self.addEventListener('install', function(event) {
 			cacheName = gotCacheName;
 			console.log('cacheName', cacheName);
 			caches.open(cacheName).then(function(cache) {
-				return cache.addAll([
-					// '/',
-					// '/public/index.html',
-					// '/public/css/vendor-bundle.min.css',
-					// '/public/css/bundle.min.css',
-					// '/public/js/vendor-bundle.min.js',
-					// '/public/js/bundle.min.js',
-					'/public/webfonts/fa-brands-400.svg',
-					'/public/webfonts/fa-brands-400.ttf',
-					'/public/webfonts/fa-brands-400.eot',
-					'/public/webfonts/fa-brands-400.woff',
-					'/public/webfonts/fa-brands-400.woff2',
-					'/public/webfonts/fa-regular-400.svg',
-					'/public/webfonts/fa-regular-400.ttf',
-					'/public/webfonts/fa-regular-400.eot',
-					'/public/webfonts/fa-regular-400.woff',
-					'/public/webfonts/fa-regular-400.woff2',
-					'/public/webfonts/fa-solid-900.svg',
-					'/public/webfonts/fa-solid-900.ttf',
-					'/public/webfonts/fa-solid-900.eot',
-					'/public/webfonts/fa-solid-900.woff',
-					'/public/webfonts/fa-solid-900.woff2',
-					'/public/webfonts/MaterialIcons-Regular.ttf',
-					'/public/webfonts/MaterialIcons-Regular.eot',
-					'/public/webfonts/MaterialIcons-Regular.woff',
-					'/public/webfonts/MaterialIcons-Regular.woff2',
-					'/public/img/Angular_logo.svg',
-					'/public/img/Node.js_logo.svg'
-				]).then(function() {
+				return cache.addAll(staticAssets).then(function() {
 					console.log('>> serviceWorker, cached static assets');
 					self.skipWaiting();
 				});
@@ -73,7 +68,7 @@ self.addEventListener('activate', function(event) {
 });
 
 function updateCache() {
-	return new Promise(function(resolve/*, reject*/) {
+	return new Promise(function(resolve) {
 		getCacheName().then(function(gotCacheName) {
 			console.log('updateCache, compare build hashes');
 			if (cacheName !== gotCacheName) {
@@ -88,36 +83,7 @@ function updateCache() {
 					});
 				}).then(function() {
 					caches.open(cacheName).then(function(cache) {
-						cache.addAll([
-							// '/',
-							// '/public/index.html',
-							// '/public/app/views/admin-workspace.html',
-							// '/public/css/vendor-bundle.min.css',
-							// '/public/css/bundle.min.css',
-							// '/public/js/vendor-bundle.min.js',
-							// '/public/js/bundle.min.js',
-							'/public/webfonts/fa-brands-400.svg',
-							'/public/webfonts/fa-brands-400.ttf',
-							'/public/webfonts/fa-brands-400.eot',
-							'/public/webfonts/fa-brands-400.woff',
-							'/public/webfonts/fa-brands-400.woff2',
-							'/public/webfonts/fa-regular-400.svg',
-							'/public/webfonts/fa-regular-400.ttf',
-							'/public/webfonts/fa-regular-400.eot',
-							'/public/webfonts/fa-regular-400.woff',
-							'/public/webfonts/fa-regular-400.woff2',
-							'/public/webfonts/fa-solid-900.svg',
-							'/public/webfonts/fa-solid-900.ttf',
-							'/public/webfonts/fa-solid-900.eot',
-							'/public/webfonts/fa-solid-900.woff',
-							'/public/webfonts/fa-solid-900.woff2',
-							'/public/fonts/MaterialIcons-Regular.ttf',
-							'/public/fonts/MaterialIcons-Regular.eot',
-							'/public/fonts/MaterialIcons-Regular.woff',
-							'/public/fonts/MaterialIcons-Regular.woff2',
-							'/public/img/Angular_logo.svg',
-							'/public/img/Node.js_logo.svg'
-						]).then(function() {
+						cache.addAll(staticAssets).then(function() {
 							console.log('>> serviceWorker, updated cached static assets');
 							resolve();
 						});
@@ -168,7 +134,7 @@ self.addEventListener('fetch', function(event) {
 	/*
 	*	check cache, containing static assets, before fetching requests
 	*/
-	if (/service-worker-registration\.js$/.test(request.url)) {
+	if (/service-worker\.js$/.test(request.url)) {
 		console.log('>> serviceWorker, should check cache update, this happens on initial page load when worker is already installed');
 		event.waitUntil(updateCache());
 		event.respondWith(fetch(request));
