@@ -57,7 +57,6 @@ describe('DashboardLoginComponent', () => {
 	});
 
 	it('should be defined', () => {
-		// console.log(this.component);
 		expect(this.component).toBeDefined();
 	});
 
