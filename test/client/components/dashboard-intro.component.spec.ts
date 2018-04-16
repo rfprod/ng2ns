@@ -76,6 +76,8 @@ describe('DashboardIntroComponent', () => {
 		});
 	});
 
+	afterEach(() => this.backend.verifyNoPendingRequests());
+
 	it('should be defined', () => {
 		expect(this.component).toBeDefined();
 	});
