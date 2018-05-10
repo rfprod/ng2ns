@@ -1,5 +1,5 @@
 const testUtils = require('./test-utils');
-const headlessChromeFlags = testUtils.headlessChromeFlags();
+const headlessChromeFlags = testUtils.karmaHeadlessChromeFlags();
 
 module.exports = function(config){
 	config.set({

@@ -1,5 +1,5 @@
 const testUtils = require('./test-utils');
-const isDocker = testUtils.isDocker();
+const headlessChromeFlags = testUtils.protractorHeadlessChromeFlags();
 
 exports.config = {
 
@@ -20,16 +20,7 @@ exports.config = {
 	capabilities: {
 		browserName: 'chrome',
 		chromeOptions: {
-			args: (!isDocker) ? [
-				'--headless',
-				'--disable-gpu',
-				'--window-size=1680x1024'
-			] : [
-				'--headless',
-				'--disable-gpu',
-				'--window-size=1680x1024',
-				'--no-sandbox'
-			]
+			args: headlessChromeFlags
 		}
 	},
 

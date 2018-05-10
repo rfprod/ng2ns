@@ -12,12 +12,23 @@ function isDocker() {
 
 module.exports = {
 	isDocker: isDocker,
-	headlessChromeFlags: () => {
+	karmaHeadlessChromeFlags: () => {
 		const flags = [
 			'--headless',
 			'--disable-gpu',
 			// Without a remote debugging port Chrome exits immediately
 			'--remote-debugging-port=9222'
+		];
+		if (isDocker()) {
+			flags.push(['--no-sandbox']); // required by Docker
+		}
+		return flags;
+	},
+	protractorHeadlessChromeFlags: () => {
+		const flags = [
+			'--headless',
+			'--disable-gpu',
+			'--window-size=1680x1024'
 		];
 		if (isDocker()) {
 			flags.push(['--no-sandbox']); // required by Docker
