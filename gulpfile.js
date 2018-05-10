@@ -163,6 +163,37 @@ const logsIndexHTML = `
 <!DOCTYPE html>
 <html>
 	<head>
+		<style>
+			body {
+				height: 100%;
+				margin: 0;
+				padding: 0 1em;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				align-items: flex-start;
+				align-content: flex-start;
+				justify-content: stretch;
+			}
+			.flex-100 {
+				flex: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.flex-item {
+				flex: 1 1 auto;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: center;
+				border: 1px rgba(0, 0, 0, 0.3) dotted;
+			}
+			a {
+				text-transform: uppercase;
+			}
+		</style>
 		<script type="application/javascript">
 			function fitIframeHeight() {
 				var iframe = document.querySelector('iframe');
@@ -171,61 +202,41 @@ const logsIndexHTML = `
 		</script>
 	</head>
 	<body onload="fitIframeHeight()">
-		<h1>Ng2NS Reports and Documentation Index</h1>
-		<iframe src="git-stats.html" width="100%" frameborder=0></iframe>
-		<div>
-			<h2>Reports</h2>
-			<ul>
-				<li>
-					<h3>Server Unit</h3>
-					<ul>
-						<li>
-							<a href="unit/server/index.html" target=_blank>Spec</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<h3>Client Unit</h3>
-					<ul>
-						<li>
-							<a href="unit/client/index.html" target=_blank>Spec</a>
-						</li>
-						<li>
-							<a href="coverage/html-report/index.html" target=_blank>Coverage</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<h3>Client E2E</h3>
-					<ul>
-						<li>
-							<a href="e2e/report/index.html" target=_blank>Spec</a>
-						</li>
-					</ul>
-				</li>
-			</li>
+		<h1 class="flex-100">Ng2NS Reports and Documentation Index</h1>
+
+		<div class="flex-100">
+			<iframe src="git-stats.html" width="100%" frameborder=0></iframe>
 		</div>
-		<div>
-			<h2>Documentation</h2>
-			<ul>
-				<li>
-					<h3>Server</h3>
-					<ul>
-						<li>
-							<a href="jsdoc/index.html" target=_blank>JSDoc</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<h3>Client</h3>
-					<ul>
-						<li>
-							<a href="typedoc/index.html" target=_blank>TypeDoc</a>
-						</li>
-					</ul>
-				</li>
-			</li>
-		</div>
+
+		<h2 class="flex-100">Reports</h2>
+
+			<span class="flex-item">
+				<h3 class="flex-100">Server Unit</h3>
+				<a class="flex-item" href="unit/server/index.html" target=_blank>Spec</a>
+			</span>
+
+			<span class="flex-item">
+				<h3 class="flex-100">Client Unit</h3>
+				<a class="flex-item" href="unit/client/index.html" target=_blank>Spec</a>
+				<a class="flex-item" href="coverage/html-report/index.html" target=_blank>Coverage</a>
+			</span>
+
+			<span class="flex-item">
+				<h3 class="flex-100">Client E2E</h3>
+				<a class="flex-item" href="e2e/report/index.html" target=_blank>Spec</a>
+			</span>
+
+			<h2 class="flex-100">Documentation</h2>
+
+			<span class="flex-item">
+				<h3 class="flex-100">Server</h3>
+				<a class="flex-item" href="jsdoc/index.html" target=_blank>JSDoc</a>
+			</span>
+
+			<span class="flex-item">
+				<h3 class="flex-100">Client</h3>
+				<a class="flex-item" href="typedoc/index.html" target=_blank>TypeDoc</a>
+			</span>
 	</body>
 </html>
 `;
