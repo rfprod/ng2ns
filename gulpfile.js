@@ -659,9 +659,9 @@ gulp.task('electron-packager-nix', (done) => {
 gulp.task('electron-winstaller', (done) => {
 	const electronWinstaller = require('electron-winstaller');
 	electronWinstaller.createWindowsInstaller({
-		appDirectory: './desktop/win/build/ng2nwtn-win32-x64',
+		appDirectory: './desktop/win/build/ng2ns-win32-x64',
 		outputDirectory: './desktop/win/dist',
-		authors: 'TechnoNIKOL'
+		authors: 'rfprod'
 	}).then(
 		() => {
 			console.log('build successful');
@@ -676,9 +676,9 @@ gulp.task('electron-winstaller', (done) => {
 gulp.task('electron-debinstaller', (done) => {
 	const electronDebInstaller = require('electron-installer-debian');
 	electronDebInstaller({
-		src: './desktop/nix/build/ng2nwtn-linux-x64',
+		src: './desktop/nix/build/ng2ns-linux-x64',
 		dest: './desktop/nix/dist',
-		maintainer: 'TechnoNIKOL',
+		maintainer: 'rfprod',
 		arch: 'amd64',
 		categories: ['Internet'],
 		lintianOverrides: ['changelog-file-missing-in-native-package']
