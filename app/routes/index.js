@@ -43,7 +43,7 @@ module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 	 * @name App-diag build hashsum
 	 * @path {GET} /api/app-diag/hashsum
 	 * @code {200}
-	 * @response {object} {} Object with hashsum key
+	 * @response {object} - Object with hashsum key
 	 */
 	app.get('/api/app-diag/hashsum', (req, res) => {
 		console.log('process.env.BUILD_HASH', process.env.BUILD_HASH);
@@ -56,12 +56,9 @@ module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 	 * @name App-diag usage
 	 * @path {GET} /api/app-diag/usage
 	 * @code {200}
-	 * @response {array} [] Array of objects
+	 * @response {array} - Array of objects with user sessions data
 	 */
 	app.get('/api/app-diag/usage', (req, res) => {
-		/*
-		*	reports user sessions codes list with views count
-		*/
 		let filesList;
 		fs.readdir(cwd + '/sessions', (err, data) => {
 			if (err) throw err;
@@ -91,7 +88,7 @@ module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 	 * @name App-diag static
 	 * @path {GET} /api/app-diag/static
 	 * @code {200}
-	 * @response {object} {} Object with array of key/value pairs
+	 * @response {object} - Server static data
 	 */
 	app.get('/api/app-diag/static', (req, res) => {
 		res.format({
@@ -106,7 +103,7 @@ module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 	 * @name App-diag dynamic
 	 * @path {WS} /api/app-diag/dynamic
 	 * @code {200}
-	 * @response {object} {} Object with array of key/value pairs
+	 * @response {array} - Server dynamic data
 	 */
 	app.ws('/api/app-diag/dynamic', (ws) => {
 		console.log('websocket opened /app-diag/dynamic');
@@ -143,7 +140,7 @@ module.exports = function(app, cwd, fs, SrvInfo, DBmocks) {
 	 * @name Users List
 	 * @path {GET} /api/users
 	 * @code {200}
-	 * @response {array} [] Array of objects
+	 * @response {array} - Array of objects
 	 */
 	app.get('/api/users', (req, res) => {
 		res.json(DBmocks.users);

@@ -3,13 +3,12 @@
 /**
  * Users Mock module
  * @module app/mocks/users
- * @see module/app/mocks/barrel
  */
 
 module.exports = {
 	/**
-	 * Returns mocked users list
-	 * @return {array} Users list
+	 * Returns mocked users list.
+	 * @return {array} - Users list
 	 */
 	users: () => {
 		const sampleObj = {

@@ -5,13 +5,13 @@
  * @module app/utils/srv-info
  */
 
-const os = require('os'),
-	exec = require('child_process').execSync;
+const os = require('os');
+const exec = require('child_process').execSync;
 
 /**
  * @function npmVersion
  * @description Returns installed NPM version
- * @return {string} installed NPM version or 'N/A' if the app is packed in Electron or if npm --version returns error
+ * @return {string} - installed NPM version or 'N/A' if the app is packed in Electron or if npm --version returns error
  */
 function npmVersion() {
 	require('dotenv').load();
@@ -27,7 +27,7 @@ function npmVersion() {
 
 /**
  * Returns Static server data
- * @return {array} Static server data
+ * @return {array} - Static server data
  */
 exports.static = () => {
 	return [
@@ -58,7 +58,7 @@ exports.static = () => {
 
 /**
  * Returns Dymanic server data
- * @return {array} Dynamic server data
+ * @return {array} - Dynamic server data
  */
 exports.dynamic = () => {
 	return [

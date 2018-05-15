@@ -65,25 +65,19 @@ This will install the Ng2NS components into the `Ng2NS` directory in your projec
 Create a file named `.env` in the root directory manually or use a gulp task
 
 ```
-gulp create-env-development
+gulp create-env
 ```
 
 or
 
 ```
-gulp create-env-development-cluster
+gulp create-env-cluster
 ```
 
 or
 
 ```
 gulp create-env-electron
-```
-
-or
-
-```
-gulp create-env-production
 ```
 
 This `.env` file should contain
@@ -115,16 +109,6 @@ PORT=8080
 APP_URL=http://localhost:8080/
 APP_VERSION=1.0.0
 ELECTRON=true
-NODE_ENV=production
-BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
-```
-
-for production environment
-
-```
-PORT=8080
-APP_URL=http://app-url
-APP_VERSION=1.0.0
 NODE_ENV=production
 BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
@@ -410,6 +394,10 @@ most command needed for manual interaction with the project were listed above, f
 * [`Docker documentation`](https://docs.docker.com)
 * [`Docker documentation: Engine command-line reference`](https://docs.docker.com/engine/reference/commandline/docker/)
 * [`Docker documentation: Configure and use Docker`](https://docs.docker.com/engine/reference/commandline/docker/)
+
+### Electron documentation
+
+* [`Electron documentation`](https://electronjs.org/docs)
 
 ## Licenses
 

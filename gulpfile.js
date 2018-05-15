@@ -1,50 +1,29 @@
 'use strict';
 
-const gulp = require('gulp'),
-	runSequence = require('run-sequence'),
-	util = require('gulp-util'),
-	concat = require('gulp-concat'),
-	rename = require('gulp-rename'),
-	eslint = require('gulp-eslint'),
-	tslint = require('gulp-tslint'),
-	plumber = require('gulp-plumber'),
-	replace = require('gulp-replace'),
-	mocha = require('gulp-mocha'),
-	karmaServer = require('karma').Server,
-	uglify = require('gulp-uglify'),
-	sass = require('gulp-sass'),
-	cssnano = require('gulp-cssnano'),
-	autoprefixer = require('gulp-autoprefixer'),
-	systemjsBuilder = require('gulp-systemjs-builder'),
-	hashsum = require('gulp-hashsum'),
-	crypto = require('crypto'),
-	fs = require('fs'),
-	spawn = require('child_process').spawn,
-	exec = require('child_process').exec;
-let node,
-	tsc,
-	protractor;
+const gulp = require('gulp');
+const runSequence = require('run-sequence');
+const util = require('gulp-util');
+const concat = require('gulp-concat');
+const rename = require('gulp-rename');
+const eslint = require('gulp-eslint');
+const tslint = require('gulp-tslint');
+const plumber = require('gulp-plumber');
+const replace = require('gulp-replace');
+const mocha = require('gulp-mocha');
+const karmaServer = require('karma').Server;
+const uglify = require('gulp-uglify');
+const sass = require('gulp-sass');
+const cssnano = require('gulp-cssnano');
+const autoprefixer = require('gulp-autoprefixer');
+const systemjsBuilder = require('gulp-systemjs-builder');
+const hashsum = require('gulp-hashsum');
+const crypto = require('crypto');
+const fs = require('fs');
+const spawn = require('child_process').spawn;
 
-function killProcessByName(name) {
-	exec('pgrep ' + name, (error, stdout, stderr) => {
-		if (error) {
-			// throw error;
-			console.log('killProcessByName, error', error);
-		}
-		if (stderr) console.log('stderr:', stderr);
-		if (stdout) {
-			//console.log('killing running processes:', stdout);
-			const runningProcessesIDs = stdout.match(/\d+/);
-			runningProcessesIDs.forEach((id) => {
-				exec('kill -9 ' + id, (error, stdout, stderr) => {
-					if (error) throw error;
-					if (stderr) console.log('stdout:', stdout);
-					if (stdout) console.log('stderr:', stderr);
-				});
-			});
-		}
-	});
-}
+let node;
+let tsc;
+let protractor;
 
 /*
 *	hashsum identifies build
@@ -71,9 +50,9 @@ function createEnvFile(env, done) {
 	});
 }
 
-gulp.task('create-env-development', (done) => {
+gulp.task('create-env', (done) => {
 	/*
-	*	create .env file for development
+	*	create .env file
 	*/
 	const pkg = require('./package.json');
 	fs.readFile('./.env', (err, data) => {
@@ -91,9 +70,9 @@ gulp.task('create-env-development', (done) => {
 	});
 });
 
-gulp.task('create-env-development-cluster', (done) => {
+gulp.task('create-env-cluster', (done) => {
 	/*
-	*	create .env file for development
+	*	create .env file, use cluster
 	*/
 	const pkg = require('./package.json');
 	fs.readFile('./.env', (err, data) => {
@@ -260,15 +239,19 @@ gulp.task('typedoc-client', () => {
 	const typedoc = require('gulp-typedoc');
 	const config = {
 		// typescript options (see typescript docs)
-		module: 'commonjs',
-		target: 'es2015',
-		moduleResolution: 'node',
-		sourceMap: true,
+		allowSyntheticDefaultImports: true,
+		alwaysStrict: true,
+		importHelpers: true,
 		emitDecoratorMetadata: true,
+		esModuleInterop: true,
 		experimentalDecorators: true,
-		removeComments: false,
+		module: 'commonjs',
+		moduleResolution: 'node',
 		noImplicitAny: false,
+		removeComments: true,
+		sourceMap: true,
 		suppressImplicitAnyIndexErrors: true,
+		target: 'es2017',
 		// output options (see typedoc docs: http://typedoc.org/api/index.html)
 		readme: './README.md',
 		out: './logs/typedoc',
@@ -579,11 +562,11 @@ gulp.task('spawn-rebuild-app', (done) => {
 *	start sequences
 */
 gulp.task('default', (done) => {
-	runSequence('lint', 'compile-and-build', 'create-env-development', 'server', 'watch', done);
+	runSequence('lint', 'compile-and-build', 'create-env', 'server', 'watch', done);
 });
 
 gulp.task('production-start', (done) => {
-	runSequence('compile-and-build', 'create-env-production', 'server', done);
+	runSequence('compile-and-build', 'create-env', 'server', done);
 });
 
 /*
@@ -711,5 +694,4 @@ gulp.task('build-electron-deb', (done) => {
 
 process.on('exit', (code) => {
 	console.log(`PROCESS EXIT CODE ${code}`);
-	// killProcessByName('gulp');
 });

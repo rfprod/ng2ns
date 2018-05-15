@@ -1,23 +1,113 @@
 'use strict';
 
-const express = require('express'),
-	compression = require('compression'),
-	routes = require('./app/routes/index.js'),
-	session = require('express-session'),
-	FileStore = require('session-file-store')(session),
-	app = express(),
-	expressWs = require('express-ws')(app), // eslint-disable-line no-unused-vars
-	cluster = require('cluster'),
-	os = require('os'),
-	fs = require('fs');
+/**
+ * Server module
+ * @module server
+ */
+
+/**
+ * @name express
+ * @constant
+ * @summary Express server
+ * @description Express server
+ */
+const express = require('express');
+/**
+ * @name compression
+ * @constant
+ * @summary Compression for Express server
+ * @description Compression for Express server
+ */
+const compression = require('compression');
+/**
+ * @name bodyParser
+ * @constant
+ * @summary Body parser
+ * @description Body parser for Express server
+ */
+const bodyParser = require('body-parser');
+/**
+ * @name routes
+ * @constant
+ * @summary Express server Routes
+ * @description Express server Routes
+ * @see {@link module:app/routes/index}
+ */
+const routes = require('./app/routes/index.js');
+/**
+ * @name session
+ * @constant
+ * @summary Express server session
+ * @description Express server session
+ */
+const session = require('express-session');
+/**
+ * @name FileStore
+ * @constant
+ * @summary Express server session storage
+ * @description Express server session storage
+ */
+const FileStore = require('session-file-store')(session);
+/**
+ * @name app
+ * @constant
+ * @summary Express application
+ * @description Express application
+ */
+const app = express();
+/**
+ * @name expressWs
+ * @constant
+ * @summary Websocket for Express application
+ * @description Websocket for Express application
+ */
+const expressWs = require('express-ws')(app); // eslint-disable-line no-unused-vars
+/**
+ * @name cluster
+ * @constant
+ * @summary NodeJS cluster
+ * @description NodeJS cluster
+ */
+const cluster = require('cluster');
+/**
+ * @name os
+ * @constant
+ * @summary OS utility module
+ * @description OS utility module
+ */
+const os = require('os');
+/**
+ * @name path
+ * @constant
+ * @summary Directory paths utility module
+ * @description Directory paths utility module
+ */
+const fs = require('fs');
+
+/**
+ * @name clusterStop
+ * @type {boolean}
+ * @default {false}
+ * @summary Indicates if cluster is stopped
+ * @description Indicates if cluster is stopped, which prevents workers from spawning
+ */
 let clusterStop = false;
 
 require('dotenv').load();
 
 process.title = 'ng2nodestarter';
 
+/**
+ * @name cwd
+ * @constant
+ * @summary Current directory of the main Server script - server.js
+ * @description Correct root path for all setups, it should be used for all file references for the server and its modules like filePath: cwd + '/actual/file.extension'. Built Electron app contains actual app in resources/app(.asar) subdirectory, so it is essential to prefer __dirname usage over process.cwd() to get the value.
+ */
 const cwd = __dirname;
 
+/**
+ * Sessions management.
+ */
 app.use(session({
 	secret: 'secretNG2NODESTARTER',
 	store: new FileStore,
@@ -28,18 +118,30 @@ app.use(session({
 	}
 }));
 
-/*
-*	use compression for all responses
-*/
+/**
+ * Use compression for all responses.
+ */
 app.use(compression({
 	threshold: 0,
 	level: -1
 }));
 
+/**
+ * Request parameters middleware
+ */
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use('/public', express.static(cwd + '/public'));
 if (process.env.DEV_MODE) {
 	console.log('\n# > DEV_MODE variable present > Node.js will serve /logs with coverage report\n');
 	app.use('/logs', express.static(cwd + '/logs'));
+	/*
+	*	Next three lines are for applicatoin debugging if nothing else helps
+	*/
+	app.use('/node_modules', express.static(cwd + '/node_modules'));
+	app.use('/systemjs.config.js', express.static(cwd + '/systemjs.config.js'));
+	app.use('/systemjs.config.extras.js', express.static(cwd + '/systemjs.config.extras.js'));
 }
 app.use((req, res, next) => {
 	/*
@@ -71,13 +173,6 @@ app.use((req, res, next) => {
 		res.sendFile(cwd + '/public/index.html');
 	}
 });
-/*
-*	Next three lines are needed only for development purposes
-*	should be commeneted out in production
-*/
-app.use('/node_modules', express.static(cwd + '/node_modules'));
-app.use('/systemjs.config.js', express.static(cwd + '/systemjs.config.js'));
-app.use('/systemjs.config.extras.js', express.static(cwd + '/systemjs.config.extras.js'));
 
 // headers config for all Express routes
 app.all('/*', function(req, res, next) {
@@ -96,16 +191,45 @@ app.all('/*', function(req, res, next) {
 	else next();
 });
 
+/**
+ * @name SrvInfo
+ * @constant
+ * @summary Server information module
+ * @description Static, and dynamic server data
+ * @see {@link module:app/utils/srv-info}
+ */
 const SrvInfo = require('./app/utils/srv-info.js');
+/**
+ * @name DBmocks
+ * @constant
+ * @summary Databse mocks module
+ * @description Databse mocks module containing functions that return generated data
+ * @see {@link module:app/mocks/users}
+ */
 const DBmocks = {
 	users: require('./app/models/users').users()
 };
 
 routes(app, cwd, fs, SrvInfo, DBmocks);
 
-const port = process.env.PORT || 8080,
-	ip = process.env.IP;
+/**
+ * @name port
+ * @summary Application port
+ * @description Application port
+ */
+const port = process.env.PORT || 8080;
+/**
+ * @name ip
+ * @summary Application ip
+ * @description Application ip
+ */
+const ip = process.env.IP;
 
+/**
+ * @function terminator
+ * @summary Terminator function
+ * @description Terminates application
+ */
 function terminator (sig) {
 	if (typeof sig === 'string') {
 		console.log(`\n${Date(Date.now())}: Received signal ${sig} - terminating app...\n`);
