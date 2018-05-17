@@ -1,19 +1,41 @@
 /*
-*	SystemJS configuration for Angular
+*	SystemJS configuration for Angular 6 TODO
 */
 (function (global) { // eslint-disable-line no-unused-vars
 
 	var paths = {
-		'npm:': './base/node_modules/'
+		'npm:': './base/node_modules/',
+
+		'rxjs-compat/*': 							'node_modules/rxjs-compat/*.js',
+		'rxjs/*': 										'node_modules/rxjs/*.js',
+		'rxjs/add/observable/*.js': 	'node_modules/rxjs/add/observable/*.js',
+		'rxjs/add/observable/dom/*': 	'node_modules/rxjs/add/observable/dom/*.js',
+		'rxjs/add/operator/*.js': 		'node_modules/rxjs/add/operator/*.js',
+		'rxjs/symbol/*.js': 					'node_modules/rxjs/symbol/*.js'
 	};
 	// packages locations
 	var map = {
 		'app': 																	'./base/public/app',
 		'mocks': 																'./base/test/client/mocks',
 		'ng2-nvd3': 														'npm:ng2-nvd3/build',
-		'rxjs/Rx': 															'npm:rxjs/bundles/Rx.js',
-		'rxjs': 																'npm:rxjs',
+
+		'rxjs': 																'npm:rxjs/bundles/rxjs.umd.js',
+		'rxjs-compat': 													'npm:rxjs-compat',
+		'rxjs/internal-compatibility': 					'npm:rxjs/internal-compatibility',
+		'rxjs/testing': 												'npm:rxjs/testing',
+		'rxjs/ajax': 														'npm:rxjs/ajax',
 		'rxjs/operators': 											'npm:rxjs/operators',
+		'rxjs/webSocket': 											'npm:rxjs/webSocket',
+		'rxjs/util': 														'npm:rxjs/util',
+		'rxjs/internal': 												'npm:rxjs/internal',
+		'rxjs/add/operator/takeUntil': 					'npm:rxjs/add/operator/takeUntil.js',
+		'rxjs/add/operator/first': 							'npm:rxjs/add/operator/first.js',
+		'rxjs/add/operator/timeout': 						'npm:rxjs/add/operator/timeout.js',
+		'rxjs/add/operator/map': 								'npm:rxjs/add/operator/map.js',
+		'rxjs/add/operator/catch': 							'npm:rxjs/add/operator/catch.js',
+		'rxjs/add/observable/fromEvent': 				'npm:rxjs/add/observable/fromEvent.js',
+		'rxjs/add/observable/throw': 						'npm:rxjs/add/observable/throw.js',
+
 		'tslib': 																'npm:tslib/tslib.js',
 		'traceur': 															'npm:traceur/bin',
 		'@angular/animations': 									'npm:@angular/animations/bundles/animations.umd.js',
@@ -50,17 +72,26 @@
 		'@angular/cdk/scrolling': 							'npm:@angular/cdk/bundles/cdk-scrolling.umd.js',
 		'@angular/cdk/stepper': 								'npm:@angular/cdk/bundles/cdk-stepper.umd.js',
 		'@angular/cdk/table': 									'npm:@angular/cdk/bundles/cdk-table.umd.js',
+		'@angular/cdk/text-field': 							'npm:@angular/cdk/bundles/cdk-text-field.umd.js',
+		'@angular/cdk/tree': 										'npm:@angular/cdk/bundles/cdk-tree.umd.js',
 		'@angular/material-moment-adapter': 		'npm:@angular/material-moment-adapter/bundles/material-moment-adapter.umd.js',
 		'moment': 															'npm:moment/min/moment-with-locales.min.js' // reconfig reference: https://github.com/angular/material2/commit/9545427c73627f0cf91b5086efd5d727459fc44f
 	};
 	// how to load packages
 	var packages = {
-		'app': 												{ main: 'app', defaultExtension: 'js' },
-		'mocks': 											{ main: 'index', defaultExtension: 'js' },
-		'ng2-nvd3': 									{ main: 'index', defaultExtension: 'js' },
-		'rxjs': 											{ defaultExtension: 'js' },
-		'rxjs/operators': 						{ main: '../operators', defaultExtension: 'js' },
-		'traceur': 										{ main: 'traceur', defaultExtension: 'js' }
+		'app': 													{ main: 'app', defaultExtension: 'js' },
+		'mocks': 												{ main: 'index', defaultExtension: 'js' },
+		'ng2-nvd3': 										{ main: 'index', defaultExtension: 'js' },
+		'traceur': 											{ main: 'traceur', defaultExtension: 'js' },
+
+		'rxjs-compat': 									{ main: 'Rx.js', defaultExtension: 'js' },
+		'rxjs/internal-compatibility': 	{ main: 'index', defaultExtension: 'js'},
+		'rxjs/testing': 								{ main: 'index', defaultExtension: 'js' },
+		'rxjs/ajax': 										{ main: 'index', defaultExtension: 'js' },
+		'rxjs/operators': 							{ main: 'index', defaultExtension: 'js' },
+		'rxjs/webSocket': 							{ main: 'index', defaultExtension: 'js' },
+		'rxjs/util': 										{ main: 'index', defaultExtension: 'js' },
+		'rxjs/internal': 								{ main: 'index', defaultExtension: 'js' }
 	};
 
 	var config = {

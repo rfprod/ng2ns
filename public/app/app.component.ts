@@ -7,7 +7,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 import { MatIconRegistry, DateAdapter } from '@angular/material';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
 declare let $: JQueryStatic;
@@ -42,6 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	private ngUnsubscribe: Subject<void> = new Subject();
+
+	private subscriptions: any[] = [];
 
 	public showAppInfo: boolean = true;
 	public showSpinner: boolean = false;
@@ -92,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		$('#init').remove(); // remove initialization text
 
 		// listen event emitter control messages
-		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
+		const sub: any = this.emitter.getEmitter().subscribe((message: any) => {
 			console.log('app consuming event:', message);
 			if (message.appInfo) {
 				if (message.appInfo === 'hide') {
@@ -120,6 +122,7 @@ export class AppComponent implements OnInit, OnDestroy {
 				}
 			}
 		});
+		this.subscriptions.push(sub);
 
 		// listen date adapter locale change
 		this.dateAdapter.localeChanges.takeUntil(this.ngUnsubscribe).subscribe(() => {
@@ -162,6 +165,11 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.serviceWorker.disableServiceWorker();
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
+		if (this.subscriptions.length) {
+			for (const sub of this.subscriptions) {
+				sub.unsubscribe();
+			}
+		}
 	}
 
 }

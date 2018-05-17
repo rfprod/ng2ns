@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, HostListener }
 
 import { EventEmitterService } from '../services/event-emitter.service';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/first';
 
@@ -21,9 +21,12 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		private el: ElementRef,
 		private emitter: EventEmitterService
 	) {
-		console.log('this.el.nativeElement:', this.el.nativeElement);
+		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
+
 	private ngUnsubscribe: Subject<void> = new Subject();
+
+	private subscriptions: any[] = [];
 
 /*
 *	map form
@@ -334,33 +337,22 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 /*
-*	spinner
-*/
-	private emitSpinnerStartEvent(): void {
-		console.log('root spinner start event emitted');
-		this.emitter.emitEvent({spinner: 'start'});
-	}
-	private emitSpinnerStopEvent(): void {
-		console.log('root spinner stop event emitted');
-		this.emitter.emitEvent({spinner: 'stop'});
-	}
-
-/*
 *	component lifecycle
 */
 	public ngOnInit(): void {
 		console.log('ngOnInit: DashboardMapComponent initialized');
-		this.emitSpinnerStartEvent();
+		this.emitter.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'hide'});
 
-		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
-			console.log('/map consuming event:', message);
+		const sub: any = this.emitter.getEmitter().subscribe((event: any) => {
+			console.log('/map consuming event:', event);
 			/*
 			*	TODO: event emitter listener
 			*/
 		});
+		this.subscriptions.push(sub);
 
-		this.emitSpinnerStopEvent();
+		this.emitter.emitSpinnerStopEvent();
 	}
 	public ngAfterViewInit() {
 		this.drawMap();
@@ -369,5 +361,10 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		console.log('ngOnDestroy: DashboardMapComponent destroyed');
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
+		if (this.subscriptions.length) {
+			for (const sub of this.subscriptions) {
+				sub.unsubscribe();
+			}
+		}
 	}
 }

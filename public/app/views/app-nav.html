@@ -32,10 +32,10 @@
 		</button>
 		<mat-menu #mobileMenu="matMenu" [fxHide.md]="true" [fxHide.lg]="true">
 			<button (click)="switchNavButtons($event, 'help');" mat-menu-item [ngClass]="{selected: navButtonsState[0], inactive: !navButtonsState[0]}">
-			<i class="fas fa-question-circle-o"></i> {{ 'help' | translate }}
+			<i class="fas fa-question-circle"></i> {{ 'help' | translate }}
 			</button>
 			<button [routerLink]="['intro']" (click)="switchNavButtons($event, 'intro')" mat-menu-item [ngClass]="{selected: navButtonsState[1], inactive: !navButtonsState[1]}">
-				<i class="fas fa-tachometer"></i> {{ 'intro' | translate }}
+				<i class="fas fa-tachometer-alt"></i> {{ 'intro' | translate }}
 			</button>
 			<button [routerLink]="['login']" (click)="switchNavButtons($event, 'login')" mat-menu-item [ngClass]="{selected: navButtonsState[2], inactive: !navButtonsState[2]}" *ngIf="!userService.getUser().token">
 				<i class="fas fa-user"></i> {{ 'login' | translate }}

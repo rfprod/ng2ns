@@ -11,7 +11,7 @@ import { UserService } from '../../../public/app/services/user.service';
 
 import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
@@ -81,84 +81,29 @@ describe('AppNavComponent', () => {
 	});
 
 	it('should switch nav buttons correctly', () => {
-		/*
-		for (const state of this.component.navButtonsState) {
-			expect(state).toBeFalsy();
-		}
-		*/
 		expect(this.component.navButtonsState.filter((item) => item).length).toEqual(0);
 		this.component.switchNavButtons({ url: 'intro'});
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.navButtonsState[1]).toBeTruthy();
-		/*
-		for (const [index, state] of this.component.navButtonsState.entries()) {
-			if (index === 1) {
-				expect(state).toBeTruthy();
-			} else {
-				expect(state).toBeFalsy();
-			}
-		}
-		*/
+
 		this.component.switchNavButtons({ url: 'intro?arg=random'});
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.navButtonsState[1]).toBeTruthy();
-		/*
-		for (const [index, state] of this.component.navButtonsState.entries()) {
-			if (index === 1) {
-				expect(state).toBeTruthy();
-			} else {
-				expect(state).toBeFalsy();
-			}
-		}
-		*/
+
 		this.component.switchNavButtons({ url: 'login'});
 		expect(this.component.navButtonsState[2]).toBeTruthy();
-		/*
-		expect(this.component.hideNavbar).toBeFalsy();
-		for (const [index, state] of this.component.navButtonsState.entries()) {
-			if (index === 2) {
-				expect(state).toBeTruthy();
-			} else {
-				expect(state).toBeFalsy();
-			}
-		}
-		*/
+
 		this.component.switchNavButtons({ url: 'data'});
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.navButtonsState[3]).toBeTruthy();
-		/*
-		for (const [index, state] of this.component.navButtonsState.entries()) {
-			if (index === 3) {
-				expect(state).toBeTruthy();
-			} else {
-				expect(state).toBeFalsy();
-			}
-		}
-		*/
+
 		this.component.switchNavButtons({ url: 'map'});
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.navButtonsState[4]).toBeTruthy();
-		/*
-		for (const [index, state] of this.component.navButtonsState.entries()) {
-			if (index === 4) {
-				expect(state).toBeTruthy();
-			} else {
-				expect(state).toBeFalsy();
-			}
-		}
-		*/
+
 		this.component.switchNavButtons({ url: 'data'}, 'help');
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.navButtonsState[0]).toBeTruthy();
-		/*
-		for (const [index, state] of this.component.navButtonsState.entries()) {
-			if (index === 0) {
-				expect(state).toBeTruthy();
-			} else {
-				expect(state).toBeFalsy();
-			}
-		}
-		*/
 	});
 
 	it('should emit websocket control message on stopWS method call', () => {

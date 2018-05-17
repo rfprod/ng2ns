@@ -17,8 +17,7 @@ import { ServerStaticDataService } from '../../../public/app/services/server-sta
 import { PublicDataService } from '../../../public/app/services/public-data.service';
 import { WebsocketService } from '../../../public/app/services/websocket.service';
 
-import { Observable } from 'rxjs/Rx';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
@@ -64,8 +63,6 @@ describe('DashboardIntroComponent', () => {
 		}).compileComponents().then(() => {
 			this.fixture = TestBed.createComponent(DashboardIntroComponent);
 			this.component = this.fixture.componentInstance;
-			spyOn(this.component, 'emitSpinnerStartEvent').and.callThrough();
-			spyOn(this.component, 'emitSpinnerStopEvent').and.callThrough();
 			this.eventEmitterSrv = TestBed.get(EventEmitterService) as EventEmitterService;
 			spyOn(this.eventEmitterSrv, 'emitEvent').and.callThrough();
 			this.serverStaticDataSrv = TestBed.get(ServerStaticDataService) as ServerStaticDataService;
@@ -123,21 +120,9 @@ describe('DashboardIntroComponent', () => {
 		expect(this.component.ws).toEqual(jasmine.any(WebSocket));
 		expect(this.component.getServerStaticData).toBeDefined();
 		expect(this.component.getPublicData).toBeDefined();
-		expect(this.component.emitSpinnerStartEvent).toBeDefined();
-		expect(this.component.emitSpinnerStopEvent).toBeDefined();
 		expect(this.component.nvd3).toEqual(jasmine.any(NvD3Component));
 		expect(this.component.ngOnInit).toBeDefined();
 		expect(this.component.ngOnDestroy).toBeDefined();
-	});
-
-	it('emitSpinnerStartEvent should send respective event emitter message', () => {
-		this.component.emitSpinnerStartEvent();
-		expect(this.eventEmitterSrv.emitEvent).toHaveBeenCalledWith({ spinner: 'start' });
-	});
-
-	it('emitSpinnerStopEvent should send respective event emitter message', () => {
-		this.component.emitSpinnerStopEvent();
-		expect(this.eventEmitterSrv.emitEvent).toHaveBeenCalledWith({ spinner: 'stop' });
 	});
 
 	it('should be properly destroyed', () => {

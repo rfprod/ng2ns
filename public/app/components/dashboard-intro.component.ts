@@ -5,7 +5,7 @@ import { ServerStaticDataService } from '../services/server-static-data.service'
 import { PublicDataService } from '../services/public-data.service';
 import { WebsocketService } from '../services/websocket.service';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/first';
 
@@ -19,6 +19,7 @@ declare let d3: any;
 	}
 })
 export class DashboardIntroComponent implements OnInit, OnDestroy {
+
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -26,11 +27,16 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		private serverStaticDataService: ServerStaticDataService,
 		private publicDataService: PublicDataService
 	) {
-		console.log('this.el.nativeElement:', this.el.nativeElement);
+		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
+
 	private ngUnsubscribe: Subject<void> = new Subject();
+
+	private subscriptions: any[] = [];
+
 	public title: string = 'Ng2NodeStarter (Ng2NS)';
 	public description: string = 'Angular, NodeJS';
+
 	public chartOptions: object = {
 		chart: {
 			type: 'pieChart',
@@ -82,9 +88,12 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		static: [],
 		dynamic: [],
 	};
+
 	private wsEndpoint: string = '/api/app-diag/dynamic';
 	private ws: WebSocket = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
+
 	public errorMessage: string;
+
 	private getServerStaticData(callback): void {
 		this.serverStaticDataService.getData().first().subscribe(
 			(data: any): void => this.serverData.static = data,
@@ -109,15 +118,6 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	private emitSpinnerStartEvent(): void {
-		console.log('root spinner start event emitted');
-		this.emitter.emitEvent({spinner: 'start'});
-	}
-	private emitSpinnerStopEvent(): void {
-		console.log('root spinner stop event emitted');
-		this.emitter.emitEvent({spinner: 'stop'});
-	}
-
 	public showModal: boolean = false;
 	public toggleModal(): void {
 		if (this.showModal) {
@@ -130,7 +130,7 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		console.log('ngOnInit: DashboardIntroComponent initialized');
-		this.emitSpinnerStartEvent();
+		this.emitter.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'show'});
 
 		this.ws.onopen = (evt: any): void => {
@@ -159,17 +159,18 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			console.log('websocket closed:', evt);
 		};
 
-		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
-			console.log('/intro consuming event:', message);
-			if (message.websocket === 'close') {
+		const sub: any = this.emitter.getEmitter().subscribe((event: any) => {
+			console.log('/intro consuming event:', event);
+			if (event.websocket === 'close') {
 				console.log('closing webcosket');
 				this.ws.close();
 			}
 		});
+		this.subscriptions.push(sub);
 
-		this.getPublicData((/*publicData*/) => {
-			this.getServerStaticData((/*serverStaticData*/) => {
-				this.emitSpinnerStopEvent();
+		this.getPublicData(() => {
+			this.getServerStaticData(() => {
+				this.emitter.emitSpinnerStopEvent();
 			});
 		});
 
@@ -179,5 +180,10 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
 		this.ws.close();
+		if (this.subscriptions.length) {
+			for (const sub of this.subscriptions) {
+				sub.unsubscribe();
+			}
+		}
 	}
 }

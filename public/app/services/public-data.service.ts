@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 
 import { CustomHttpHandlersService } from './custom-http-handlers.service';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -19,7 +19,7 @@ export class PublicDataService {
 
 	private appDataUrl: string = this.window.location.origin + '/api/app-diag/usage';
 
-	public getData(): Observable<any[]> { // tslint:disable-line
+	public getData(): Observable<any[]> {
 		return this.http.get(this.appDataUrl)
 			.map(this.httpHandlers.extractArray)
 			.catch(this.httpHandlers.handleError);

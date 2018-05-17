@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Response, ResponseOptions, Headers } from '@angular/http';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/throw';
 
 import { CustomHttpHandlersService } from '../../../public/app/services/custom-http-handlers.service';
 
@@ -49,11 +50,23 @@ describe('CustomHttpHandlersService', () => {
 		expect(this.service.handleError({ errors: [{ detail: 'error' }]})).toEqual(jasmine.any(Observable));
 	});
 
-	it('handleError should handle errors properly', () => {
-		expect(this.service.handleError({ _body: JSON.stringify({}), message: 'some error message', status: '400', statusText: 'error status text' })).toEqual(Observable.throw('some error message'));
-		expect(this.service.handleError({ _body: JSON.stringify({}), status: '400', statusText: 'error status text' })).toEqual(Observable.throw('400 - error status text'));
-		expect(this.service.handleError({ status: '400', statusText: 'error status text' })).toEqual(Observable.throw('400 - error status text'));
-		expect(this.service.handleError({})).toEqual(Observable.throw('Server error'));
+	it('handleError should handle errors properly', async () => {
+		await this.service.handleError({ _body: JSON.stringify({}), message: 'some error message', status: '400', statusText: 'error status text' }).subscribe(
+			() => true,
+			(error) => expect(error).toEqual('some error message')
+		);
+		await this.service.handleError({ _body: JSON.stringify({}), status: '400', statusText: 'error status text' }).subscribe(
+			() => true,
+			(error) => expect(error).toEqual('400 - error status text')
+		);
+		await this.service.handleError({ status: '400', statusText: 'error status text' }).subscribe(
+			() => true,
+			(error) => expect(error).toEqual('400 - error status text')
+		);
+		await this.service.handleError({}).subscribe(
+			() => true,
+			(error) => expect(error).toEqual('Server error')
+		);
 	});
 
 });

@@ -7,7 +7,7 @@ import { TranslateService } from '../translate/translate.service';
 
 import { UsersListService } from '../services/users-list.service';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/first';
 
@@ -19,6 +19,7 @@ import 'rxjs/add/operator/first';
 	}
 })
 export class DashboardDetailsComponent implements OnInit, OnDestroy {
+
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -27,15 +28,16 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 	) {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
+
 	private ngUnsubscribe: Subject<void> = new Subject();
+
+	private subscriptions: any[] = [];
+
 	public usersList: any[] = [];
+
 	public errorMessage: string;
-	private getUsersList(callback?: any): Promise<boolean> {
-		/*
-		*	this function can be provided a callback function to be executed after data is retrieved
-		*	or
-		*	callback can be chained with .then()
-		*/
+
+	private getUsersList(): Promise<boolean> {
 		const def = new CustomDeferredService<boolean>();
 		this.usersListService.getUsersList().first().subscribe(
 			(data) => {
@@ -48,11 +50,11 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 			},
 			() => {
 				console.log('getUserList done');
-				if (callback) { callback(this.usersList); }
 			}
 		);
 		return def.promise;
 	}
+
 	public mouseEntered(event) {
 		console.log('mouse enter', event);
 	}
@@ -117,47 +119,29 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		this.datePicker.open();
 	}
 
-/*
-*	spinner
-*/
-	private emitSpinnerStartEvent() {
-		console.log('root spinner start event emitted');
-		this.emitter.emitEvent({sys: 'start spinner'});
-	}
-	private emitSpinnerStopEvent() {
-		console.log('root spinner stop event emitted');
-		this.emitter.emitEvent({sys: 'stop spinner'});
-	}
-
 	public ngOnInit() {
 		console.log('ngOnInit: DashboardDetailsComponent initialized');
-		this.emitSpinnerStartEvent();
+		this.emitter.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'hide'});
-		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
-			console.log('/data consuming event:', JSON.stringify(message));
+		const sub: any = this.emitter.getEmitter().subscribe((event: any) => {
+			console.log('/data consuming event:', JSON.stringify(event));
 			// TODO
 		});
+		this.subscriptions.push(sub);
 
-		/*
-		*	functions sequence with callbacks
-		*
-		this.getUsersList((userlList) => {
-			console.log('users list:', userlList);
-			this.emitSpinnerStopEvent();
-		});
-		*/
-
-		/*
-		*	functions chaining with .then()
-		*/
 		this.getUsersList().then(() => {
 			console.log('all models updated');
-			this.emitSpinnerStopEvent();
+			this.emitter.emitSpinnerStopEvent();
 		});
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: DashboardDetailsComponent destroyed');
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
+		if (this.subscriptions.length) {
+			for (const sub of this.subscriptions) {
+				sub.unsubscribe();
+			}
+		}
 	}
 }

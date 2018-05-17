@@ -36,6 +36,7 @@ module.exports = function(config){
 			'node_modules/hammerjs/hammer.js',
 			{ pattern: 'node_modules/@angular/**', included: false, watched: false },
 			{ pattern: 'node_modules/rxjs/**', included: false, watched: false },
+			{ pattern: 'node_modules/rxjs-compat/**', included: false, watched: false },
 			{ pattern: 'node_modules/tslib/**', included: false, watched: false },
 			{ pattern: 'node_modules/traceur/**', included: false, watched: false },
 

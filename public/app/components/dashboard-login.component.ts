@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { UserService } from '../services/user.service';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/first';
 
@@ -17,6 +17,7 @@ import 'rxjs/add/operator/first';
 	}
 })
 export class DashboardLoginComponent implements OnInit, OnDestroy {
+
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -24,8 +25,8 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private userService: UserService
 	) {
-		console.log('this.el.nativeElement:', this.el.nativeElement);
-		console.log('localStorage.userService', JSON.stringify(localStorage.userService));
+		// console.log('this.el.nativeElement:', this.el.nativeElement);
+		console.log('localStorage.userService', localStorage.userService);
 		const restoredModel: any = this.userService.getUser();
 		console.log('restoredModel use model', restoredModel);
 		this.loginForm = this.fb.group({
@@ -33,7 +34,11 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 			password: ['', Validators.compose([Validators.required, Validators.minLength(1)])]
 		});
 	}
+
 	private ngUnsubscribe: Subject<void> = new Subject();
+
+	private subscriptions: any[] = [];
+
 	public loginForm: FormGroup;
 	public resetForm(): void {
 		this.loginForm.reset({
@@ -54,24 +59,20 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 	}
 	public errorMessage: string;
 
-	private emitSpinnerStartEvent(): void {
-		console.log('root spinner start event emitted');
-		this.emitter.emitEvent({spinner: 'start'});
-	}
-	private emitSpinnerStopEvent(): void {
-		console.log('root spinner stop event emitted');
-		this.emitter.emitEvent({spinner: 'stop'});
-	}
-
 	public ngOnInit(): void {
 		console.log('ngOnInit: DashboardLoginComponent initialized');
-		this.emitSpinnerStartEvent();
+		this.emitter.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'hide'});
-		this.emitSpinnerStopEvent();
+		this.emitter.emitSpinnerStopEvent();
 	}
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: DashboardLoginComponent destroyed');
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
+		if (this.subscriptions.length) {
+			for (const sub of this.subscriptions) {
+				sub.unsubscribe();
+			}
+		}
 	}
 }

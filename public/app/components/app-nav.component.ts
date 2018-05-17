@@ -6,7 +6,7 @@ import { CustomServiceWorkerService } from '../services/custom-service-worker.se
 import { TranslateService } from '../translate/index';
 import { UserService } from '../services/user.service';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
 @Component({
@@ -29,6 +29,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	) {}
 
 	private ngUnsubscribe: Subject<void> = new Subject();
+
+	private subscriptions: any[] = [];
+
 	public navButtonsState: boolean[] = [false, false, false, false, false];
 
 	public hideNavbar: boolean = false;
@@ -110,14 +113,15 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	}
 
 	private emitterSubscribe(): void {
-		this.emitter.getEmitter().takeUntil(this.ngUnsubscribe).subscribe((message: any) => {
-			console.log('AppNavComponent consuming event:', JSON.stringify(message));
-			if (message.serviceWorker === 'registered') {
+		const sub: any = this.emitter.getEmitter().subscribe((event: any) => {
+			console.log('AppNavComponent consuming event:', event);
+			if (event.serviceWorker === 'registered') {
 				this.serviceWorkerRegistered = true;
-			} else if (message.serviceWorker === 'unregistered') {
+			} else if (event.serviceWorker === 'unregistered') {
 				this.serviceWorkerRegistered = false;
 			}
 		});
+		this.subscriptions.push(sub);
 	}
 
 	private routerSubscribe(): void {
@@ -140,5 +144,10 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		console.log('ngOnDestroy: AppNavComponent destroyed');
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
+		if (this.subscriptions.length) {
+			for (const sub of this.subscriptions) {
+				sub.unsubscribe();
+			}
+		}
 	}
 }
