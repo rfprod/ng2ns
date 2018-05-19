@@ -3,9 +3,6 @@ import { EventEmitterService } from '../services/event-emitter.service';
 
 import { IBadge } from '../interfaces/index';
 
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-
 @Component({
 	selector: 'app-info',
 	template: `
@@ -22,8 +19,6 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 	constructor(
 		private emitter: EventEmitterService
 	) {}
-
-	private ngUnsubscribe: Subject<void> = new Subject();
 
 	private subscriptions: any[] = [];
 
@@ -52,8 +47,6 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: AppInfoComponent destroyed');
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

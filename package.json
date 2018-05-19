@@ -80,7 +80,6 @@
 		"reflect-metadata": "^0.1.12",
 		"run-sequence": "^2.2.1",
 		"rxjs": "6.1.0",
-		"rxjs-compat": "^6.1.0",
 		"session-file-store": "^1.2.0",
 		"systemjs": "0.21.3",
 		"traceur": "^0.0.111",

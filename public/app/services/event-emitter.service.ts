@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/fromEvent';
 
 @Injectable()
 export class EventEmitterService {
@@ -41,10 +40,4 @@ export class EventEmitterService {
 		this.emitter.emit({sys: 'stop spinner'});
 	}
 
-	/**
-	 * Converts event to observable so that takeUntil operator works.
-	 */
-	public eventToObservable(event: EventEmitter<any>): Observable<any> {
-		return Observable.fromEvent(event);
-	}
 }

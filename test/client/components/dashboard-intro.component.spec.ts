@@ -80,7 +80,7 @@ describe('DashboardIntroComponent', () => {
 	});
 
 	it('should have variables defined', () => {
-		expect(this.component.ngUnsubscribe).toEqual(jasmine.any(Subject));
+		expect(this.component.subscriptions).toEqual(jasmine.any(Array));
 		expect(this.component.title).toBeDefined();
 		expect(this.component.title === 'Ng2NodeStarter (Ng2NS)').toBeTruthy();
 		expect(this.component.description).toBeDefined();
@@ -127,11 +127,13 @@ describe('DashboardIntroComponent', () => {
 
 	it('should be properly destroyed', () => {
 		this.component.ngOnInit();
-		spyOn(this.component.ngUnsubscribe, 'next').and.callThrough();
-		spyOn(this.component.ngUnsubscribe, 'complete').and.callThrough();
+		for (const sub of this.component.subscriptions) {
+			spyOn(sub, 'unsubscribe').and.callThrough();
+		}
 		this.component.ngOnDestroy();
-		expect(this.component.ngUnsubscribe.next).toHaveBeenCalled();
-		expect(this.component.ngUnsubscribe.complete).toHaveBeenCalled();
+		for (const sub of this.component.subscriptions) {
+			expect(sub.unsubscribe).toHaveBeenCalled();
+		}
 	});
 
 });

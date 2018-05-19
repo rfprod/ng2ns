@@ -6,9 +6,6 @@ import { CustomServiceWorkerService } from '../services/custom-service-worker.se
 import { TranslateService } from '../translate/index';
 import { UserService } from '../services/user.service';
 
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-
 @Component({
 	selector: 'app-nav',
 	templateUrl: '/public/app/views/app-nav.html',
@@ -27,8 +24,6 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		private translate: TranslateService,
 		@Inject('Window') private window: Window
 	) {}
-
-	private ngUnsubscribe: Subject<void> = new Subject();
 
 	private subscriptions: any[] = [];
 
@@ -125,13 +120,14 @@ export class AppNavComponent implements OnInit, OnDestroy {
 	}
 
 	private routerSubscribe(): void {
-		this.router.events.takeUntil(this.ngUnsubscribe).subscribe((event: any) => {
+		const sub: any = this.router.events.subscribe((event: any) => {
 			// console.log(' > ROUTER EVENT:', event);
 			if (event instanceof NavigationEnd) {
 				console.log(' > ROUTER > NAVIGATION END, event', event);
 				this.switchNavButtons(event);
 			}
 		});
+		this.subscriptions.push(sub);
 	}
 
 	public ngOnInit(): void {
@@ -142,8 +138,6 @@ export class AppNavComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppNavComponent destroyed');
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

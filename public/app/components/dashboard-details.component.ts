@@ -7,10 +7,6 @@ import { TranslateService } from '../translate/translate.service';
 
 import { UsersListService } from '../services/users-list.service';
 
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/first';
-
 @Component({
 	selector: 'dashboard-details',
 	templateUrl: '/public/app/views/dashboard-details.html',
@@ -29,25 +25,18 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 
-	private ngUnsubscribe: Subject<void> = new Subject();
-
 	private subscriptions: any[] = [];
 
 	public usersList: any[] = [];
 
-	public errorMessage: string;
-
-	private getUsersList(): Promise<boolean> {
-		const def = new CustomDeferredService<boolean>();
-		this.usersListService.getUsersList().first().subscribe(
-			(data) => {
+	private getUsersList(): Promise<void> {
+		const def = new CustomDeferredService<void>();
+		this.usersListService.getUsersList().subscribe(
+			(data: any[]) => {
 				this.usersList = data;
-				def.resolve(true);
+				def.resolve();
 			},
-			(error) => {
-				this.errorMessage = error as any;
-				def.reject(false);
-			},
+			(error: any) => null, // service catches error
 			() => {
 				console.log('getUserList done');
 			}
@@ -129,15 +118,15 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		});
 		this.subscriptions.push(sub);
 
-		this.getUsersList().then(() => {
-			console.log('all models updated');
-			this.emitter.emitSpinnerStopEvent();
-		});
+		this.getUsersList()
+			.then(() => {
+				console.log('all models updated');
+				this.emitter.emitSpinnerStopEvent();
+			})
+			.catch((error: string) => console.log('dashboard details init requests error'));
 	}
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: DashboardDetailsComponent destroyed');
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

@@ -7,9 +7,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 import { MatIconRegistry, DateAdapter } from '@angular/material';
 
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-
 declare let $: JQueryStatic;
 
 @Component({
@@ -40,8 +37,6 @@ export class AppComponent implements OnInit, OnDestroy {
 	) {
 		console.log('this.el.nativeElement', this.el.nativeElement);
 	}
-
-	private ngUnsubscribe: Subject<void> = new Subject();
 
 	private subscriptions: any[] = [];
 
@@ -94,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		$('#init').remove(); // remove initialization text
 
 		// listen event emitter control messages
-		const sub: any = this.emitter.getEmitter().subscribe((message: any) => {
+		let sub: any = this.emitter.getEmitter().subscribe((message: any) => {
 			console.log('app consuming event:', message);
 			if (message.appInfo) {
 				if (message.appInfo === 'hide') {
@@ -125,9 +120,10 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(sub);
 
 		// listen date adapter locale change
-		this.dateAdapter.localeChanges.takeUntil(this.ngUnsubscribe).subscribe(() => {
+		sub = this.dateAdapter.localeChanges.subscribe(() => {
 			console.log('dateAdapter.localeChanges, changed according to the language');
 		});
+		this.subscriptions.push(sub);
 
 		/*
 		* check preferred language, respect preference if dictionary exists
@@ -153,9 +149,10 @@ export class AppComponent implements OnInit, OnDestroy {
 		/*
 		*	TODO:app.component router events
 		*
-		this.router.events.takeUntil(this.ngUnsubscribe).subscribe((event: any) => {
+		sub = this.router.events.subscribe((event: any) => {
 			console.log(' > AppComponent listens ROUTER EVENT:', event);
 		});
+		this.subscriptions.push(sub);
 		*/
 
 	}
@@ -163,8 +160,6 @@ export class AppComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppComponent destroyed');
 		this.serviceWorker.disableServiceWorker();
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

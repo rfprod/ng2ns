@@ -5,10 +5,6 @@ import { Router } from '@angular/router';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { UserService } from '../services/user.service';
 
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/first';
-
 @Component({
 	selector: 'dashboard-login',
 	templateUrl: '/public/app/views/dashboard-login.html',
@@ -34,8 +30,6 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 			password: ['', Validators.compose([Validators.required, Validators.minLength(1)])]
 		});
 	}
-
-	private ngUnsubscribe: Subject<void> = new Subject();
 
 	private subscriptions: any[] = [];
 
@@ -67,8 +61,6 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 	}
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: DashboardLoginComponent destroyed');
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

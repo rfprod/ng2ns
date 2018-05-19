@@ -1,17 +1,10 @@
 /*
-*	SystemJS configuration for Angular 6 TODO
+*	SystemJS configuration for Angular 6
 */
 (function (global) { // eslint-disable-line no-unused-vars
 
 	var paths = {
-		'npm:': './base/node_modules/',
-
-		'rxjs-compat/*': 							'node_modules/rxjs-compat/*.js',
-		'rxjs/*': 										'node_modules/rxjs/*.js',
-		'rxjs/add/observable/*.js': 	'node_modules/rxjs/add/observable/*.js',
-		'rxjs/add/observable/dom/*': 	'node_modules/rxjs/add/observable/dom/*.js',
-		'rxjs/add/operator/*.js': 		'node_modules/rxjs/add/operator/*.js',
-		'rxjs/symbol/*.js': 					'node_modules/rxjs/symbol/*.js'
+		'npm:': './base/node_modules/'
 	};
 	// packages locations
 	var map = {
@@ -20,21 +13,12 @@
 		'ng2-nvd3': 														'npm:ng2-nvd3/build',
 
 		'rxjs': 																'npm:rxjs/bundles/rxjs.umd.js',
-		'rxjs-compat': 													'npm:rxjs-compat',
-		'rxjs/internal-compatibility': 					'npm:rxjs/internal-compatibility',
-		'rxjs/testing': 												'npm:rxjs/testing',
 		'rxjs/ajax': 														'npm:rxjs/ajax',
 		'rxjs/operators': 											'npm:rxjs/operators',
-		'rxjs/webSocket': 											'npm:rxjs/webSocket',
+		'rxjs/testing': 												'npm:rxjs/testing',
 		'rxjs/util': 														'npm:rxjs/util',
+		'rxjs/webSocket': 											'npm:rxjs/webSocket',
 		'rxjs/internal': 												'npm:rxjs/internal',
-		'rxjs/add/operator/takeUntil': 					'npm:rxjs/add/operator/takeUntil.js',
-		'rxjs/add/operator/first': 							'npm:rxjs/add/operator/first.js',
-		'rxjs/add/operator/timeout': 						'npm:rxjs/add/operator/timeout.js',
-		'rxjs/add/operator/map': 								'npm:rxjs/add/operator/map.js',
-		'rxjs/add/operator/catch': 							'npm:rxjs/add/operator/catch.js',
-		'rxjs/add/observable/fromEvent': 				'npm:rxjs/add/observable/fromEvent.js',
-		'rxjs/add/observable/throw': 						'npm:rxjs/add/observable/throw.js',
 
 		'tslib': 																'npm:tslib/tslib.js',
 		'traceur': 															'npm:traceur/bin',
@@ -84,14 +68,12 @@
 		'ng2-nvd3': 										{ main: 'index', defaultExtension: 'js' },
 		'traceur': 											{ main: 'traceur', defaultExtension: 'js' },
 
-		'rxjs-compat': 									{ main: 'Rx.js', defaultExtension: 'js' },
-		'rxjs/internal-compatibility': 	{ main: 'index', defaultExtension: 'js'},
-		'rxjs/testing': 								{ main: 'index', defaultExtension: 'js' },
 		'rxjs/ajax': 										{ main: 'index', defaultExtension: 'js' },
 		'rxjs/operators': 							{ main: 'index', defaultExtension: 'js' },
-		'rxjs/webSocket': 							{ main: 'index', defaultExtension: 'js' },
+		'rxjs/testing': 								{ main: 'index', defaultExtension: 'js' },
 		'rxjs/util': 										{ main: 'index', defaultExtension: 'js' },
-		'rxjs/internal': 								{ main: 'index', defaultExtension: 'js' }
+		'rxjs/webSocket': 							{ main: 'index', defaultExtension: 'js' },
+		'rxjs/internal': 								{ main: 'Rx', defaultExtension: 'js' }
 	};
 
 	var config = {

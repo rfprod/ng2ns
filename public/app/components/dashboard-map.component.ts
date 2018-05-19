@@ -2,10 +2,6 @@ import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, HostListener }
 
 import { EventEmitterService } from '../services/event-emitter.service';
 
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/first';
-
 declare let d3: any;
 declare let Datamap: any;
 
@@ -23,8 +19,6 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	) {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
-
-	private ngUnsubscribe: Subject<void> = new Subject();
 
 	private subscriptions: any[] = [];
 
@@ -359,8 +353,6 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: DashboardMapComponent destroyed');
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

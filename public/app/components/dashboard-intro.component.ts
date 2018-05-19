@@ -1,13 +1,10 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 
 import { EventEmitterService } from '../services/event-emitter.service';
+import { CustomDeferredService } from '../services/custom-deferred.service';
 import { ServerStaticDataService } from '../services/server-static-data.service';
 import { PublicDataService } from '../services/public-data.service';
 import { WebsocketService } from '../services/websocket.service';
-
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/first';
 
 declare let d3: any;
 
@@ -30,14 +27,12 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 
-	private ngUnsubscribe: Subject<void> = new Subject();
-
 	private subscriptions: any[] = [];
 
 	public title: string = 'Ng2NodeStarter (Ng2NS)';
 	public description: string = 'Angular, NodeJS';
 
-	public chartOptions: object = {
+	public chartOptions: { chart } = {
 		chart: {
 			type: 'pieChart',
 			height: 450,
@@ -55,9 +50,9 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			legend: {
 				margin: {
 					top: 5,
-					right: 140,
+					right: 5,
 					bottom: 5,
-					left: 0,
+					left: 5,
 				},
 			},
 		},
@@ -84,38 +79,42 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			y: 1,
 		}
 	];
-	public serverData: any = {
-		static: [],
-		dynamic: [],
+	public serverData: { static, dynamic } = {
+		static: [] as any[],
+		dynamic: [] as any[],
 	};
 
 	private wsEndpoint: string = '/api/app-diag/dynamic';
 	private ws: WebSocket = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
 
-	public errorMessage: string;
-
-	private getServerStaticData(callback): void {
-		this.serverStaticDataService.getData().first().subscribe(
-			(data: any): void => this.serverData.static = data,
-			(error: any): void => this.errorMessage = error as any,
+	private getServerStaticData(): Promise<void> {
+		const def = new CustomDeferredService<void>();
+		this.serverStaticDataService.getData().subscribe(
+			(data: any[]) => {
+				this.serverData.static = data;
+				def.resolve();
+			},
+			(error: any) => null, // service catches error
 			() => {
-				console.log('getServerStaticData done, data:', this.serverData.static);
-				callback(this.serverData.static);
+				console.log('getServerStaticData done');
 			}
 		);
+		return def.promise;
 	}
-	private getPublicData(callback): void {
-		this.publicDataService.getData().first().subscribe(
-			(data: any): void => {
+	private getPublicData(): Promise<void> {
+		const def = new CustomDeferredService<void>();
+		this.publicDataService.getData().subscribe(
+			(data: any[]) => {
 				this.nvd3.clearElement();
 				this.appUsageData = data;
+				def.resolve();
 			},
-			(error: any): void => this.errorMessage = error as any,
-			(): void => {
-				console.log('getPublicData done, data:', this.appUsageData);
-				callback(this.appUsageData);
+			(error: any) => null, // service catches error
+			() => {
+				console.log('getPublicData done');
 			}
 		);
+		return def.promise;
 	}
 
 	public showModal: boolean = false;
@@ -168,17 +167,16 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		});
 		this.subscriptions.push(sub);
 
-		this.getPublicData(() => {
-			this.getServerStaticData(() => {
+		this.getPublicData()
+			.then(() => this.getServerStaticData())
+			.then(() => {
 				this.emitter.emitSpinnerStopEvent();
-			});
-		});
+			})
+			.catch((error: any) => console.log('dashboard intro init requests error'));
 
 	}
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: DashboardIntroComponent destroyed');
-		this.ngUnsubscribe.next();
-		this.ngUnsubscribe.complete();
 		this.ws.close();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
