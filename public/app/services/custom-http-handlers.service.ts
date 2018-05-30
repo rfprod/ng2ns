@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-
-import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class CustomHttpHandlersService {

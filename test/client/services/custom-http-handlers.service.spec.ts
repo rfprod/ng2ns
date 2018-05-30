@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { Response, ResponseOptions, Headers } from '@angular/http';
 
 import { Observable } from 'rxjs';
 

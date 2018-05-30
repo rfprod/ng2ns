@@ -17,6 +17,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./public/app` - main module and routes
     * `./public/app/components` - components' scripts (development)
     * `./public/app/interfaces` - interfaces' scripts (development)
+    * `./public/app/modules` - modules' scripts (development)
     * `./public/app/scss` - stylesheets (development)
     * `./public/app/services` - services' scripts (development)
     * `./public/app/views` - components' templates
