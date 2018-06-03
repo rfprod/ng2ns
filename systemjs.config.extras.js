@@ -1,5 +1,5 @@
 /*
-*	SystemJS Extrac configuration for Angular
+*	SystemJS Extra configuration for Angular
 */
 (function (global) { // eslint-disable-line no-unused-vars
 	System.config({

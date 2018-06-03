@@ -41,7 +41,11 @@ function createEnvFile(env, done) {
 		if (err) throw err;
 		const hash = crypto.createHmac('sha256', data.toString()).digest('hex');
 		console.log('BUILD_HASH', hash);
-		env += 'BUILD_HASH=' + hash + '\n';
+		if (!/BUILD_HASH/.test(env)) {
+			env += `BUILD_HASH=${hash}\n`;
+		} else {
+			env.replace(/^BUILD_HASH\=.+$/, `BUILD_HASH=${hash}`);
+		}
 		fs.writeFile('./.env', env, (err) => {
 			if (err) throw err;
 			console.log('# > ENV > .env file was created');

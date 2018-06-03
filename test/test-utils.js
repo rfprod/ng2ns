@@ -11,7 +11,6 @@ function isDocker() {
 }
 
 module.exports = {
-	isDocker: isDocker,
 	karmaHeadlessChromeFlags: () => {
 		const flags = [
 			'--headless',
