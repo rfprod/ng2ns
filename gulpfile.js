@@ -44,7 +44,7 @@ function createEnvFile(env, done) {
 		if (!/BUILD_HASH/.test(env)) {
 			env += `BUILD_HASH=${hash}\n`;
 		} else {
-			env.replace(/^BUILD_HASH\=.+$/, `BUILD_HASH=${hash}`);
+			env.replace(/^BUILD_HASH=.+$/, `BUILD_HASH=${hash}`);
 		}
 		fs.writeFile('./.env', env, (err) => {
 			if (err) throw err;
