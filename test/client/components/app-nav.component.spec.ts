@@ -28,6 +28,8 @@ describe('AppNavComponent', () => {
 				{path: 'intro', component: DummyComponent},
 				{path: 'login', component: DummyComponent},
 				{path: 'data', component: DummyComponent},
+				{path: 'map', component: DummyComponent},
+				{path: 'lazy', component: DummyComponent},
 				{path: '', redirectTo: 'intro', pathMatch: 'full'},
 				{path: '**', redirectTo: 'intro'}
 			]) ],
@@ -62,8 +64,8 @@ describe('AppNavComponent', () => {
 	it('should have variables and methods defined', () => {
 		expect(this.component.subscriptions).toEqual(jasmine.any(Array));
 		expect(this.component.navButtonsState).toEqual(jasmine.any(Array));
-		expect(this.component.navButtonsState.length).toEqual(5);
-		expect(this.component.navButtonsState.reduce((a, b) => !b ? a + 1 : a, 0)).toEqual(5);
+		expect(this.component.navButtonsState.length).toEqual(6);
+		expect(this.component.navButtonsState.reduce((a, b) => !b ? a + 1 : a, 0)).toEqual(6);
 		expect(this.component.hideNavbar).toEqual(jasmine.any(Boolean));
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.supportedLanguages).toEqual([
@@ -98,6 +100,10 @@ describe('AppNavComponent', () => {
 		this.component.switchNavButtons({ url: 'map'});
 		expect(this.component.hideNavbar).toBeFalsy();
 		expect(this.component.navButtonsState[4]).toBeTruthy();
+
+		this.component.switchNavButtons({ url: 'lazy'});
+		expect(this.component.hideNavbar).toBeFalsy();
+		expect(this.component.navButtonsState[5]).toBeTruthy();
 
 		this.component.switchNavButtons({ url: 'data'}, 'help');
 		expect(this.component.hideNavbar).toBeFalsy();

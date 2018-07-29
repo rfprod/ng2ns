@@ -4,11 +4,13 @@
 (function (global) { // eslint-disable-line no-unused-vars
 
 	var paths = {
-		'npm:': './node_modules/'
+		'npm:': './node_modules/',
+		'pub:': './public/'
 	};
 	// packages locations
 	var map = {
-		'app': 																	'./public/app',
+		'app': 																	'pub:app',
+		'lazy.module': 													'pub:app/lazy/lazy.module.js',
 		'ng2-nvd3': 														'npm:ng2-nvd3/build',
 
 		'rxjs': 																'npm:rxjs/bundles/rxjs.umd.js',
@@ -74,11 +76,79 @@
 		'rxjs/webSocket': 							{ main: 'index', defaultExtension: 'js' },
 		'rxjs/internal': 								{ main: 'Rx', defaultExtension: 'js' }
 	};
+	// defined bundles (where each dependency should be looked up)
+	var bundles = {
+		'/public/js/app.bundle.min.js': [
+			'app'
+		],
+		'/public/js/dependencies.bundle.min.js': [
+
+			// dependencies
+			'npm:ng2-nvd3/build/index.js',
+
+			'npm:rxjs/bundles/rxjs.umd.js',
+			'npm:rxjs/ajax/index.js',
+			'npm:rxjs/operators/index.js',
+			'npm:rxjs/testing/index.js',
+			'npm:rxjs/util/index.js',
+			'npm:rxjs/webSocket/index.js',
+			'npm:rxjs/internal/index.js',
+
+			'npm:tslib/tslib.js',
+			'npm:traceur/bin/traceur.js',
+
+			'npm:@angular/animations/bundles/animations.umd.js',
+			'npm:@angular/animations/bundles/animations-browser.umd.js',
+			'npm:@angular/core/bundles/core.umd.js',
+			'npm:@angular/common/bundles/common.umd.js',
+			'npm:@angular/common/bundles/common-http.umd.js',
+			'npm:@angular/compiler/bundles/compiler.umd.js',
+			'npm:@angular/forms/bundles/forms.umd.js',
+			'npm:@angular/http/bundles/http.umd.js',
+			'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
+			'npm:@angular/platform-browser/bundles/platform-browser-animations.umd.js',
+			'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+			'npm:@angular/router/bundles/router.umd.js',
+			'npm:@angular/flex-layout/bundles/flex-layout.umd.js',
+			'npm:@angular/flex-layout/bundles/flex-layout-core.umd.js',
+			'npm:@angular/flex-layout/bundles/flex-layout-extended.umd.js',
+			'npm:@angular/flex-layout/bundles/flex-layout-flex.umd.js',
+			'npm:@angular/flex-layout/bundles/flex-layout-server.umd.js',
+			'npm:@angular/flex-layout/bundles/flex-layout-grid.umd.js',
+			'npm:@angular/material/bundles/material.umd.js',
+			'npm:@angular/cdk/bundles/cdk.umd.js',
+			'npm:@angular/cdk/bundles/cdk-a11y.umd.js',
+			'npm:@angular/cdk/bundles/cdk-accordion.umd.js',
+			'npm:@angular/cdk/bundles/cdk-bidi.umd.js',
+			'npm:@angular/cdk/bundles/cdk-coercion.umd.js',
+			'npm:@angular/cdk/bundles/cdk-collections.umd.js',
+			'npm:@angular/cdk/bundles/cdk-keycodes.umd.js',
+			'npm:@angular/cdk/bundles/cdk-layout.umd.js',
+			'npm:@angular/cdk/bundles/cdk-observers.umd.js',
+			'npm:@angular/cdk/bundles/cdk-overlay.umd.js',
+			'npm:@angular/cdk/bundles/cdk-platform.umd.js',
+			'npm:@angular/cdk/bundles/cdk-portal.umd.js',
+			'npm:@angular/cdk/bundles/cdk-rxjs.umd.js',
+			'npm:@angular/cdk/bundles/cdk-scrolling.umd.js',
+			'npm:@angular/cdk/bundles/cdk-stepper.umd.js',
+			'npm:@angular/cdk/bundles/cdk-table.umd.js',
+			'npm:@angular/cdk/bundles/cdk-text-field.umd.js',
+			'npm:@angular/cdk/bundles/cdk-tree.umd.js',
+			'npm:@angular/material-moment-adapter/bundles/material-moment-adapter.umd.js',
+			'npm:moment/min/moment-with-locales.min.js'
+		],
+		'/public/js/lazy.bundle.min.js': [
+			'pub:app/lazy/lazy.module.js',
+			'pub:app/lazy/lazy-routing.module.js',
+			'pub:app/components/lazy.component.js'
+		]
+	};
 
 	var config = {
 		paths: paths,
 		map: map,
-		packages: packages
+		packages: packages,
+		bundles: bundles
 	};
 
 	System.config(config);

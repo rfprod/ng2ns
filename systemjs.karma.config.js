@@ -9,6 +9,7 @@
 	// packages locations
 	var map = {
 		'app': 																	'./base/public/app',
+		'lazy.module': 													'./base/public/app/lazy/lazy.module.js',
 		'mocks': 																'./base/test/client/mocks',
 		'ng2-nvd3': 														'npm:ng2-nvd3/build',
 

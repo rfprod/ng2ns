@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ElementRef, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouteConfigLoadStart } from '@angular/router';
 import { EventEmitterService } from './services/event-emitter.service';
 import { TranslateService } from './translate/index';
 import { CustomServiceWorkerService } from './services/custom-service-worker.service';
@@ -147,13 +147,15 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.matIconRegistry.registerFontClassAlias('fontawesome-all');
 
 		/*
-		*	TODO:app.component router events
-		*
+		*	router events listener
+		*/
 		sub = this.router.events.subscribe((event: any) => {
-			console.log(' > AppComponent listens ROUTER EVENT:', event);
+			console.log(' > AppComponent, ROUTER EVENT:', event);
+			if (event instanceof RouteConfigLoadStart) {
+				console.log('RouteConfigLoadStart, event', event);
+			}
 		});
 		this.subscriptions.push(sub);
-		*/
 
 	}
 

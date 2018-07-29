@@ -20,6 +20,9 @@
 		<button [routerLink]="['map']" (click)="switchNavButtons($event, 'map')" mat-button [ngClass]="{selected: navButtonsState[4], inactive: !navButtonsState[4]}" [fxHide.xs]="true" [fxHide.sm]="true">
 			<i class="fas fa-map"></i> {{ 'map' | translate }}
 		</button>
+		<button [routerLink]="['lazy']" (click)="switchNavButtons($event, 'lazy')" mat-button [ngClass]="{selected: navButtonsState[5], inactive: !navButtonsState[5]}" [fxHide.xs]="true" [fxHide.sm]="true">
+			<i class="fas fa-bed"></i> {{ 'lazy' | translate }}
+		</button>
 		<button mat-button [matMenuTriggerFor]="languageMenu" [fxHide.xs]="true" [fxHide.sm]="true">
 			<i class="fas fa-globe"></i> {{ 'language' | translate }}
 		</button>
@@ -48,6 +51,9 @@
 			</button>
 			<button [routerLink]="['map']" (click)="switchNavButtons($event, 'map')" mat-menu-item [ngClass]="{selected: navButtonsState[4], inactive: !navButtonsState[4]}">
 				<i class="fas fa-map"></i> {{ 'map' | translate }}
+			</button>
+			<button [routerLink]="['lazy']" (click)="switchNavButtons($event, 'lazy')" mat-menu-item [ngClass]="{selected: navButtonsState[5], inactive: !navButtonsState[5]}">
+				<i class="fas fa-bed"></i> {{ 'lazy' | translate }}
 			</button>
 			<hr>
 			<button mat-button *ngFor="let lang of supportedLanguages" [ngClass]="{selected: isLanguageSelected(lang.key)}" (click)="selectLanguage(lang.key)">{{lang.name}}</button>

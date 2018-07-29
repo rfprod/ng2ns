@@ -352,16 +352,36 @@ gulp.task('client-e2e-test', () => {
 	protractor = spawn('npm', ['run', 'protractor'], {stdio: 'inherit'});
 });
 
-gulp.task('build-system-js', () => {
+gulp.task('build-system-js-dependencies', () => {
 	/*
-	*	this task builds angular application
-	*	components, angular modules, and some dependencies
-	*
-	*	nonangular components related to design, styling, data visualization etc.
-	*	are built by another task
+	*	builds angular vendor pack
 	*/
-	return systemjsBuilder('/','./systemjs.config.js')
-		.buildStatic('app', 'bundle.min.js', {
+	return systemjsBuilder('/', './systemjs.config.js')
+		.bundle('./public/app/**/*.js - [./public/app/**/*.js]', 'dependencies.bundle.min.js', {
+			minify: true,
+			mangle: true
+		})
+		.pipe(gulp.dest('./public/js'));
+});
+
+gulp.task('build-system-js-lazy', () => {
+	/*
+	*	builds application lazy module
+	*/
+	return systemjsBuilder('/', './systemjs.config.js')
+		.bundle('./public/app/lazy/lazy.module.js - ./public/js/dependencies.bundle.min.js', 'lazy.bundle.min.js', {
+			minify: true,
+			mangle: true
+		})
+		.pipe(gulp.dest('./public/js'));
+});
+
+gulp.task('build-system-js-app', () => {
+	/*
+	*	builds application eager module
+	*/
+	return systemjsBuilder('/', './systemjs.config.js')
+		.bundle('app - ./public/js/dependencies.bundle.min.js - ./public/js/lazy.bundle.min.js', 'app.bundle.min.js', {
 			minify: true,
 			mangle: true
 		})
@@ -410,6 +430,11 @@ gulp.task('pack-vendor-js', () => {
 		/*
 		*	add paths to required third party js libraries here
 		*/
+
+		// TODO:build required for lazy loading, uncomment when needed (both systemjs config, and src)
+		'./node_modules/systemjs/dist/system.src.js',
+		'./systemjs.config.js',
+
 		// angular requirements
 		'./node_modules/core-js/client/shim.js',
 		'./node_modules/zone.js/dist/zone.min.js',
@@ -516,7 +541,7 @@ gulp.task('watch', () => {
 	gulp.watch(['./test/server/*.js'], ['server-test']); // watch server tests changes, and run tests
 	gulp.watch(['./gulpfile.js'], ['pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts']); // watch gulpfile changes, and repack vendor assets
 	gulp.watch('./public/app/scss/*.scss', ['sass-autoprefix-minify-css']); // watch app scss-source changes, and pack application css bundle
-	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts', './tslint.json'], ['spawn-rebuild-app']); // watch app ts-source chages, and rebuild app js bundle
+	gulp.watch(['./public/app/*.ts', './public/app/**/*.ts', './test/client/**/*.ts', './tslint.json', './systemjs*.js'], ['spawn-rebuild-app']); // watch app ts-source chages, and rebuild app js bundle
 	gulp.watch(['./*.js', './app/**/*.js', './public/{electron.preload,service-worker}.js', './test/*.js', './test/e2e/scenarios.js', './test/server/test.js', './.eslintignore', './.eslintrc.json'], ['eslint']); // watch js file changes, and lint
 });
 
@@ -541,15 +566,15 @@ gulp.task('compile-and-test', (done) => {
 *	build sequences
 */
 gulp.task('compile-and-build', (done) => {
-	runSequence('tsc', 'build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
+	runSequence('tsc', 'build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
 });
 
 gulp.task('build', (done) => {
-	runSequence('build-system-js', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
+	runSequence('build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
 });
 
 gulp.task('rebuild-app', (done) => { // should be used in watcher to rebuild the app on *.ts file changes
-	runSequence('tslint', 'tsc', 'build-system-js', 'hashsum', done);
+	runSequence('tslint', 'tsc', 'build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'hashsum', done);
 });
 
 let rebuildApp;

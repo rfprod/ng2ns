@@ -27,7 +27,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
 
 	private subscriptions: any[] = [];
 
-	public navButtonsState: boolean[] = [false, false, false, false, false];
+	public navButtonsState: boolean[] = [false, false, false, false, false, false];
 
 	public hideNavbar: boolean = false;
 
@@ -58,6 +58,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 			this.hideNavbar = false;
 		} else if (path === 'map') {
 			index = '4';
+			this.hideNavbar = false;
+		} else if (path === 'lazy') {
+			index = '5';
 			this.hideNavbar = false;
 		} else {
 			index = '0';

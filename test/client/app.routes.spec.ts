@@ -21,12 +21,14 @@ describe('APP_ROUTES', () => {
 
 	it('should have proper routes defined', () => {
 		expect(this.routes).toEqual([
-			{path: 'intro', component: DashboardIntroComponent},
-			{path: 'login', component: DashboardLoginComponent, canActivate: [AnonimousGuard]},
-			{path: 'data', component: DashboardDetailsComponent, canActivate: [AuthGuardGeneral]},
-			{path: 'map', component: DashboardMapComponent, canActivate: [AuthGuardGeneral]},
-			{path: '', redirectTo: 'intro', pathMatch: 'full'},
-			{path: '**', redirectTo: 'intro'}
+			{ path: 'intro', component: DashboardIntroComponent },
+			{ path: 'login', component: DashboardLoginComponent, canActivate: [AnonimousGuard] },
+			{ path: 'data', component: DashboardDetailsComponent, canActivate: [AuthGuardGeneral] },
+			{ path: 'map', component: DashboardMapComponent, canActivate: [AuthGuardGeneral] },
+			{ path: 'lazy', loadChildren: 'lazy.module#LazyModule', data: { preload: false } },
+			{ path: '', redirectTo: 'intro', pathMatch: 'full' },
+			{ path: '**', redirectTo: 'intro' }
 		]);
 	});
+
 });
