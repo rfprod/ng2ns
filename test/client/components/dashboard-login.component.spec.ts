@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EventEmitterService } from '../../../public/app/services/event-emitter.service';
 import { UserService } from '../../../public/app/services/user.service';
 
-import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
+import { TranslateService, TranslateModule } from '../../../public/app/translate/index';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
@@ -22,9 +22,9 @@ describe('DashboardLoginComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ TranslatePipe, DashboardLoginComponent, DummyComponent ],
+			declarations: [ DashboardLoginComponent, DummyComponent ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, FormsModule, ReactiveFormsModule,
-				CustomMaterialModule, FlexLayoutModule,
+				CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot(),
 				RouterTestingModule.withRoutes([
 					{path: 'login', component: DashboardLoginComponent},
 					{path: 'profile', component: DummyComponent}
@@ -33,8 +33,6 @@ describe('DashboardLoginComponent', () => {
 			providers: [
 				{ provide: 'Window', useValue: { location: { host: 'localhost', protocol: 'http' } } },
 				EventEmitterService,
-				TRANSLATION_PROVIDERS,
-				TranslateService,
 				UserService
 			],
 			schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

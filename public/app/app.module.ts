@@ -29,7 +29,7 @@ import { DashboardLoginComponent } from './components/dashboard-login.component'
 import { DashboardDetailsComponent } from './components/dashboard-details.component';
 import { DashboardMapComponent } from './components/dashboard-map.component';
 
-import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService } from './translate/index';
+import { TranslateModule } from './translate/index';
 
 import { CustomServiceWorkerService } from './services/custom-service-worker.service';
 import { CustomDeferredService } from './services/custom-deferred.service';
@@ -47,15 +47,16 @@ import { CustomPreloadingStrategy } from './custom-preloading.strategy';
 import { NvD3Component } from 'ng2-nvd3';
 
 @NgModule({
-	declarations: [ AppComponent, TranslatePipe, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent,
+	declarations: [ AppComponent, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent,
 									DashboardDetailsComponent, DashboardMapComponent, NvD3Component
 								],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,
-									HttpClientModule, RouterModule.forRoot(APP_ROUTES, { preloadingStrategy: CustomPreloadingStrategy })
+									HttpClientModule, TranslateModule.forRoot(),
+									RouterModule.forRoot(APP_ROUTES, { preloadingStrategy: CustomPreloadingStrategy })
 								],
 	providers 	: [ { provide: APP_BASE_HREF, useValue: '/' }, { provide: LocationStrategy, useClass: PathLocationStrategy },
-									{ provide: 'Window', useValue: window }, TRANSLATION_PROVIDERS, TranslateService, CustomServiceWorkerService,
-									CustomDeferredService, CustomHttpHandlersService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral,
+									{ provide: 'Window', useValue: window }, CustomServiceWorkerService, CustomDeferredService,
+									CustomHttpHandlersService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral,
 									AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService, CustomPreloadingStrategy
 								],
 	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],

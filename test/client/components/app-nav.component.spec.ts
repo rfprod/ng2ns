@@ -9,7 +9,7 @@ import { EventEmitterService } from '../../../public/app/services/event-emitter.
 import { CustomServiceWorkerService } from '../../../public/app/services/custom-service-worker.service';
 import { UserService } from '../../../public/app/services/user.service';
 
-import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
+import { TranslateService, TranslateModule } from '../../../public/app/translate/index';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
@@ -23,23 +23,23 @@ describe('AppNavComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ TranslatePipe, AppNavComponent, DummyComponent ],
-			imports: [ NoopAnimationsModule, FlexLayoutModule, CustomMaterialModule, RouterTestingModule.withRoutes([
-				{path: 'intro', component: DummyComponent},
-				{path: 'login', component: DummyComponent},
-				{path: 'data', component: DummyComponent},
-				{path: 'map', component: DummyComponent},
-				{path: 'lazy', component: DummyComponent},
-				{path: '', redirectTo: 'intro', pathMatch: 'full'},
-				{path: '**', redirectTo: 'intro'}
-			]) ],
+			declarations: [ AppNavComponent, DummyComponent ],
+			imports: [ NoopAnimationsModule, FlexLayoutModule, CustomMaterialModule, TranslateModule.forRoot(),
+				RouterTestingModule.withRoutes([
+					{path: 'intro', component: DummyComponent},
+					{path: 'login', component: DummyComponent},
+					{path: 'data', component: DummyComponent},
+					{path: 'map', component: DummyComponent},
+					{path: 'lazy', component: DummyComponent},
+					{path: '', redirectTo: 'intro', pathMatch: 'full'},
+					{path: '**', redirectTo: 'intro'}
+				])
+			],
 			providers: [
 				{ provide: 'Window', useValue: window },
 				EventEmitterService,
 				CustomServiceWorkerService,
 				UserService,
-				TRANSLATION_PROVIDERS,
-				TranslateService,
 				{provide: APP_BASE_HREF, useValue: '/'}
 			],
 			schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

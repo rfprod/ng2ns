@@ -9,7 +9,7 @@ import { NvD3Component } from 'ng2-nvd3';
 
 import { EventEmitterService } from '../../../public/app/services/event-emitter.service';
 
-import { TranslateService, TranslatePipe, TRANSLATION_PROVIDERS } from '../../../public/app/translate/index';
+import { TranslateService, TranslateModule } from '../../../public/app/translate/index';
 
 import { CustomHttpHandlersService } from '../../../public/app/services/custom-http-handlers.service';
 
@@ -29,13 +29,11 @@ describe('DashboardIntroComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ TranslatePipe, NvD3Component, DashboardIntroComponent, NvD3Component ],
-			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule ],
+			declarations: [ NvD3Component, DashboardIntroComponent, NvD3Component ],
+			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot() ],
 			providers: [
 				{ provide: 'Window', useValue: { location: { host: 'localhost', protocol: 'http' } } },
 				EventEmitterService,
-				TRANSLATION_PROVIDERS,
-				TranslateService,
 				BaseRequestOptions,
 				MockBackend,
 				{ provide: Http,
