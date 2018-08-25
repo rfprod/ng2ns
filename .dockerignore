@@ -1,3 +1,9 @@
 node_modules
+*.log
+sessions/*.json
 desktop
 .git
+logs/*
+!logs/.gitkeep
+logs/**/*
+!logs/**/.gitkeep

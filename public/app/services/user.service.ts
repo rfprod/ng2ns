@@ -11,7 +11,7 @@ export class UserService {
 		this.model.email = null;
 		this.model.token = null;
 		this.modelKeys = Object.keys(this.model);
-		if (typeof localStorage.getItem('userService') === 'undefined' && localStorage.userService) {
+		if (typeof localStorage.getItem('userService') === 'undefined' && !localStorage.getItem('userService')) {
 			localStorage.setItem('userService', JSON.stringify(this.model));
 		} else {
 			this.RestoreUser();
@@ -40,7 +40,7 @@ export class UserService {
 
 	public RestoreUser(): void {
 		console.log('Restore User, localStorage.userService:', localStorage.getItem('userService'));
-		if (typeof localStorage.getItem('userService') !== 'undefined' && localStorage.userService) {
+		if (typeof localStorage.getItem('userService') !== 'undefined' && !localStorage.getItem('userService')) {
 			this.model = JSON.parse(localStorage.getItem('userService'));
 		}
 	}

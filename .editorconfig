@@ -19,6 +19,6 @@ indent_style = tab
 indent_size = 4
 
 # 2 space indentation for code
-[*.{js,ts,json,sh,eslintignore,gitignore}]
+[*.{js,ts,json,sh,eslintignore,gitignore,Dockerfile}]
 indent_style = tab
 indent_size = 2

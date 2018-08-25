@@ -1,5 +1,5 @@
 # define image
-FROM node:latest
+FROM node:slim as builder
 
 # create directory structure
 ## create app directory
@@ -30,21 +30,22 @@ ENV DISPLAY=:99 CHROME_BIN=chromium
 #
 ## remove source code, tests, and build files
 #
-## purge previously installed packages via apt, and clean apt cache
+## dont purge previously installed packages (via apt, and clean apt cache), go multistage instead, see below
 RUN apt-get -y update --fix-missing; \
 	apt-get -y install --fix-missing --no-install-recommends apt-utils; \
 	apt-get -y upgrade --fix-missing && apt-get -y install --fix-missing chromium xvfb; \
 	sleep 1; \
 	Xvfb :99 -screen 0 1680x1024x8 -nolisten tcp & sleep 2; \
 	sleep 1; \
-	npm install; \
-	npm rebuild node-sass --force; \
 	npm install -g gulp-cli typescript; \
+	npm update --no-optional; \
+	npm rebuild node-sass --force; \
+	npm install --no-optional; \
 	gulp compile-and-build && gulp create-env-development; \
 	sleep 1; \
 	gulp server & npm run server-test && npm run client-test-single-run && gulp client-e2e-test && gulp server-kill && npm run doc-docker; \
 	sleep 1; \
-	npm prune --production && \
+	npm prune --production --no-optional && \
 	npm uninstall @angular/animations @angular/cdk @angular/common @angular/compiler @angular/core \
 	@angular/flex-layout @angular/forms @angular/http @angular/material @angular/material-moment-adapter \
 	@angular/platform-browser @angular/platform-browser-dynamic @angular/router @types/core-js \
@@ -53,19 +54,38 @@ RUN apt-get -y update --fix-missing; \
 	gulp-mocha gulp-plumber gulp-rename gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify \
 	gulp-util hammerjs jasmine-core jquery karma karma-redirect-preprocessor material-design-icon-fonts moment \
 	ng2-nvd3 nvd3 reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
-	web-animations-js zone.js --no-save --only=production && \
+	web-animations-js zone.js --no-save --production --no-optional && \
 	npm uninstall -g gulp-cli typescript --save && \
 	npm cache clean --force; \
 	sleep 1; \
-	rm -rf ./public/app/components ./public/app/directives ./public/app/interfaces ./public/app/scss \
-	./public/app/services ./public/app/translate ./test ./topoData && rm ./public/app/*.ts ./public/app/*.js \
-	./public/app/*.js.map ./gulpfile.js ./main.js ./systemjs* ./*.json ./*.sh ./*.md ./Dockerfile* \
-	./.dockerignore ./.editorconfig ./.eslintignore ./.gitignore; \
-	sleep 1; \
-	apt-get purge -y chromium xvfb apt-utils; apt-get -y autoremove; apt-get -y clean
+	rm -rf ./public/app/components ./public/app/directives ./public/app/interfaces ./public/app/modules \
+	./public/app/pipes ./public/app/services ./public/app/translate ./public/app/scss \
+	./test/client ./test/e2e ./build-system ./topoData && \
+	find ./public/app -type f -name "*.ts" -exec rm {} + && \
+	find ./public/app -type f -name "*.js" -exec rm {} + && \
+	find ./public/app -type f -name "*.scss" -exec rm {} + && \
+	find ./ -type f -name "*.md" -exec rm {} + && \
+	find ./ -type f -name "*.sh" -exec rm {} + && \
+	find ./test -type f -name "*.js" -exec rm {} + && \
+	rm ./public/electron.preload.js ./main.js \
+	./gulpfile.js ./systemjs* ./*Dockerfile ./.dockerignore \
+	./.editorconfig ./.eslintignore ./.gitignore \
+	./*.json
+
+# MULTISTAGE, use build from the previous stage, don't build anything, just copy and start, use lighter image
+
+# define image
+FROM node:alpine
+# create directory structure
+#
+## Create app directory.
+WORKDIR /app
+## Copy app source.
+COPY --from=builder /app .
 
 # run the application
-## map app port
+#
+## Map app port to docker.
 EXPOSE 8080
-## define command to run app
+## Define command to run app.
 CMD [ "node", "server.js" ]

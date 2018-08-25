@@ -8,7 +8,7 @@ source util-echo_colours.sh
 # and start if no arguments are provided
 if [ 1 -gt $# ]; then
 	printf " ${GREEN} >> building docker container ...${DEFAULT} "
-	sudo docker build -t rfprod/ng2ns -f ./Dockerfile .
+	sudo docker build -t rfprod/ng2ns -f ./dock-app.Dockerfile .
 	printf " ${GREEN} >> starting docker container ...${DEFAULT} "
 	sudo docker run --rm -it -p 127.0.0.1:8080:8080 rfprod/ng2ns:latest
 fi
@@ -18,7 +18,7 @@ if [ $# -gt 0 ]; then
 	# build
 	if [ $1 = 'build' ]; then
 		printf " ${GREEN} >> building docker container ...${DEFAULT} "
-		sudo docker build -t rfprod/ng2ns -f ./Dockerfile .
+		sudo docker build -t rfprod/ng2ns -f ./dock-app.Dockerfile .
 	fi
 
 	# start

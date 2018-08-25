@@ -626,7 +626,7 @@ const electronPackagerIgnore = [ // exclude
 	/\/node_modules\/(@angular|gulp.*|karma.*|jasmine.*|mocha.*|@types|(remap-)?istanbul)/, // not needed node_modules
 	/\/test\/(client|e2e|server\/.*\.js|.*\.js)/, // tests source code
 	/\/topoData/, // intermediary project build files
-	/\/Dockerfile\.*/, // docker configs
+	/\/.*\.Dockerfile/, // docker configs
 	/\/\.(dockerignore|editorconfig|eslintignore|eslintrc\.json|gitattributes|gitignore)/, // configuration files matching pattern: .config_filename
 	/\/(tsconfig|tslint|jsdoc)\.json/, // json configuration
 	/\/README\.md/, // readme
