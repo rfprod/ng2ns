@@ -22,7 +22,7 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		private userService: UserService
 	) {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
-		console.log('localStorage.userService', localStorage.userService);
+		console.log('localStorage.userService', localStorage.getItem('userService'));
 		const restoredModel: any = this.userService.getUser();
 		console.log('restoredModel use model', restoredModel);
 		this.loginForm = this.fb.group({
