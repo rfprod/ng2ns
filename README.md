@@ -13,6 +13,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./app/models` - data models
   * `./app/routes` - routes
   * `./app/utils` - utilities
+* `./build-system` - gulp-based build system modules, tasks
 * `./public` - client
   * `./public/app` - application scripts, templates, styles
     * `./public/app/components` - components (development)
@@ -98,7 +99,7 @@ for development environment without nodejs cluster
 PORT=8080
 APP_URL=http://localhost:8080/
 APP_VERSION=1.0.0
-DEV_MODE=true
+DEV_MODE=false
 BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
 
@@ -108,7 +109,7 @@ for development environment with nodejs cluster
 PORT=8080
 APP_URL=http://localhost:8080/
 APP_VERSION=1.0.0
-DEV_MODE=false
+DEV_MODE=true
 BUILD_HASH=3ae81c3e8cac4bcdb303da08cfda57abbdaed
 ```
 

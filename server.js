@@ -258,7 +258,7 @@ function terminator (sig) {
 	});
 })();
 
-if (cluster.isMaster && process.env.DEV_MODE === 'false') {
+if (cluster.isMaster && process.env.DEV_MODE === 'true') {
 	const workersCount = os.cpus().length;
 	console.log(`\n# > START > CLUSTER > Node.js listening on ${ip}:${port}...\n`);
 	console.log(`Cluster setup, workers count: ${workersCount}`);
