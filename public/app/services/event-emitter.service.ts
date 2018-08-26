@@ -1,7 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
+/**
+ * Event emitter service.
+ */
 @Injectable()
 export class EventEmitterService {
 

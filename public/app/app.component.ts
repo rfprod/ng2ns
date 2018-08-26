@@ -9,6 +9,9 @@ import { MatIconRegistry, DateAdapter } from '@angular/material';
 
 declare let $: JQueryStatic;
 
+/**
+ * Application root component.
+ */
 @Component({
 	selector: 'root',
 	template: `
@@ -41,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	private subscriptions: any[] = [];
 
 	public showAppInfo: boolean = true;
+
 	public showSpinner: boolean = false;
 
 	// spinner controls

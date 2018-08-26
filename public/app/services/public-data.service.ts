@@ -6,8 +6,17 @@ import { CustomHttpHandlersService } from './custom-http-handlers.service';
 import { Observable } from 'rxjs';
 import { take, map, catchError } from 'rxjs/operators';
 
+/**
+ * Public data service.
+ */
 @Injectable()
 export class PublicDataService {
+
+	/**
+	 * @param http Http Client
+	 * @param window Window - window reference
+	 * @param httpHandlers Custom Http Handlers Service
+	 */
 	constructor(
 		private http: HttpClient,
 		@Inject('Window') private window: Window,
@@ -16,10 +25,16 @@ export class PublicDataService {
 		console.log('PublicDataService init');
 	}
 
-	private appDataUrl: string = this.window.location.origin + '/api/app-diag/usage';
+	/**
+	 * Endpoint to make request to.
+	 */
+	private endpoint: string = this.window.location.origin + '/api/app-diag/usage';
 
+	/**
+	 * Gets public data.
+	 */
 	public getData(): Observable<any[]> {
-		return this.http.get(this.appDataUrl).pipe(
+		return this.http.get(this.endpoint).pipe(
 			take(1),
 			map(this.httpHandlers.extractArray),
 			catchError(this.httpHandlers.handleError)

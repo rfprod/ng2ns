@@ -1,6 +1,8 @@
 export const LANG_RU_NAME = 'ru';
 
-// keys map for Russian language
+/**
+ * Keys map for Russian language.
+ */
 export const LANG_RU_TRANSLATIONS = {
 	help: 'Помощь',
 	intro: 'Введение',

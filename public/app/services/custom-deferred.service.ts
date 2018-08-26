@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * Custom deferred service.
+ */
 @Injectable()
 export class CustomDeferredService<T> {
 
@@ -10,10 +13,19 @@ export class CustomDeferredService<T> {
 		});
 	}
 
+	/**
+	 * Promise.
+	 */
 	public promise: Promise<T>;
 
+	/**
+	 * Resolve.
+	 */
 	public resolve: (value?: T | PromiseLike<T>) => void;
 
+	/**
+	 * Reject.
+	 */
 	public reject: (reason?: any) => void;
 
 }

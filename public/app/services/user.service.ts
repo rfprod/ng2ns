@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * User service - wrapper around browser local storage.
+ */
 @Injectable()
 export class UserService {
-	private model: any = {
-		email: null,
-		token: null
-	};
-	private modelKeys: any[];
+
 	constructor() {
 		this.model.email = null;
 		this.model.token = null;
@@ -19,15 +18,38 @@ export class UserService {
 		console.log(' >> USER SERVICE CONSTRUCTOR, model', this.model);
 	}
 
+	/**
+	 * User model.
+	 */
+	private model: any = {
+		email: null,
+		token: null
+	};
+
+	/**
+	 * User model keys.
+	 */
+	private modelKeys: any[];
+
+	/**
+	 * Returns current user model.
+	 */
 	public getUser(): any {
 		return this.model;
 	}
 
+	/**
+	 * Returns current user token.
+	 */
 	public isLoggedIn(): string {
 		return this.model.token;
 	}
 
-	public SaveUser(newValues): void {
+	/**
+	 * Saves new user model values.
+	 * @param newValues object with new user model values
+	 */
+	public SaveUser(newValues: { email?: string, token?: string }): void {
 		console.log('SaveUser', newValues);
 		if (newValues.hasOwnProperty('email')) {
 			this.model.email = newValues.email;
@@ -38,6 +60,9 @@ export class UserService {
 		localStorage.setItem('userService', JSON.stringify(this.model));
 	}
 
+	/**
+	 * Restores user model.
+	 */
 	public RestoreUser(): void {
 		console.log('Restore User, localStorage.userService:', localStorage.getItem('userService'));
 		if (typeof localStorage.getItem('userService') !== 'undefined' && localStorage.getItem('userService')) {
@@ -45,6 +70,9 @@ export class UserService {
 		}
 	}
 
+	/**
+	 * Resets user model.
+	 */
 	public ResetUser(): void {
 		for (const key of this.modelKeys) {
 			this.model[key] = null;

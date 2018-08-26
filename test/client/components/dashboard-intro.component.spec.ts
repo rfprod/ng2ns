@@ -2,8 +2,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Http, BaseRequestOptions, Response, ResponseOptions, Headers } from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { NvD3Component } from 'ng2-nvd3';
 
@@ -17,8 +17,6 @@ import { ServerStaticDataService } from '../../../public/app/services/server-sta
 import { PublicDataService } from '../../../public/app/services/public-data.service';
 import { WebsocketService } from '../../../public/app/services/websocket.service';
 
-import { Observable, Subject } from 'rxjs';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
 import { CustomMaterialModule } from '../../../public/app/modules/custom-material.module';
@@ -30,26 +28,20 @@ describe('DashboardIntroComponent', () => {
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ NvD3Component, DashboardIntroComponent, NvD3Component ],
-			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot() ],
+			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot() ],
 			providers: [
-				{ provide: 'Window', useValue: { location: { host: 'localhost', protocol: 'http' }, localStorage: window.localStorage } },
+				{ provide: 'Window', useValue: window },
 				EventEmitterService,
-				BaseRequestOptions,
-				MockBackend,
-				{ provide: Http,
-					useFactory: (mockedBackend, requestOptions) => new Http(mockedBackend, requestOptions),
-					deps: [MockBackend, BaseRequestOptions]
-				},
 				CustomHttpHandlersService,
 				{
 					provide: PublicDataService,
 					useFactory: (http, window, handlers) => new PublicDataService(http, window, handlers),
-					deps: [Http, 'Window', CustomHttpHandlersService]
+					deps: [HttpClient, 'Window', CustomHttpHandlersService]
 				},
 				{
 					provide: ServerStaticDataService,
 					useFactory: (http, window, handlers) => new ServerStaticDataService(http, window, handlers),
-					deps: [Http, 'Window', CustomHttpHandlersService]
+					deps: [HttpClient, 'Window', CustomHttpHandlersService]
 				},
 				{
 					provide: WebsocketService,
@@ -66,12 +58,15 @@ describe('DashboardIntroComponent', () => {
 			this.serverStaticDataSrv = TestBed.get(ServerStaticDataService) as ServerStaticDataService;
 			this.publicDataSrv = TestBed.get(PublicDataService) as PublicDataService;
 			this.translateService = TestBed.get(TranslateService) as TranslateService;
-			this.backend = TestBed.get(MockBackend) as MockBackend;
+			this.httpController = TestBed.get(HttpTestingController) as HttpTestingController;
 			done();
 		});
 	});
 
-	afterEach(() => this.backend.verifyNoPendingRequests());
+	afterEach(() => {
+		this.httpController.match((req: HttpRequest<any>): boolean => true).forEach((req: TestRequest) => req.flush({}));
+		this.httpController.verify();
+	});
 
 	it('should be defined', () => {
 		expect(this.component).toBeDefined();

@@ -2,8 +2,16 @@ import { Injectable, Inject } from '@angular/core';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { CustomDeferredService } from '../services/custom-deferred.service';
 
+/**
+ * Custom service worker service.
+ */
 @Injectable()
 export class CustomServiceWorkerService {
+
+	/**
+	 * @param emitter Event Emitter SErvice
+	 * @param window Window - window reference
+	 */
 	constructor(
 		private emitter: EventEmitterService,
 		@Inject('Window') private window: Window
@@ -12,10 +20,19 @@ export class CustomServiceWorkerService {
 		this.initializeServiceWorker();
 	}
 
+	/**
+	 * Service worker instance.
+	 */
 	private serviceWorker: any = this.window.navigator.serviceWorker;
 
+	/**
+	 * Service worker registration,
+	 */
 	private serviceWorkerRegistration: any;
 
+	/**
+	 * Registers service worker.
+	 */
 	private registerServiceWorker(): Promise<boolean> {
 		const def = new CustomDeferredService<boolean>();
 		if (this.serviceWorker) {
@@ -34,6 +51,9 @@ export class CustomServiceWorkerService {
 		return def.promise;
 	}
 
+	/**
+	 * Unregisters service worker.
+	 */
 	private unregisterServiceWorker(): Promise<boolean> {
 		const def = new CustomDeferredService<boolean>();
 		if (this.serviceWorker) {
@@ -52,8 +72,14 @@ export class CustomServiceWorkerService {
 		return def.promise;
 	}
 
+	/**
+	 * Event emitter subscription.
+	 */
 	private emitterSubscription: any;
 
+	/**
+	 * Subscribe to Event emitter events.
+	 */
 	private emitterSubscribe(): void {
 		this.emitterSubscription = this.emitter.getEmitter().subscribe((message: any) => {
 			console.log('CustomServiceWorkerService consuming event:', JSON.stringify(message));
@@ -65,10 +91,16 @@ export class CustomServiceWorkerService {
 		});
 	}
 
+	/**
+	 * Unsubscribe from event emitter events.
+	 */
 	private emitterUnsubscribe(): void {
 		this.emitterSubscription.unsubscribe();
 	}
 
+	/**
+	 * Initializes service worker.
+	 */
 	public initializeServiceWorker(): void {
 		this.registerServiceWorker().then(() => {
 			this.emitterSubscribe();
@@ -78,12 +110,19 @@ export class CustomServiceWorkerService {
 		});
 	}
 
+	/**
+	 * Deinitializes service worker.
+	 */
 	private deinitializeServiceWorker(): void {
 		this.unregisterServiceWorker().then(() => {
 			this.emitter.emitEvent({serviceWorker: 'unregistered'});
 		});
 	}
 
+	/**
+	 * Disables service worker.
+	 * Unregisters and unsubscribes from Event emitter events.
+	 */
 	public disableServiceWorker(): void {
 		this.unregisterServiceWorker().then(() => {
 			this.emitterUnsubscribe();
@@ -91,6 +130,9 @@ export class CustomServiceWorkerService {
 		});
 	}
 
+	/**
+	 * Resolves if service worker is registered.
+	 */
 	public isServiceWorkerRegistered(): boolean {
 		return this.serviceWorker && typeof this.serviceWorkerRegistration !== 'undefined';
 	}
