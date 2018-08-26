@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
+/**
+ * Lazily loaded component.
+ */
 @Component({
 	selector: 'lazy-component',
 	templateUrl: '/public/app/views/lazy.html',
@@ -9,14 +12,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class LazyComponent implements OnInit, OnDestroy {
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
-/*
-*	component lifecycle
-*/
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit(): void {
 		console.log('ngOnInit: LazyComponent initialized');
 	}
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: LazyComponent destroyed');
 		if (this.subscriptions.length) {

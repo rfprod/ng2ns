@@ -5,15 +5,25 @@ import { Router } from '@angular/router';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { UserService } from '../services/user.service';
 
+/**
+ * Application login component.
+ */
 @Component({
-	selector: 'dashboard-login',
-	templateUrl: '/public/app/views/dashboard-login.html',
+	selector: 'app-login',
+	templateUrl: '/public/app/views/app-login.html',
 	host: {
 		class: 'mat-body-1'
 	}
 })
-export class DashboardLoginComponent implements OnInit, OnDestroy {
+export class AppLoginComponent implements OnInit, OnDestroy {
 
+	/**
+	 * @param el Element reference
+	 * @param emitter Event emitter service - components interaction
+	 * @param fb Form builder
+	 * @param router Router - application router
+	 * @param userService User service - browser local storage wrapper
+	 */
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -31,9 +41,18 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
+	/**
+	 * Login form group.
+	 */
 	public loginForm: FormGroup;
+	/**
+	 * Resets login form.
+	 */
 	public resetForm(): void {
 		this.loginForm.reset({
 			email: null,
@@ -41,6 +60,9 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 		});
 		this.userService.ResetUser();
 	}
+	/**
+	 * Submits login form.
+	 */
 	public submitForm(): void {
 		console.log('SUBMIT', this.loginForm);
 		if (this.loginForm.valid) {
@@ -51,16 +73,25 @@ export class DashboardLoginComponent implements OnInit, OnDestroy {
 			this.errorMessage = 'Invalid form input';
 		}
 	}
+	/**
+	 * UI error message.
+	 */
 	public errorMessage: string;
 
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit(): void {
-		console.log('ngOnInit: DashboardLoginComponent initialized');
+		console.log('ngOnInit: AppLoginComponent initialized');
 		this.emitter.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'hide'});
 		this.emitter.emitSpinnerStopEvent();
 	}
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy(): void {
-		console.log('ngOnDestroy: DashboardLoginComponent destroyed');
+		console.log('ngOnDestroy: AppLoginComponent destroyed');
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

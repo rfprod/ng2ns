@@ -5,6 +5,9 @@ import { EventEmitterService } from '../services/event-emitter.service';
 declare let d3: any;
 declare let Datamap: any;
 
+/**
+ * Dashboard map component.
+ */
 @Component({
 	selector: 'dashboard-map',
 	templateUrl: '/public/app/views/dashboard-map.html',
@@ -13,6 +16,11 @@ declare let Datamap: any;
 	}
 })
 export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
+
+	/**
+	 * @param el Element reference
+	 * @param emitter Event emitter service - components interaction
+	 */
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService
@@ -20,19 +28,30 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
-/*
-*	map form
-*/
+	/**
+	 * Map form data.
+	 */
 	public formData: any = {
 		country: '' as string,
 		regions: '' as string
 	};
+	/**
+	 * Selected geo ids: countries, regions.
+	 */
 	private selectedGeoIDs: any = { // store codes (classes of selected svg paths for form -> map feedback)
 		country: '' as string,
 		regions: [] as string[]
 	};
+	/**
+	 * Selects country.
+	 * @param value country name
+	 * @param geoID country geo id
+	 */
 	public selectCountry(value: string, geoID: string): void {
 		console.log('select country');
 		// do not reselect country if already selected
@@ -44,6 +63,11 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.selectedGeoIDs.regions = [];
 		}
 	}
+	/**
+	 * Selects region.
+	 * @param value region name
+	 * @param geoID region geo id
+	 */
 	public selectRegion(value: string, geoID: string): void {
 		console.log('select region: value =', value, ', geoID =', geoID);
 		let currentlySelectedRegions = this.formData.regions;
@@ -59,9 +83,10 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.formData.regions = currentlySelectedRegions;
 		}
 	}
-/*
-* map
-*/
+
+	/**
+	 * Map markers: factories.
+	 */
 	public factories: any[] = [
 		{ lng: 128.1445, lat: 59.62333, name: 'factory 1', description: 'factory 1 description' },
 		{ lng: 91.63147, lat: 59.46183, name: 'factory 2', description: 'factory 2 description' },
@@ -69,15 +94,27 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		{ lng: 55.54688, lat: 59.80063, name: 'factory 4', description: 'factory 4 description' },
 		{ lng: 36.73828, lat: 59.62333, name: 'factory 5', description: 'factory 5 description' }
 	];
+	/**
+	 * Map instance.
+	 */
 	private map: any;
+	/**
+	 * Map regisons.
+	 */
 	public regions: any[] = ['world', 'rus'];
+	/**
+	 * Selected map id.
+	 */
 	public selectedMapId: number = 0;
+	/**
+	 * Returns selected map code name.
+	 */
 	public selectedMap(): string {
-		/*
-		*	returns selected map code name
-		*/
 		return this.regions[this.selectedMapId];
 	}
+	/**
+	 * Selects map.
+	 */
 	public selectMap(mapCode: string): void {
 		const mapId = this.regions.indexOf(mapCode);
 		if (mapId !== -1) {
@@ -85,6 +122,9 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.drawMap();
 		}
 	}
+	/**
+	 * Shows marker tooltip.
+	 */
 	public showMarkerToolip(data: any) {
 		/*
 		*	use already existing tooltip
@@ -95,6 +135,9 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		d3.select('.datamaps-hoverover')
 			.style('display', 'block');
 	}
+	/**
+	 * Draws markers.
+	 */
 	public drawMarkers(datamap: any, s: number = 1): void {
 		datamap.svg.selectAll('.mark').remove();
 		datamap.svg.select('.datamaps-subunits').selectAll('.mark')
@@ -115,6 +158,9 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 				this.showMarkerToolip(data);
 			});
 	}
+	/**
+	 * Draws map.
+	 */
 	public drawMap(): void {
 		/*
 		*	remove map if present first
@@ -321,7 +367,14 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 	}
 
+	/**
+	 * Window resize host listener.
+	 * @param event window resize event
+	 */
 	@HostListener('window:resize', ['$event'])
+	/**
+	 * Window resize event handler.
+	 */
 	private onResize(event) {
 		// console.log('onResize, event', event);
 		/*
@@ -330,9 +383,9 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.drawMap();
 	}
 
-/*
-*	component lifecycle
-*/
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit(): void {
 		console.log('ngOnInit: DashboardMapComponent initialized');
 		this.emitter.emitSpinnerStartEvent();
@@ -348,9 +401,15 @@ export class DashboardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.emitter.emitSpinnerStopEvent();
 	}
+	/**
+	 * Lifecycle hook called after component view is initialized.
+	 */
 	public ngAfterViewInit() {
 		this.drawMap();
 	}
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: DashboardMapComponent destroyed');
 		if (this.subscriptions.length) {

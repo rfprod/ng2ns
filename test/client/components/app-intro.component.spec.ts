@@ -21,13 +21,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
 import { CustomMaterialModule } from '../../../public/app/modules/custom-material.module';
 
-import { DashboardIntroComponent } from '../../../public/app/components/dashboard-intro.component';
+import { AppIntroComponent } from '../../../public/app/components/app-intro.component';
 
-describe('DashboardIntroComponent', () => {
+describe('AppIntroComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ NvD3Component, DashboardIntroComponent, NvD3Component ],
+			declarations: [ NvD3Component, AppIntroComponent, NvD3Component ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot() ],
 			providers: [
 				{ provide: 'Window', useValue: window },
@@ -51,7 +51,7 @@ describe('DashboardIntroComponent', () => {
 			],
 			schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 		}).compileComponents().then(() => {
-			this.fixture = TestBed.createComponent(DashboardIntroComponent);
+			this.fixture = TestBed.createComponent(AppIntroComponent);
 			this.component = this.fixture.componentInstance;
 			this.eventEmitterSrv = TestBed.get(EventEmitterService) as EventEmitterService;
 			spyOn(this.eventEmitterSrv, 'emitEvent').and.callThrough();

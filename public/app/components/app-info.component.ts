@@ -3,6 +3,9 @@ import { EventEmitterService } from '../services/event-emitter.service';
 
 import { IBadge } from '../interfaces/index';
 
+/**
+ * Application infor component.
+ */
 @Component({
 	selector: 'app-info',
 	template: `
@@ -16,13 +19,25 @@ import { IBadge } from '../interfaces/index';
 })
 export class AppInfoComponent implements OnInit, OnDestroy {
 
+	/**
+	 * @param emitter Event emitter service - components interaction
+	 */
 	constructor(
 		private emitter: EventEmitterService
 	) {}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
+	/**
+	 * Indicates if info should be hidden or not.
+	 */
 	public hideInfo: boolean = true;
+	/**
+	 * Badges.
+	 */
 	public badges: IBadge[] = [
 		{
 			title: 'Angular - (commonly referred to as "Angular 2+" or "Angular 2") is a TypeScript-based open-source front-end web application platform led by the Angular Team at Google and by a community of individuals and corporations to address all of the parts of the developer\'s workflow while building complex web applications. Angular is a complete rewrite from the same team that built AngularJS.',
@@ -36,6 +51,9 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 		}
 	];
 
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit() {
 		console.log('ngOnInit: AppInfoComponent initialized');
 		const sub: any = this.emitter.getEmitter().subscribe((event: any) => {
@@ -45,6 +63,9 @@ export class AppInfoComponent implements OnInit, OnDestroy {
 		});
 		this.subscriptions.push(sub);
 	}
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: AppInfoComponent destroyed');
 		if (this.subscriptions.length) {

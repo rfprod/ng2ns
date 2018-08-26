@@ -8,15 +8,25 @@ import { WebsocketService } from '../services/websocket.service';
 
 declare let d3: any;
 
+/**
+ * Application intro component.
+ */
 @Component({
-	selector: 'dashboard-intro',
-	templateUrl: '/public/app/views/dashboard-intro.html',
+	selector: 'app-intro',
+	templateUrl: '/public/app/views/app-intro.html',
 	host: {
 		class: 'mat-body-1'
 	}
 })
-export class DashboardIntroComponent implements OnInit, OnDestroy {
+export class AppIntroComponent implements OnInit, OnDestroy {
 
+	/**
+	 * @param el Element reference
+	 * @param emitter Event emitter service - components interaction
+	 * @param websocket Websocket service - generates websocker urls
+	 * @param serverStaticDataService Server static data service - retrieves server static data over API
+	 * @param publicDataService Public data service - retrieves public data over API
+	 */
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -27,11 +37,23 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
+	/**
+	 * Component UI title.
+	 */
 	public title: string = 'Ng2NodeStarter (Ng2NS)';
+	/**
+	 * Component UI description.
+	 */
 	public description: string = 'Angular, NodeJS';
 
+	/**
+	 * D3 chart options.
+	 */
 	public chartOptions: { chart } = {
 		chart: {
 			type: 'pieChart',
@@ -57,6 +79,9 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			},
 		},
 	};
+	/**
+	 * Application usage data.
+	 */
 	public appUsageData: any[] = [
 		{
 			key: 'Default',
@@ -79,14 +104,26 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			y: 1,
 		}
 	];
+	/**
+	 * Server data.
+	 */
 	public serverData: { static, dynamic } = {
 		static: [] as any[],
 		dynamic: [] as any[],
 	};
 
+	/**
+	 * Websocket endpoint.
+	 */
 	private wsEndpoint: string = '/api/app-diag/dynamic';
+	/**
+	 * Websocket
+	 */
 	private ws: WebSocket = new WebSocket(this.websocket.generateUrl(this.wsEndpoint));
 
+	/**
+	 * Gets server static data.
+	 */
 	private getServerStaticData(): Promise<void> {
 		const def = new CustomDeferredService<void>();
 		this.serverStaticDataService.getData().subscribe(
@@ -101,6 +138,9 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		);
 		return def.promise;
 	}
+	/**
+	 * Gets public data.
+	 */
 	private getPublicData(): Promise<void> {
 		const def = new CustomDeferredService<void>();
 		this.publicDataService.getData().subscribe(
@@ -117,7 +157,13 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		return def.promise;
 	}
 
+	/**
+	 * Indicates if custom modal should be shown or not.
+	 */
 	public showModal: boolean = false;
+	/**
+	 * Toggles custom modal visibility.
+	 */
 	public toggleModal(): void {
 		if (this.showModal) {
 			this.ws.send(JSON.stringify({action: 'pause'}));
@@ -125,10 +171,16 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 		this.showModal = (!this.showModal) ? true : false;
 	}
 
+	/**
+	 * D3 chart view child reference.
+	 */
 	@ViewChild ('chart') private nvd3: any;
 
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit(): void {
-		console.log('ngOnInit: DashboardIntroComponent initialized');
+		console.log('ngOnInit: AppIntroComponent initialized');
 		this.emitter.emitSpinnerStartEvent();
 		this.emitter.emitEvent({appInfo: 'show'});
 
@@ -175,8 +227,11 @@ export class DashboardIntroComponent implements OnInit, OnDestroy {
 			.catch((error: any) => console.log('dashboard intro init requests error'));
 
 	}
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy(): void {
-		console.log('ngOnDestroy: DashboardIntroComponent destroyed');
+		console.log('ngOnDestroy: AppIntroComponent destroyed');
 		this.ws.close();
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {

@@ -24,8 +24,8 @@ import { CustomMaterialModule } from './modules/custom-material.module';
 import { AppComponent } from './app.component';
 import { AppNavComponent } from './components/app-nav.component';
 import { AppInfoComponent } from './components/app-info.component';
-import { DashboardIntroComponent } from './components/dashboard-intro.component';
-import { DashboardLoginComponent } from './components/dashboard-login.component';
+import { AppIntroComponent } from './components/app-intro.component';
+import { AppLoginComponent } from './components/app-login.component';
 import { DashboardDetailsComponent } from './components/dashboard-details.component';
 import { DashboardMapComponent } from './components/dashboard-map.component';
 
@@ -47,7 +47,7 @@ import { CustomPreloadingStrategy } from './custom-preloading.strategy';
 import { NvD3Component } from 'ng2-nvd3';
 
 @NgModule({
-	declarations: [ AppComponent, AppNavComponent, AppInfoComponent, DashboardIntroComponent, DashboardLoginComponent,
+	declarations: [ AppComponent, AppNavComponent, AppInfoComponent, AppIntroComponent, AppLoginComponent,
 									DashboardDetailsComponent, DashboardMapComponent, NvD3Component
 								],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,

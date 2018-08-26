@@ -7,6 +7,9 @@ import { TranslateService } from '../translate/translate.service';
 
 import { UsersListService } from '../services/users-list.service';
 
+/**
+ * Dashboard details component.
+ */
 @Component({
 	selector: 'dashboard-details',
 	templateUrl: '/public/app/views/dashboard-details.html',
@@ -16,6 +19,12 @@ import { UsersListService } from '../services/users-list.service';
 })
 export class DashboardDetailsComponent implements OnInit, OnDestroy {
 
+	/**
+	 * @param el Element reference
+	 * @param emitter Event emitter service - components interaction
+	 * @param usersListService Users list service - retrieves users list over API
+	 * @param translateService Translate service - UI translation to predefined languages
+	 */
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -25,10 +34,19 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		// console.log('this.el.nativeElement:', this.el.nativeElement);
 	}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
+	/**
+	 * Users list retrieved over api.
+	 */
 	public usersList: any[] = [];
 
+	/**
+	 * Retrieves users list over api.
+	 */
 	private getUsersList(): Promise<void> {
 		const def = new CustomDeferredService<void>();
 		this.usersListService.getUsersList().subscribe(
@@ -44,23 +62,38 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		return def.promise;
 	}
 
+	/**
+	 * Mouse entered event handler.
+	 */
 	public mouseEntered(event) {
 		console.log('mouse enter', event);
 	}
+	/**
+	 * Mouse left event handler.
+	 */
 	public mouseLeft(event) {
 		console.log('mouse leave', event);
 	}
 
-/*
-*	search
-*/
+	/**
+	 * Filters search value.
+	 */
 	private searchValue: string;
+	/**
+	 * Filters search query getter.
+	 */
 	public get searchQuery(): string {
 		return this.searchValue;
 	}
+	/**
+	 * Filters search query setter.
+	 */
 	public set searchQuery(val: string) {
 		this.searchValue = val;
 	}
+	/**
+	 * Hides element conditionally.
+	 */
 	public hideElement(index) {
 		console.log(' > hideElement:', index, this.usersList[index].firstName);
 		const result = this.usersList[index].firstName.indexOf(this.searchValue) === -1;
@@ -68,19 +101,28 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		return (this.searchValue) ? result : false;
 	}
 
-/*
-*	sort
-*/
+	/**
+	 * Filters sort value.
+	 */
 	private sortValue: string;
+	/**
+	 * Filters sort value getter.
+	 */
 	public get sortByCriterion(): string {
 		return this.sortValue;
 	}
+	/**
+	 * Filters sort value setter.
+	 */
 	public set sortByCriterion(val: string) {
 		if (this.sortValue !== val) { // sort if value changed
 			this.sortValue = val;
 			this.performSorting(val);
 		}
 	}
+	/**
+	 * Performs sorting based on provided value.
+	 */
 	private performSorting(val: string): void {
 		if (val === 'registered') {
 			this.usersList.sort((a, b) => parseInt(a[val], 10) - parseInt(b[val], 10));
@@ -98,16 +140,25 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 		}
 	}
 
-/*
-*	datepicker
-*/
+	/**
+	 * Datepicker date.
+	 */
 	public pickerDate: string = new Date().toISOString();
+	/**
+	 * Datepicker view child reference.
+	 */
 	@ViewChild('datePicker') private datePicker: MatDatepicker<string>;
+	/**
+	 * Calls datepicker.
+	 */
 	public showDatePicker(event: any): void {
 		console.log('showDatePicker', this.datePicker);
 		this.datePicker.open();
 	}
 
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit() {
 		console.log('ngOnInit: DashboardDetailsComponent initialized');
 		this.emitter.emitSpinnerStartEvent();
@@ -125,6 +176,9 @@ export class DashboardDetailsComponent implements OnInit, OnDestroy {
 			})
 			.catch((error: string) => console.log('dashboard details init requests error'));
 	}
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy() {
 		console.log('ngOnDestroy: DashboardDetailsComponent destroyed');
 		if (this.subscriptions.length) {

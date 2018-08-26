@@ -3,8 +3,8 @@ import { APP_ROUTES } from '../../public/app/app.routes';
 import { AuthGuardGeneral } from '../../public/app/services/auth-guard-general.service';
 import { AnonimousGuard } from '../../public/app/services/anonimous-guard.service';
 
-import { DashboardIntroComponent } from '../../public/app/components/dashboard-intro.component';
-import { DashboardLoginComponent } from '../../public/app/components/dashboard-login.component';
+import { AppIntroComponent } from '../../public/app/components/app-intro.component';
+import { AppLoginComponent } from '../../public/app/components/app-login.component';
 import { DashboardDetailsComponent } from '../../public/app/components/dashboard-details.component';
 import { DashboardMapComponent } from '../../public/app/components/dashboard-map.component';
 
@@ -21,8 +21,8 @@ describe('APP_ROUTES', () => {
 
 	it('should have proper routes defined', () => {
 		expect(this.routes).toEqual([
-			{ path: 'intro', component: DashboardIntroComponent },
-			{ path: 'login', component: DashboardLoginComponent, canActivate: [AnonimousGuard] },
+			{ path: 'intro', component: AppIntroComponent },
+			{ path: 'login', component: AppLoginComponent, canActivate: [AnonimousGuard] },
 			{ path: 'data', component: DashboardDetailsComponent, canActivate: [AuthGuardGeneral] },
 			{ path: 'map', component: DashboardMapComponent, canActivate: [AuthGuardGeneral] },
 			{ path: 'lazy', loadChildren: 'lazy.module#LazyModule', data: { preload: false } },

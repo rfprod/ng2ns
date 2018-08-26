@@ -6,6 +6,9 @@ import { CustomServiceWorkerService } from '../services/custom-service-worker.se
 import { TranslateService } from '../translate/index';
 import { UserService } from '../services/user.service';
 
+/**
+ * Application navigation component.
+ */
 @Component({
 	selector: 'app-nav',
 	templateUrl: '/public/app/views/app-nav.html',
@@ -15,6 +18,15 @@ import { UserService } from '../services/user.service';
 })
 export class AppNavComponent implements OnInit, OnDestroy {
 
+	/**
+	 * @param el Element reference
+	 * @param emitter Event emitter service - components interaction
+	 * @param serviceWorker Custom Service Worker Service - controls service worker
+	 * @param userService User service - browser local storage wrapper
+	 * @param router Router - application router
+	 * @param translate Translate service - UI translation to predefined languages
+	 * @param window Window - window reference
+	 */
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,
@@ -25,17 +37,34 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		@Inject('Window') private window: Window
 	) {}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
+	/**
+	 * Navigation buttons state.
+	 */
 	public navButtonsState: boolean[] = [false, false, false, false, false, false];
 
+	/**
+	 * Indicates if navbar should be hidden.
+	 */
 	public hideNavbar: boolean = false;
 
+	/**
+	 * Supported languages.
+	 */
 	public supportedLanguages: any[] = [
 		{ key: 'en', name: 'English' },
 		{ key: 'ru', name: 'Russian' }
 	];
 
+	/**
+	 * Switches navigation buttons.
+	 * @param event router event
+	 * @param [path] path
+	 */
 	public switchNavButtons(event: any, path?: string): void {
 		/*
 		*	accepts router event, and optionally path which contains name of activated path
@@ -79,6 +108,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		console.log('navButtonsState:', this.navButtonsState);
 	}
 
+	/**
+	 * Emits websocker close event.
+	 */
 	public stopWS(): void {
 		/*
 		*	this function should be executed before user is sent to any external resource
@@ -88,20 +120,36 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		this.emitter.emitEvent({websocket: 'close'});
 	}
 
+	/**
+	 * Logs user out.
+	 */
 	public logOut(): void {
-		const token = this.userService.getUser().token;
 		this.userService.SaveUser({ token: '' });
 		this.router.navigate(['']);
 	}
 
+	/**
+	 * Selects language.
+	 * @param key language key
+	 */
 	public selectLanguage(key: string): void {
 		this.emitter.emitEvent({lang: key});
 	}
+	/**
+	 * Resolves if language is seleted.
+	 * @param key language key
+	 */
 	public isLanguageSelected(key: string): boolean {
 		return key === this.translate.currentLanguage;
 	}
 
+	/**
+	 * Service worker registration state.
+	 */
 	public serviceWorkerRegistered: boolean = true; // registered by default
+	/**
+	 * Toggles service worker..
+	 */
 	public toggleServiceWorker(): void {
 		if (this.serviceWorkerRegistered) {
 			this.emitter.emitEvent({serviceWorker: 'deinitialize'});
@@ -110,6 +158,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Subscribes to event emitter events.
+	 */
 	private emitterSubscribe(): void {
 		const sub: any = this.emitter.getEmitter().subscribe((event: any) => {
 			console.log('AppNavComponent consuming event:', event);
@@ -122,6 +173,9 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(sub);
 	}
 
+	/**
+	 * Subscribes to router events.
+	 */
 	private routerSubscribe(): void {
 		const sub: any = this.router.events.subscribe((event: any) => {
 			// console.log(' > ROUTER EVENT:', event);
@@ -133,12 +187,17 @@ export class AppNavComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(sub);
 	}
 
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit(): void {
 		console.log('ngOnInit: AppNavComponent initialized');
 		this.emitterSubscribe();
 		this.routerSubscribe();
 	}
-
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppNavComponent destroyed');
 		if (this.subscriptions.length) {

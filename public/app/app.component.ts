@@ -28,6 +28,16 @@ declare let $: JQueryStatic;
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+	/**
+	 * @param el Element reference
+	 * @param emitter Event emitter service - components interaction
+	 * @param translate Translate service - UI translation to predefined languages
+	 * @param router Router - application router
+	 * @param matIconRegistry Material icon registry - icons registry for registering icons for usage within mat-icon selector
+	 * @param dateAdapter Date adapter - used by datepickers
+	 * @param serviceWorker Custom Service Worker Service - controls service worker
+	 * @param window Window - window reference
+	 */
 	constructor(
 		private el: ElementRef,
 		private emitter: EventEmitterService,

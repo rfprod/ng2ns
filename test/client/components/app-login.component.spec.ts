@@ -16,17 +16,17 @@ import { CustomMaterialModule } from '../../../public/app/modules/custom-materia
 
 import { DummyComponent } from '../mocks/index';
 
-import { DashboardLoginComponent } from '../../../public/app/components/dashboard-login.component';
+import { AppLoginComponent } from '../../../public/app/components/app-login.component';
 
-describe('DashboardLoginComponent', () => {
+describe('AppLoginComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ DashboardLoginComponent, DummyComponent ],
+			declarations: [ AppLoginComponent, DummyComponent ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, FormsModule, ReactiveFormsModule,
 				CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot(),
 				RouterTestingModule.withRoutes([
-					{path: 'login', component: DashboardLoginComponent},
+					{path: 'login', component: AppLoginComponent},
 					{path: 'profile', component: DummyComponent}
 				])
 			],
@@ -37,7 +37,7 @@ describe('DashboardLoginComponent', () => {
 			],
 			schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 		}).compileComponents().then(() => {
-			this.fixture = TestBed.createComponent(DashboardLoginComponent);
+			this.fixture = TestBed.createComponent(AppLoginComponent);
 			this.component = this.fixture.componentInstance;
 			spyOn(this.component.router, 'navigate').and.callThrough();
 			this.eventEmitterSrv = TestBed.get(EventEmitterService) as EventEmitterService;
