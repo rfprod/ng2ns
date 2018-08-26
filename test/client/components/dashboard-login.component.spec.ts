@@ -31,7 +31,7 @@ describe('DashboardLoginComponent', () => {
 				])
 			],
 			providers: [
-				{ provide: 'Window', useValue: { location: { host: 'localhost', protocol: 'http' } } },
+				{ provide: 'Window', useValue: { location: { host: 'localhost', protocol: 'http' } }, localStorage: window.localStorage },
 				EventEmitterService,
 				UserService
 			],

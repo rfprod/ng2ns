@@ -24,7 +24,7 @@ describe('AppNavComponent', () => {
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ AppNavComponent, DummyComponent ],
-			imports: [ NoopAnimationsModule, FlexLayoutModule, CustomMaterialModule, TranslateModule.forRoot(),
+			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, FlexLayoutModule, CustomMaterialModule, TranslateModule.forRoot(),
 				RouterTestingModule.withRoutes([
 					{path: 'intro', component: DummyComponent},
 					{path: 'login', component: DummyComponent},
