@@ -205,7 +205,7 @@ module.exports = (gulp, runSequence, exec, cwd) => {
 		const installerOptions = {
 			src: `${cwd}/desktop/nix/build/transport-linux-x64`,
 			dest: `${cwd}/desktop/nix/dist`,
-			maintainer: 'Transport',
+			maintainer: 'Ng2NS',
 			arch: 'amd64',
 			categories: ['Internet'],
 			lintianOverrides: ['changelog-file-missing-in-native-package']
@@ -225,7 +225,7 @@ module.exports = (gulp, runSequence, exec, cwd) => {
 		const installerOptions = {
 			src: `${cwd}/desktop/osx/build/transport-darwin-x64`,
 			dest: `${cwd}/desktop/osx/dist`,
-			maintainer: 'Transport',
+			maintainer: 'Ng2NS',
 			arch: 'amd64',
 			categories: ['Internet'],
 			lintianOverrides: ['changelog-file-missing-in-native-package']
