@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { Router, RouteConfigLoadStart } from '@angular/router';
 import { EventEmitterService } from './services/event-emitter.service';
-import { TranslateService } from './translate/index';
+import { TranslateService } from './modules/translate/index';
 import { CustomServiceWorkerService } from './services/custom-service-worker.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { MatIconRegistry, DateAdapter } from '@angular/material';
-
-declare let $: JQueryStatic;
 
 /**
  * Application root component.
@@ -97,10 +95,21 @@ export class AppComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Removes UI initialization object, kind of splashscreen.
+	 */
+	private removeUIinit(): void {
+		const initUIobj: HTMLElement = this.window.document.getElementById('init');
+		console.log('initUIobj', initUIobj);
+		if (initUIobj) {
+			initUIobj.parentNode.removeChild(initUIobj);
+		}
+	}
+
 	public ngOnInit(): void {
 		console.log('ngOnInit: AppComponent initialized');
 
-		$('#init').remove(); // remove initialization text
+		this.removeUIinit();
 
 		// listen event emitter control messages
 		let sub: any = this.emitter.getEmitter().subscribe((message: any) => {

@@ -171,6 +171,14 @@ const fs = require('fs');
 const spawn = require('child_process').spawn;
 
 /**
+ * @name exec
+ * @constant
+ * @summary Node child process command executor
+ * @description Node child process command executor
+ */
+const exec = require('child_process').exec;
+
+/**
  * @name node
  * @summary NodeJS client application server instance.
  */
@@ -187,6 +195,14 @@ let tsc;
  * @summary Protractor instance.
  */
 let protractor;
+
+/**
+ * @name cwd
+ * @constant
+ * @summary Current directory of the main Server script - server.js
+ * @description Correct root path for all setups, it should be used for all file references for the server and its modules like filePath: cwd + '/actual/file.extension'. Built Electron app contains actual app in resources/app(.asar) subdirectory, so it is essential to prefer __dirname usage over process.cwd() to get the value.
+ */
+const cwd = __dirname;
 
 /**
  * @name hashsum
@@ -597,129 +613,11 @@ gulp.task('default', (done) => {
 	runSequence('lint', 'compile-and-build', 'server', 'watch', done);
 });
 
-/*
-*	build electron app dist for windows, linux
-*
-*	requires mono installation for Ubuntu, see here http://www.mono-project.com/download/
-*
-*	NOTE before packing/building: package.json must contain
-*	{...
-*		"main": "main.js",
-*	...}
-*
-*	after installation execute: gulp electron-packager-win
-*
-*	after previous task is completed execute: gulp electron-winstaller
-*	or use a single sequence of tasks, execure: gulp build-electron-win
-*
-*	when running on windows port 8080 may be in use, execute the following:
-*	netstat -ano | findstr 8080
-*	taskkill /F /PID <fond_task_PID>
-*
-*	electronPackagerIgnore is an array of regexps to be ignored on electron app packaging
-*/
-const electronPackagerIgnore = [ // exclude
-	/\/desktop/, // builds and dists
-	/\/public\/app\/(components|directives|scss|services|translate|.*\.ts|.*\.js)/, // client app source code
-	/\/logs/, // logs
-	/\/node_modules\/(@angular|gulp.*|karma.*|jasmine.*|mocha.*|@types|(remap-)?istanbul)/, // not needed node_modules
-	/\/test\/(client|e2e|server\/.*\.js|.*\.js)/, // tests source code
-	/\/topoData/, // intermediary project build files
-	/\/build-system/, // gulp-based build system
-	/\/.*\.Dockerfile/, // docker configs
-	/\/\.(dockerignore|editorconfig|eslintignore|eslintrc\.json|gitattributes|gitignore)/, // configuration files matching pattern: .config_filename
-	/\/(tsconfig|tslint|jsdoc*)\.json/, // json configuration
-	/\/README\.md/, // readme
-	/\/.*\.sh/, // bash scripts
-	/\/systemjs\..*/ // systemjs configs
-	// /\/package(-lock)?\.json/ // package.json and package-lock.json
-];
-gulp.task('electron-packager-win', (done) => {
-	const electronPackager = require('electron-packager');
-	electronPackager({
-		dir: './',
-		out: './desktop/win/build',
-		ignore: electronPackagerIgnore,
-		overwrite: true,
-		asar: true,
-		arch: 'x64',
-		platform: 'win32',
-		win32metadata: {
-			'requested-execution-level': 'requireAdministrator' // asInvoker, hightstAvailable, requireAdministrator
-		}
-	}).then(
-		(appPaths) => {
-			console.log(`package successful, appPaths ${appPaths}`);
-			done();
-		},
-		(error) => {
-			console.log(`error packaging electron app ${error}`);
-			throw error;
-		}
-	);
-});
-gulp.task('electron-packager-nix', (done) => {
-	const electronPackager = require('electron-packager');
-	electronPackager({
-		dir: './',
-		out: './desktop/nix/build',
-		ignore: electronPackagerIgnore,
-		overwrite: true,
-		asar: true,
-		arch: 'x64',
-		platform: 'linux'
-	}).then(
-		(appPaths) => {
-			console.log(`package successful, appPaths ${appPaths}`);
-			done();
-		},
-		(error) => {
-			console.log(`error packaging electron app ${error}`);
-			throw error;
-		}
-	);
-});
-gulp.task('electron-winstaller', (done) => {
-	const electronWinstaller = require('electron-winstaller');
-	electronWinstaller.createWindowsInstaller({
-		appDirectory: './desktop/win/build/ng2ns-win32-x64',
-		outputDirectory: './desktop/win/dist',
-		authors: 'rfprod'
-	}).then(
-		() => {
-			console.log('build successful');
-			done();
-		},
-		(error) => {
-			console.log(`error building electron app for windows ${error}`);
-			throw error;
-		}
-	);
-});
-gulp.task('electron-debinstaller', (done) => {
-	const electronDebInstaller = require('electron-installer-debian');
-	electronDebInstaller({
-		src: './desktop/nix/build/ng2ns-linux-x64',
-		dest: './desktop/nix/dist',
-		maintainer: 'rfprod',
-		arch: 'amd64',
-		categories: ['Internet'],
-		lintianOverrides: ['changelog-file-missing-in-native-package']
-	}, (error, options) => {
-		if (error) {
-			console.log(`error building electron app for debian ${error}`);
-			throw error;
-		}
-		console.log(`successful build with options ${options}`);
-		done();
-	});
-});
-gulp.task('build-electron-win', (done) => {
-	runSequence('compile-and-build-electron', 'electron-packager-win', 'electron-winstaller', done);
-});
-gulp.task('build-electron-deb', (done) => {
-	runSequence('compile-and-build-electron', 'electron-packager-nix', 'electron-debinstaller', done);
-});
+/**
+ * @name electron-builds Electron build module import
+ * @see {@link module:build-system/modules/electron-builds}
+ */
+require('./build-system/modules/electron-builds')(gulp, runSequence, exec, cwd);
 
 process.on('exit', (code) => {
 	console.log(`PROCESS EXIT CODE ${code}`);

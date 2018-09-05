@@ -9,10 +9,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import { APP_ROUTES } from './app.routes';
-import { AuthGuardGeneral } from './services/auth-guard-general.service';
-import { AnonimousGuard } from './services/anonimous-guard.service';
 
 /*
 *	Some material components rely on hammerjs
@@ -20,6 +16,11 @@ import { AnonimousGuard } from './services/anonimous-guard.service';
 */
 import '../../node_modules/hammerjs/hammer.js';
 import { CustomMaterialModule } from './modules/custom-material.module';
+
+import { AuthGuardGeneral } from './services/auth-guard-general.service';
+import { AnonimousGuard } from './services/anonimous-guard.service';
+
+import { AppRoutingModuleWithProviders } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { AppNavComponent } from './components/app-nav.component';
@@ -29,7 +30,7 @@ import { AppLoginComponent } from './components/app-login.component';
 import { DashboardDetailsComponent } from './components/dashboard-details.component';
 import { DashboardMapComponent } from './components/dashboard-map.component';
 
-import { TranslateModule } from './translate/index';
+import { TranslateModule } from './modules/translate/index';
 
 import { CustomServiceWorkerService } from './services/custom-service-worker.service';
 import { CustomDeferredService } from './services/custom-deferred.service';
@@ -42,8 +43,6 @@ import { UserService } from './services/user.service';
 import { ServerStaticDataService } from './services/server-static-data.service';
 import { PublicDataService } from './services/public-data.service';
 
-import { CustomPreloadingStrategy } from './custom-preloading.strategy';
-
 import { NvD3Component } from 'ng2-nvd3';
 
 @NgModule({
@@ -52,12 +51,12 @@ import { NvD3Component } from 'ng2-nvd3';
 								],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,
 									HttpClientModule, TranslateModule.forRoot(),
-									RouterModule.forRoot(APP_ROUTES, { preloadingStrategy: CustomPreloadingStrategy })
+									AppRoutingModuleWithProviders
 								],
 	providers 	: [ { provide: APP_BASE_HREF, useValue: '/' }, { provide: LocationStrategy, useClass: PathLocationStrategy },
 									{ provide: 'Window', useValue: window }, CustomServiceWorkerService, CustomDeferredService,
 									CustomHttpHandlersService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral,
-									AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService, CustomPreloadingStrategy
+									AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService
 								],
 	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],
 	bootstrap 	: [ AppComponent ],

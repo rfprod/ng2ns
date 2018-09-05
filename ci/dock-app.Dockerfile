@@ -49,10 +49,10 @@ RUN apt-get -y update --fix-missing; \
 	npm uninstall @angular/animations @angular/cdk @angular/common @angular/compiler @angular/core \
 	@angular/flex-layout @angular/forms @angular/http @angular/material @angular/material-moment-adapter \
 	@angular/platform-browser @angular/platform-browser-dynamic @angular/router @types/core-js \
-	@types/hammerjs @types/jasmine @types/jquery @types/node components-font-awesome core-js d3 datamaps \
+	@types/hammerjs @types/jasmine @types/node components-font-awesome core-js d3 datamaps \
 	electron-squirrel-startup gulp gulp-autoprefixer gulp-concat gulp-cssnano gulp-eslint gulp-hashsum \
 	gulp-mocha gulp-plumber gulp-rename gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify \
-	gulp-util hammerjs jasmine-core jquery karma karma-redirect-preprocessor material-design-icon-fonts moment \
+	gulp-util hammerjs jasmine-core karma karma-redirect-preprocessor material-design-icon-fonts moment \
 	ng2-nvd3 nvd3 reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
 	web-animations-js zone.js --no-save --production --no-optional && \
 	npm uninstall -g gulp-cli typescript --save && \
@@ -61,16 +61,19 @@ RUN apt-get -y update --fix-missing; \
 	rm -rf ./public/app/components ./public/app/directives ./public/app/interfaces ./public/app/modules \
 	./public/app/pipes ./public/app/services ./public/app/translate ./public/app/scss \
 	./test/client ./test/e2e ./build-system ./topoData && \
+	find ./public/app/modules -type f -name "*.ts" -exec rm {} + && \
+	find ./public/app/modules -type f -name "*.scss" -exec rm {} + && \
 	find ./public/app -type f -name "*.ts" -exec rm {} + && \
 	find ./public/app -type f -name "*.js" -exec rm {} + && \
 	find ./public/app -type f -name "*.scss" -exec rm {} + && \
-	find ./ -type f -name "*.md" -exec rm {} + && \
-	find ./ -type f -name "*.sh" -exec rm {} + && \
 	find ./test -type f -name "*.js" -exec rm {} + && \
-	rm ./public/electron.preload.js ./main.js \
-	./gulpfile.js ./systemjs* ./*Dockerfile ./.dockerignore \
-	./.editorconfig ./.eslintignore ./.gitignore \
-	./*.json
+	find ./* -not -path "./node_modules/*" -not -path "./logs/*" -type f -name "*.md" -exec rm {} + && \
+	find ./* -not -path "./node_modules/*" -not -path "./logs/*" -type f -name "*.sh" -exec rm {} + && \
+	find ./* -not -path "./node_modules/*" -not -path "./logs/*" -type f -name "*.Dockerfile" -exec rm {} + && \
+	find ./* -not -path "./node_modules/*" -not -path "./logs/*" -type f -name "systemjs*" -exec rm {} + && \
+	find ./* -not -path "./node_modules/*" -not -path "./logs/*" -type f -name "*.json" -exec rm {} + && \
+	rm ./public/electron.preload.js ./main.js ./gulpfile.js \
+	./.dockerignore ./.editorconfig ./.eslintignore ./.gitignore
 
 # MULTISTAGE, use build from the previous stage, don't build anything, just copy and start, use lighter image
 

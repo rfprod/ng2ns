@@ -3,7 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { EventEmitterService } from '../services/event-emitter.service';
 import { CustomServiceWorkerService } from '../services/custom-service-worker.service';
-import { TranslateService } from '../translate/index';
+import { TranslateService } from '../modules/translate/index';
 import { UserService } from '../services/user.service';
 
 /**

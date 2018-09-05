@@ -9,7 +9,7 @@ import { EventEmitterService } from '../../../public/app/services/event-emitter.
 import { CustomServiceWorkerService } from '../../../public/app/services/custom-service-worker.service';
 import { UserService } from '../../../public/app/services/user.service';
 
-import { TranslateService, TranslateModule } from '../../../public/app/translate/index';
+import { TranslateService, TranslateModule } from '../../../public/app/modules/translate/index';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';

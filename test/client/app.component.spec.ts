@@ -8,7 +8,7 @@ import { EventEmitterService } from '../../public/app/services/event-emitter.ser
 import { CustomDeferredService } from '../../public/app/services/custom-deferred.service';
 import { CustomServiceWorkerService } from '../../public/app/services/custom-service-worker.service';
 
-import { TranslateService, TranslateModule } from '../../public/app/translate/index';
+import { TranslateService, TranslateModule } from '../../public/app/modules/translate/index';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../node_modules/hammerjs/hammer.js';
@@ -33,14 +33,15 @@ describe('AppComponent', () => {
 					provide: 'Window',
 					useValue: {
 						location: window.location,
+						document: window.document,
 						navigator: {
 							language: 'en',
 							languages: ['en'],
 							serviceWorker: window.navigator.serviceWorker
-						}
-					},
-					localStorage: window.localStorage,
-					sessionStorage: window.sessionStorage,
+						},
+						localStorage: window.localStorage,
+						sessionStorage: window.sessionStorage
+					}
 				},
 				CustomServiceWorkerService,
 				EventEmitterService

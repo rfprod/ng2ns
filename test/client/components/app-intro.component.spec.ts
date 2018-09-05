@@ -9,7 +9,7 @@ import { NvD3Component } from 'ng2-nvd3';
 
 import { EventEmitterService } from '../../../public/app/services/event-emitter.service';
 
-import { TranslateService, TranslateModule } from '../../../public/app/translate/index';
+import { TranslateService, TranslateModule } from '../../../public/app/modules/translate/index';
 
 import { CustomHttpHandlersService } from '../../../public/app/services/custom-http-handlers.service';
 

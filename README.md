@@ -14,6 +14,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./app/routes` - routes
   * `./app/utils` - utilities
 * `./build-system` - gulp-based build system modules, tasks
+* `./ci` - dockerfiles, related shell scripts
 * `./public` - client
   * `./public/app` - application scripts, templates, styles
     * `./public/app/components` - components (development)
@@ -43,7 +44,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./desktop/osx`
     * `./desktop/osx/build` - osx build
     * `./desktop/osx/dist` - osx installer
-* `.topoData` - topological data for maps in `json` format
+* `./topoData` - topological data for maps in `json` format
 
 ### Requirements
 
@@ -208,7 +209,7 @@ npm run electron
 ##### build
 
 ```
-sudo docker build -t repo-name/ng2ns -f ./Dockerfile .
+sudo docker build -t repo-name/ng2ns -f ci/Dockerfile .
 ```
 
 ##### start

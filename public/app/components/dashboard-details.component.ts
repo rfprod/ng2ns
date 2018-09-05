@@ -3,7 +3,7 @@ import { EventEmitterService } from '../services/event-emitter.service';
 import { CustomDeferredService } from '../services/custom-deferred.service';
 import { MatDatepicker } from '@angular/material';
 
-import { TranslateService } from '../translate/translate.service';
+import { TranslateService } from '../modules/translate/translate.service';
 
 import { UsersListService } from '../services/users-list.service';
 
