@@ -36,13 +36,24 @@ export class CustomServiceWorkerService {
 	private registerServiceWorker(): Promise<boolean> {
 		const def = new CustomDeferredService<boolean>();
 		if (this.serviceWorker) {
-			console.log('serviceWorker exists in navigator, registering');
-			this.serviceWorker.register('/service-worker.js', {
-				scope: '/'
-			}).then((registration: any) => {
-				console.log('serviceWorker registration completed, registration:', registration);
-				this.serviceWorkerRegistration = registration;
-				def.resolve();
+			console.log('serviceWorker exists in navigator, checking registrations');
+			this.serviceWorker.getRegistrations().then((registrations: any) => {
+				console.log('serviceWorker registrations', registrations);
+				if (registrations.length) {
+					console.log('service worker update');
+					registrations[0].update();
+					this.serviceWorkerRegistration = registrations[0];
+					def.resolve();
+				} else {
+					console.log('registering service worker');
+					this.serviceWorker.register('/service-worker.js', {
+						scope: '/'
+					}).then((registration: any) => {
+						console.log('serviceWorker registration completed, registration:', registration);
+						this.serviceWorkerRegistration = registration;
+						def.resolve();
+					});
+				}
 			});
 		} else {
 			console.log('serviceWorker does not exist in navigator');
@@ -81,11 +92,10 @@ export class CustomServiceWorkerService {
 	 * Subscribe to Event emitter events.
 	 */
 	private emitterSubscribe(): void {
-		this.emitterSubscription = this.emitter.getEmitter().subscribe((message: any) => {
-			console.log('CustomServiceWorkerService consuming event:', JSON.stringify(message));
-			if (message.serviceWorker === 'initialize') {
+		this.emitterSubscription = this.emitter.getEmitter().subscribe((event: any) => {
+			if (event.serviceWorker === 'initialize') {
 				this.initializeServiceWorker();
-			} else if (message.serviceWorker === 'deinitialize') {
+			} else if (event.serviceWorker === 'deinitialize') {
 				this.deinitializeServiceWorker();
 			}
 		});

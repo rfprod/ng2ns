@@ -24,7 +24,7 @@ describe('AppLoginComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [ AppLoginComponent, DummyComponent ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, FormsModule, ReactiveFormsModule,
-				CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot(),
+				CustomMaterialModule, FlexLayoutModule, TranslateModule,
 				RouterTestingModule.withRoutes([
 					{path: 'login', component: AppLoginComponent},
 					{path: 'profile', component: DummyComponent}

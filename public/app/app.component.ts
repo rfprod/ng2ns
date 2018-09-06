@@ -49,31 +49,49 @@ export class AppComponent implements OnInit, OnDestroy {
 		console.log('this.el.nativeElement', this.el.nativeElement);
 	}
 
+	/**
+	 * Component subscriptions.
+	 */
 	private subscriptions: any[] = [];
 
 	public showAppInfo: boolean = true;
 
 	public showSpinner: boolean = false;
 
-	// spinner controls
+	/**
+	 * Shows spinner.
+	 */
 	private startSpinner(): void {
 		console.log('spinner start');
 		this.showSpinner = true;
 	}
+	/**
+	 * Hides spinner.
+	 */
 	private stopSpinner(): void {
 		console.log('spinner stop');
 		this.showSpinner = false;
 	}
 
+	/**
+	 * Supported languages.
+	 */
 	private supportedLanguages: any[] = [
 		{ key: 'en', name: 'English' },
 		{ key: 'ru', name: 'Russian' }
 	];
 
+	/**
+	 * Resolves if language is current by key.
+	 */
 	private isCurrentLanguage(key: string): boolean {
 		// check if selected one is a current language
 		return key === this.translate.currentLanguage;
 	}
+	/**
+	 * Selects language.
+	 * @param key language key
+	 */
 	private selectLanguage(key: string): void {
 		if (!this.isCurrentLanguage(key)) {
 			// set current language
@@ -82,6 +100,10 @@ export class AppComponent implements OnInit, OnDestroy {
 			this.setDatepickersLocale(key);
 		}
 	}
+	/**
+	 * Sets datepicker locale.
+	 * @param key langyage key
+	 */
 	private setDatepickersLocale(key: string): void {
 		/*
 		*	set datepickers locale
@@ -111,30 +133,28 @@ export class AppComponent implements OnInit, OnDestroy {
 
 		this.removeUIinit();
 
-		// listen event emitter control messages
-		let sub: any = this.emitter.getEmitter().subscribe((message: any) => {
-			console.log('app consuming event:', message);
-			if (message.appInfo) {
-				if (message.appInfo === 'hide') {
+		let sub: any = this.emitter.getEmitter().subscribe((event: any) => {
+			if (event.appInfo) {
+				if (event.appInfo === 'hide') {
 					this.showAppInfo = false;
-				} else if (message.appInfo === 'show') {
+				} else if (event.appInfo === 'show') {
 					this.showAppInfo = true;
 				}
 			}
-			if (message.spinner) {
-				if (message.spinner === 'start') { // spinner control message
+			if (event.spinner) {
+				if (event.spinner === 'start') {
 					console.log('starting spinner');
 					this.startSpinner();
-				} else if (message.spinner === 'stop') { // spinner control message
+				} else if (event.spinner === 'stop') {
 					console.log('stopping spinner');
 					this.stopSpinner();
 				}
 			}
-			if (message.lang) { // switch translation message
-				console.log('switch language', message.lang);
-				if (this.supportedLanguages.filter((item: any) => item.key === message.lang).length) {
+			if (event.lang) {
+				console.log('switch language', event.lang);
+				if (this.supportedLanguages.filter((item: any) => item.key === event.lang).length) {
 					// switch language only if it is present in supportedLanguages array
-					this.selectLanguage(message.lang);
+					this.selectLanguage(event.lang);
 				} else {
 					console.log('selected language is not supported');
 				}
@@ -142,7 +162,6 @@ export class AppComponent implements OnInit, OnDestroy {
 		});
 		this.subscriptions.push(sub);
 
-		// listen date adapter locale change
 		sub = this.dateAdapter.localeChanges.subscribe(() => {
 			console.log('dateAdapter.localeChanges, changed according to the language');
 		});
@@ -155,8 +174,8 @@ export class AppComponent implements OnInit, OnDestroy {
 		*/
 		const nav: any = this.window.navigator;
 		const userPreference: string = (nav.language === 'ru-RU' || nav.language === 'ru' || nav.languages[0] === 'ru') ? 'ru' : 'en';
-		// set default language
-		this.selectLanguage(userPreference);
+
+		this.selectLanguage(userPreference); // set default language
 
 		/*
 		*	register fontawesome for usage in mat-icon by adding directives
@@ -169,9 +188,6 @@ export class AppComponent implements OnInit, OnDestroy {
 		*/
 		this.matIconRegistry.registerFontClassAlias('fontawesome-all');
 
-		/*
-		*	router events listener
-		*/
 		sub = this.router.events.subscribe((event: any) => {
 			console.log(' > AppComponent, ROUTER EVENT:', event);
 			if (event instanceof RouteConfigLoadStart) {
@@ -179,12 +195,11 @@ export class AppComponent implements OnInit, OnDestroy {
 			}
 		});
 		this.subscriptions.push(sub);
-
 	}
 
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppComponent destroyed');
-		this.serviceWorker.disableServiceWorker();
+		this.emitter.emitEvent({serviceWorker: 'deinitialize'});
 		if (this.subscriptions.length) {
 			for (const sub of this.subscriptions) {
 				sub.unsubscribe();

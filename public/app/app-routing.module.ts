@@ -31,12 +31,12 @@ export const APP_ROUTES: Routes = [
 	imports: [ RouterModule.forRoot(APP_ROUTES, { preloadingStrategy: CustomPreloadingStrategy }) ],
 	exports: [ RouterModule ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModuleWithoutProviders {}
 
 /**
  * Application routing module with providers.
  */
-export const AppRoutingModuleWithProviders: ModuleWithProviders = {
-	ngModule: AppRoutingModule,
+export const AppRoutingModule: ModuleWithProviders = {
+	ngModule: AppRoutingModuleWithoutProviders,
 	providers: [ CustomPreloadingStrategy ]
 };

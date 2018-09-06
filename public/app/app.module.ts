@@ -20,7 +20,7 @@ import { CustomMaterialModule } from './modules/custom-material.module';
 import { AuthGuardGeneral } from './services/auth-guard-general.service';
 import { AnonimousGuard } from './services/anonimous-guard.service';
 
-import { AppRoutingModuleWithProviders } from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { AppNavComponent } from './components/app-nav.component';
@@ -50,8 +50,7 @@ import { NvD3Component } from 'ng2-nvd3';
 									DashboardDetailsComponent, DashboardMapComponent, NvD3Component
 								],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,
-									HttpClientModule, TranslateModule.forRoot(),
-									AppRoutingModuleWithProviders
+									HttpClientModule, TranslateModule, AppRoutingModule
 								],
 	providers 	: [ { provide: APP_BASE_HREF, useValue: '/' }, { provide: LocationStrategy, useClass: PathLocationStrategy },
 									{ provide: 'Window', useValue: window }, CustomServiceWorkerService, CustomDeferredService,

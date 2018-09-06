@@ -28,7 +28,7 @@ describe('AppIntroComponent', () => {
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ NvD3Component, AppIntroComponent, NvD3Component ],
-			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule, FlexLayoutModule, TranslateModule.forRoot() ],
+			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule, FlexLayoutModule, TranslateModule ],
 			providers: [
 				{ provide: 'Window', useValue: window },
 				EventEmitterService,

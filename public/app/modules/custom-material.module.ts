@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import {
 	// form controls
 	MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
@@ -9,7 +9,7 @@ import {
 	// buttons and indicators
 	MatButtonModule, MatButtonToggleModule, MatChipsModule, MatIconModule, MatProgressSpinnerModule, MatProgressBarModule,
 	// popups and modals
-	MatDialogModule, MatTooltipModule, MatSnackBarModule,
+	MatDialogModule, MatSnackBarModule, MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions,
 	// data table
 	MatTableModule, MatSortModule, MatPaginatorModule,
 	// misc
@@ -27,30 +27,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
+/**
+ * Custom material module without providers.
+ */
 @NgModule({
-	/*
-	*	note:
-	*	it is ok not to use forRoot() here to achieve single depencendy injection tree for the MatIconRegistry provider,
-	*	so that all instances of it are the same, because it should be used only once in the app module to register
-	*	all font class aliases.
-	*
-	*	forRoot is used like so when declared:
-	*
-	*	export class SharedModule {
-	*	  static forRoot(): ModuleWithProviders {
-	*	    return {
-	*	      ngModule: SharedModule,
-	*	      providers: [CounterService]
-	*	    };
-	*	  }
-	*	}
-	*
-	* and then imported in the parent module like:
-	*
-	*	SharedModule.forRoot()
-	*
-	*/
-	providers: [ MatIconRegistry ],
 	imports: [
 		// form controls
 		MatAutocompleteModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatMomentDateModule, MatInputModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatRadioModule,
@@ -61,17 +41,17 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 		// buttons and indicators
 		MatButtonModule, MatButtonToggleModule, MatChipsModule, MatIconModule, MatProgressSpinnerModule, MatProgressBarModule,
 		// popups and modals
-		MatDialogModule, MatTooltipModule, MatSnackBarModule,
+		MatDialogModule, MatSnackBarModule, MatTooltipModule,
 		// data table
 		MatTableModule, MatSortModule, MatPaginatorModule,
 		// misc
 		MatOptionModule, MatRippleModule,
 		// divider
 		MatDividerModule,
-		// cdk
-		OverlayModule,
 		// tree
-		MatTreeModule
+		MatTreeModule,
+		// cdk
+		OverlayModule
 	],
 	exports: [
 		// form controls
@@ -83,17 +63,28 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 		// buttons and indicators
 		MatButtonModule, MatButtonToggleModule, MatChipsModule, MatIconModule, MatProgressSpinnerModule, MatProgressBarModule,
 		// popups and modals
-		MatDialogModule, MatTooltipModule, MatSnackBarModule,
+		MatDialogModule, MatSnackBarModule, MatTooltipModule,
 		// data table
 		MatTableModule, MatSortModule, MatPaginatorModule,
 		// misc
 		MatOptionModule, MatRippleModule,
 		// divider
 		MatDividerModule,
-		// cdk
-		OverlayModule,
 		// tree
-		MatTreeModule
+		MatTreeModule,
+		// cdk
+		OverlayModule
 	]
 })
-export class CustomMaterialModule {}
+export class CustomMaterialModuleWithoutProviders {}
+
+/**
+ * Custom material module with providers.
+ */
+export const CustomMaterialModule: ModuleWithProviders = {
+	ngModule: CustomMaterialModuleWithoutProviders,
+	providers: [
+		MatIconRegistry,
+		{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { showDelay: 1000, hideDelay: 1000, touchendHideDelay: 1000 } as MatTooltipDefaultOptions }
+	]
+};

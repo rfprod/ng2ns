@@ -24,7 +24,7 @@ describe('AppComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [ AppComponent, AppNavComponentMock, AppInfoComponentMock, DummyComponent ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule,
-				TranslateModule.forRoot(), RouterTestingModule.withRoutes([
+				TranslateModule, RouterTestingModule.withRoutes([
 					{path: '', component: DummyComponent},
 				])
 			],
