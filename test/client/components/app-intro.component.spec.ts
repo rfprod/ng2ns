@@ -35,8 +35,8 @@ describe('AppIntroComponent', () => {
 				CustomHttpHandlersService,
 				{
 					provide: PublicDataService,
-					useFactory: (http, window, handlers) => new PublicDataService(http, window, handlers),
-					deps: [HttpClient, 'Window', CustomHttpHandlersService]
+					useFactory: (http, handlers, window) => new PublicDataService(http, handlers, window),
+					deps: [HttpClient, CustomHttpHandlersService, 'Window']
 				},
 				{
 					provide: ServerStaticDataService,

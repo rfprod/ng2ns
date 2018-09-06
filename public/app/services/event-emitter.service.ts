@@ -30,7 +30,7 @@ export class EventEmitterService {
 	 */
 	public emitSpinnerStartEvent(): void {
 		console.log('root spinner start event emitted');
-		this.emitter.emit({sys: 'start spinner'});
+		this.emitter.emit({spinner: 'start'});
 	}
 
 	/**
@@ -38,7 +38,7 @@ export class EventEmitterService {
 	 */
 	public emitSpinnerStopEvent(): void {
 		console.log('root spinner stop event emitted');
-		this.emitter.emit({sys: 'stop spinner'});
+		this.emitter.emit({spinner: 'stop'});
 	}
 
 }

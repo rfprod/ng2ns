@@ -4,11 +4,11 @@ Error.stackTraceLimit = 0; // "No stacktrace"" is usually best for app testing.
 // Uncomment to get full stacktrace output. Sometimes helpful, usually not.
 //Error.stackTraceLimit = Infinity; //
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
 
 var builtPath = '/base';
 
-__karma__.loaded = function () { console.log('Karma loaded'); };
+__karma__.loaded = () => { console.log('Karma loaded'); };
 
 function isJsFile(path) {
 	return path.slice(-3) == '.js';
@@ -82,8 +82,7 @@ function initTestBed(){
 
 // Import all spec files and start karma
 function initTesting () {
-	console.log('INIT TESTINTG');
-	console.log('test cases count:',allSpecFiles.length);
+	console.log('INIT TESTINTG, test cases count:', allSpecFiles.length);
 	console.log(allSpecFiles);
 	return Promise.all(
 		allSpecFiles.map(function (moduleName) {

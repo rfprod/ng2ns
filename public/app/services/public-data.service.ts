@@ -19,8 +19,8 @@ export class PublicDataService {
 	 */
 	constructor(
 		private http: HttpClient,
-		@Inject('Window') private window: Window,
-		private httpHandlers: CustomHttpHandlersService
+		private httpHandlers: CustomHttpHandlersService,
+		@Inject('Window') private window: Window
 	) {
 		console.log('PublicDataService init');
 	}
