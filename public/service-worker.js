@@ -60,14 +60,13 @@ var staticAssets = [
  */
 function updateCache() {
 	return new Promise(function(resolve) {
-		console.log('SW, updateCache: compare hashes, cacheName', cacheName, '| gotCacheName', gotCacheName);
 		getCacheName().then(function(gotCacheName) {
-			console.log('SW, updateCache: compare build hashes');
+			console.log('SW, updateCache: compare hashes, cacheName', cacheName, '| gotCacheName', gotCacheName);
 			if (cacheName !== gotCacheName) {
 				cacheName = gotCacheName;
 				console.log('SW, updateCache: updating cache, cacheName', cacheName);
 
-				clearCache.then(function() {
+				clearCache().then(function() {
 					caches.open(cacheName).then(function(cache) {
 						cache.addAll(staticAssets).then(function() {
 							console.log('SW, updated cached static assets');
