@@ -1,7 +1,7 @@
 export const LANG_RU_NAME = 'ru';
 
 /**
- * Keys map for Russian language.
+ * Russian UI dictionary.
  */
 export const LANG_RU_TRANSLATIONS = {
 	help: 'Помощь',

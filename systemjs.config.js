@@ -11,7 +11,6 @@
 	var map = {
 		'app': 																	'pub:app',
 		'lazy.module': 													'pub:app/lazy/lazy.module.js',
-		'ng2-nvd3': 														'npm:ng2-nvd3/build',
 
 		'rxjs': 																'npm:rxjs/bundles/rxjs.umd.js',
 		'rxjs/ajax': 														'npm:rxjs/ajax',
@@ -61,12 +60,11 @@
 		'@angular/cdk/text-field': 							'npm:@angular/cdk/bundles/cdk-text-field.umd.js',
 		'@angular/cdk/tree': 										'npm:@angular/cdk/bundles/cdk-tree.umd.js',
 		'@angular/material-moment-adapter': 		'npm:@angular/material-moment-adapter/bundles/material-moment-adapter.umd.js',
-		'moment': 															'npm:moment/min/moment-with-locales.min.js' // reconfig reference: https://github.com/angular/material2/commit/9545427c73627f0cf91b5086efd5d727459fc44f
+		'moment': 															'npm:moment/min/moment-with-locales.min.js'
 	};
 	// how to load packages
 	var packages = {
 		'app': 													{ main: 'app', defaultExtension: 'js' },
-		'ng2-nvd3': 										{ main: 'index', defaultExtension: 'js' },
 		'traceur': 											{ main: 'traceur', defaultExtension: 'js' },
 
 		'rxjs/ajax': 										{ main: 'index', defaultExtension: 'js' },

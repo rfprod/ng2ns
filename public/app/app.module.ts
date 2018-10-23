@@ -43,11 +43,9 @@ import { UserService } from './services/user.service';
 import { ServerStaticDataService } from './services/server-static-data.service';
 import { PublicDataService } from './services/public-data.service';
 
-import { NvD3Component } from 'ng2-nvd3';
-
 @NgModule({
 	declarations: [ AppComponent, AppNavComponent, AppInfoComponent, AppIntroComponent, AppLoginComponent,
-									DashboardDetailsComponent, DashboardMapComponent, NvD3Component
+									DashboardDetailsComponent, DashboardMapComponent
 								],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,
 									HttpClientModule, TranslateModule, AppRoutingModule

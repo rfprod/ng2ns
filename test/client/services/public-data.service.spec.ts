@@ -34,7 +34,7 @@ describe('PublicDataService', () => {
 	});
 
 	afterEach(() => {
-		//this.httpController.match((req: HttpRequest<any>): boolean => true).forEach((req: TestRequest) => req.flush({}));
+		this.httpController.match((req: HttpRequest<any>): boolean => true).forEach((req: TestRequest) => req.flush({}));
 		this.httpController.verify();
 	});
 

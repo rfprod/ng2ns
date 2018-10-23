@@ -8,8 +8,6 @@ module.exports = function(config){
 		
 		files : [
 			'node_modules/d3/d3.js',
-			'node_modules/nvd3/build/nv.d3.js',
-			{ pattern: 'node_modules/ng2-nvd3/build/**', included: false, watched: false },
 
 			'node_modules/core-js/client/shim.js',
 			'node_modules/reflect-metadata/Reflect.js',

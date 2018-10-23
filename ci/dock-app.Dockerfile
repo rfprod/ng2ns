@@ -53,8 +53,8 @@ RUN apt-get -y update --fix-missing; \
 	electron-squirrel-startup gulp gulp-autoprefixer gulp-concat gulp-cssnano gulp-eslint gulp-hashsum \
 	gulp-mocha gulp-plumber gulp-rename gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify \
 	gulp-util hammerjs jasmine-core karma karma-redirect-preprocessor material-design-icon-fonts moment \
-	ng2-nvd3 nvd3 reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
-	web-animations-js zone.js --no-save --production --no-optional && \
+	reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
+	zone.js --no-save --production --no-optional && \
 	npm uninstall -g gulp-cli typescript --save && \
 	npm cache clean --force; \
 	sleep 1; \

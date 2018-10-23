@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { HttpClient, HttpRequest } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-
 import { UserService } from '../../../public/app/services/user.service';
 
 import { AuthGuardGeneral } from '../../../public/app/services/auth-guard-general.service';
@@ -35,7 +32,7 @@ describe('AuthGuardGeneral', () => {
 	beforeEach((done: DoneFn) => {
 		TestBed.configureTestingModule({
 			declarations: [ DummyComponent ],
-			imports: [ HttpClientTestingModule, RouterTestingModule.withRoutes([
+			imports: [ RouterTestingModule.withRoutes([
 				{path: 'login', component: DummyComponent},
 				{path: 'profile', component: DummyComponent, canActivate: [AuthGuardGeneral]},
 				{path: 'carrier', component: DummyComponent, canActivate: [AuthGuardGeneral]},
@@ -55,12 +52,9 @@ describe('AuthGuardGeneral', () => {
 			this.component = this.fixture.componentInstance;
 			this.userService = TestBed.get(UserService) as UserService;
 			this.service = TestBed.get(AuthGuardGeneral) as AuthGuardGeneral;
-			this.httpController = TestBed.get(HttpTestingController) as HttpTestingController;
 			done();
 		});
 	});
-
-	afterEach(() => this.httpController.verify());
 
 	it('should be defined', () => {
 		expect(this.service).toBeDefined();
@@ -75,7 +69,7 @@ describe('AuthGuardGeneral', () => {
 		this.userService.SaveUser({ token: '' });
 
 		const route = { url: [ { path: 'any' } ]} as ActivatedRouteSnapshot;
-		const can = this.service.canActivate(route)
+		const can = this.service.canActivate(route);
 		expect(can).toBeFalsy();
 
 	});
@@ -85,7 +79,7 @@ describe('AuthGuardGeneral', () => {
 		this.userService.SaveUser({ token: 'a.a' });
 
 		const route = { url: [ { path: 'any' } ]} as ActivatedRouteSnapshot;
-		const can = this.service.canActivate(route)
+		const can = this.service.canActivate(route);
 		expect(can).toBeTruthy();
 
 	});

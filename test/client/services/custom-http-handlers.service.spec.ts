@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Observable } from 'rxjs';
-
 import { CustomHttpHandlersService } from '../../../public/app/services/custom-http-handlers.service';
 
 describe('CustomHttpHandlersService', () => {

@@ -1,7 +1,7 @@
 export const LANG_EN_NAME = 'en';
 
 /**
- * Keys map for English language.
+ * English UI dictionary.
  */
 export const LANG_EN_TRANSLATIONS = {
 	help: 'Help',

@@ -1,7 +1,14 @@
 <h3>{{title}} <a (click)="toggleModal()"><i class="fas fa-cogs"></i></a></h3>
 <p>{{ 'title' | translate }}: {{description}}</p>
 
-<nvd3 #chart [options]="chartOptions" [data]="appUsageData"></nvd3>
+<div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="center start">
+	<span fxFlex="100" fxLayout="row" fxLayoutAlign="center start">
+		<span fxFlex="0 1 auto">user sessions</span>
+	</span>
+	<span fxFlex="0 1 auto">
+		<canvas #canvas></canvas>
+	</span>
+</div>
 
 <span id="modal" *ngIf="showModal">
 	<button type="button" class="close" (click)="toggleModal()"><span>&times;</span></button>

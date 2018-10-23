@@ -149,11 +149,8 @@ module.exports = {
 					'./node_modules/core-js/client/shim.js',
 					'./node_modules/zone.js/dist/zone.min.js',
 					'./node_modules/reflect-metadata/Reflect.js',
-					'./node_modules/web-animations-js/web-animations.min.js',
 
-					// ng2nvd3 dependency
-					'./node_modules/d3/d3.js',
-					'./node_modules/nvd3/build/nv.d3.js',
+					'./node_modules/d3/dist/d3.js',
 
 					// datamaps depends on topojson
 					'./node_modules/topojson/build/topojson.js',
@@ -177,7 +174,6 @@ module.exports = {
 					/*
 					*	add paths to required third party css files
 					*/
-					'./node_modules/nvd3/build/nv.d3.css',
 					'./node_modules/components-font-awesome/css/fontawesome-all.css',
 					/*
 					*	Angular material theme should be chosen and loaded here

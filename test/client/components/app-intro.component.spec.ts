@@ -5,8 +5,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
-import { NvD3Component } from 'ng2-nvd3';
-
 import { EventEmitterService } from '../../../public/app/services/event-emitter.service';
 
 import { TranslateService, TranslateModule } from '../../../public/app/modules/translate/index';
@@ -27,7 +25,7 @@ describe('AppIntroComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ NvD3Component, AppIntroComponent, NvD3Component ],
+			declarations: [ AppIntroComponent ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule, FlexLayoutModule, TranslateModule ],
 			providers: [
 				{ provide: 'Window', useValue: window },
@@ -78,32 +76,9 @@ describe('AppIntroComponent', () => {
 		expect(this.component.title === 'Ng2NodeStarter (Ng2NS)').toBeTruthy();
 		expect(this.component.description).toBeDefined();
 		expect(this.component.description === 'Angular, NodeJS').toBeTruthy();
-		expect(this.component.chartOptions).toEqual(jasmine.any(Object));
-		expect(this.component.chartOptions.chart).toBeDefined();
-		expect(this.component.chartOptions.chart).toEqual({
-			type: jasmine.any(String),
-			height: jasmine.any(Number),
-			donut: jasmine.any(Boolean),
-			x: jasmine.any(Function),
-			y: jasmine.any(Function),
-			showLabels: jasmine.any(Boolean),
-			labelSunbeamLayout: jasmine.any(Boolean),
-			pie: {
-				startAngle: jasmine.any(Function),
-				endAngle: jasmine.any(Function)
-			},
-			duration: jasmine.any(Number),
-			title: jasmine.any(String),
-			legend: {
-				margin: {
-					top: jasmine.any(Number),
-					right: jasmine.any(Number),
-					bottom: jasmine.any(Number),
-					left: jasmine.any(Number)
-				}
-			}
-		});
+		expect(this.component.canvas).toBeDefined();
 		expect(this.component.appUsageData).toEqual(jasmine.any(Array));
+		expect(this.component.drawChart).toEqual(jasmine.any(Function));
 		expect(this.component.serverData).toEqual({
 			static: jasmine.any(Array),
 			dynamic: jasmine.any(Array)
@@ -113,7 +88,6 @@ describe('AppIntroComponent', () => {
 		expect(this.component.ws).toEqual(jasmine.any(WebSocket));
 		expect(this.component.getServerStaticData).toBeDefined();
 		expect(this.component.getPublicData).toBeDefined();
-		expect(this.component.nvd3).toEqual(jasmine.any(NvD3Component));
 		expect(this.component.ngOnInit).toBeDefined();
 		expect(this.component.ngOnDestroy).toBeDefined();
 	});

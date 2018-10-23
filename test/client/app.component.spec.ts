@@ -1,11 +1,10 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { EventEmitterService } from '../../public/app/services/event-emitter.service';
-import { CustomDeferredService } from '../../public/app/services/custom-deferred.service';
 import { CustomServiceWorkerService } from '../../public/app/services/custom-service-worker.service';
 
 import { TranslateService, TranslateModule } from '../../public/app/modules/translate/index';
