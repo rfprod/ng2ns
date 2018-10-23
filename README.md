@@ -1,6 +1,8 @@
 # Ng2NodeStarter (Ng2NS)
 
-![build](https://travis-ci.org/rfprod/ng2ns.svg?branch=master)
+![TravisCI build status](https://travis-ci.org/rfprod/ng2ns.svg?branch=master)
+
+[![Azure Pipelines Build Status](https://rfprod.visualstudio.com/Ng2NodeStarter/_apis/build/status/Ng2NodeStarter-CI)](https://rfprod.visualstudio.com/Ng2NodeStarter/_build/latest?definitionId=5)
 
 ## Overview
 
