@@ -18,7 +18,7 @@ steps:
     npm install -g gulp-cli
     gulp compile-and-build
     gulp create-env-development
-    gulp server & npm run server-test && npm run client-test-single-run && gulp client-e2e-test && gulp server-kill
+    gulp server & gulp server-test && npm run client-test-single-run && gulp client-e2e-test && gulp server-kill
   env:
     PORT: 8080
     APP_URL: http://localhost:8080
