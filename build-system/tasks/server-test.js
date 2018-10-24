@@ -27,7 +27,7 @@ module.exports = (gulp, mocha, fs, config) => {
 					}
 					fs.mkdirSync(config.report.dir.server);
 				}
-				fs.copyFileSync(config.report.src, config.report.dest);
+				fs.createReadStream(config.report.src).pipe(fs.createWriteStream(config.report.dest));
 				fs.unlinkSync(config.report.src);
 			}
 		});
