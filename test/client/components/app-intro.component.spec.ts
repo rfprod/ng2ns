@@ -23,10 +23,30 @@ import { AppIntroComponent } from '../../../public/app/components/app-intro.comp
 
 describe('AppIntroComponent', () => {
 
+	class WebSocketMock {
+		constructor(url: string) {
+			console.log('WebSocketMock, url', url);
+		}
+		public send() { return true; }
+		public open() { return true; }
+		public close() { return true; }
+		public message() { return true; }
+		public onclose() { return true; }
+		public onerror() { return true; }
+		public onmessage() { return true; }
+		public onopen() { return true; }
+	}
+	// override websocket
+	const wsKey = 'WebSocket';
+	window[wsKey] = (url) => new WebSocketMock(url);
+
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ AppIntroComponent ],
-			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule, FlexLayoutModule, TranslateModule ],
+			imports: [
+				BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, CustomMaterialModule,
+				FlexLayoutModule, TranslateModule
+			],
 			providers: [
 				{ provide: 'Window', useValue: window },
 				EventEmitterService,
@@ -38,8 +58,8 @@ describe('AppIntroComponent', () => {
 				},
 				{
 					provide: ServerStaticDataService,
-					useFactory: (http, window, handlers) => new ServerStaticDataService(http, window, handlers),
-					deps: [HttpClient, 'Window', CustomHttpHandlersService]
+					useFactory: (http, handlers, window) => new ServerStaticDataService(http, handlers, window),
+					deps: [HttpClient, CustomHttpHandlersService, 'Window']
 				},
 				{
 					provide: WebsocketService,
@@ -62,7 +82,7 @@ describe('AppIntroComponent', () => {
 	});
 
 	afterEach(() => {
-		this.httpController.match((req: HttpRequest<any>): boolean => true).forEach((req: TestRequest) => req.flush({}));
+		this.httpController.match((req: HttpRequest<any>): boolean => true).forEach((req: TestRequest) => req.flush([]));
 		this.httpController.verify();
 	});
 
@@ -85,7 +105,7 @@ describe('AppIntroComponent', () => {
 		});
 		expect(this.component.wsEndpoint).toBeDefined();
 		expect(this.component.wsEndpoint).toEqual('/api/app-diag/dynamic');
-		expect(this.component.ws).toEqual(jasmine.any(WebSocket));
+		expect(this.component.ws).toEqual(jasmine.any(WebSocketMock));
 		expect(this.component.getServerStaticData).toBeDefined();
 		expect(this.component.getPublicData).toBeDefined();
 		expect(this.component.ngOnInit).toBeDefined();

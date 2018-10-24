@@ -15,9 +15,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
 import { CustomMaterialModule } from '../../../public/app/modules/custom-material.module';
 
-import { DummyComponent } from '../mocks/index';
-
 import { AppNavComponent } from '../../../public/app/components/app-nav.component';
+
+import { DummyComponent } from '../mocks/index';
 
 describe('AppNavComponent', () => {
 
@@ -30,6 +30,7 @@ describe('AppNavComponent', () => {
 					{path: 'login', component: DummyComponent},
 					{path: 'data', component: DummyComponent},
 					{path: 'map', component: DummyComponent},
+					{path: 'profile', component: DummyComponent},
 					{path: 'lazy', component: DummyComponent},
 					{path: '', redirectTo: 'intro', pathMatch: 'full'},
 					{path: '**', redirectTo: 'intro'}

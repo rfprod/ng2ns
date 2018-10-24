@@ -2,6 +2,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -14,16 +16,17 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../../node_modules/hammerjs/hammer.js';
 import { CustomMaterialModule } from '../../../public/app/modules/custom-material.module';
 
-import { DummyComponent } from '../mocks/index';
-
 import { AppLoginComponent } from '../../../public/app/components/app-login.component';
+
+import { DummyComponent } from '../mocks/index';
 
 describe('AppLoginComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
 			declarations: [ AppLoginComponent, DummyComponent ],
-			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, FormsModule, ReactiveFormsModule,
+			imports: [
+				BrowserDynamicTestingModule, NoopAnimationsModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule,
 				CustomMaterialModule, FlexLayoutModule, TranslateModule,
 				RouterTestingModule.withRoutes([
 					{path: 'login', component: AppLoginComponent},
@@ -46,8 +49,14 @@ describe('AppLoginComponent', () => {
 			spyOn(this.userService, 'ResetUser').and.callThrough();
 			spyOn(this.userService, 'SaveUser').and.callThrough();
 			this.translateService = TestBed.get(TranslateService) as TranslateService;
+			this.httpController = TestBed.get(HttpTestingController) as HttpTestingController;
 			done();
 		});
+	});
+
+	afterEach(() => {
+		this.httpController.match((req: HttpRequest<any>): boolean => true).forEach((req: TestRequest) => req.flush({}));
+		this.httpController.verify();
 	});
 
 	it('should be defined', () => {

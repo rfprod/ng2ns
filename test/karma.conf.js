@@ -7,7 +7,7 @@ module.exports = function(config){
 		basePath : '../',
 		
 		files : [
-			'node_modules/d3/d3.js',
+			'node_modules/d3/dist/d3.js',
 
 			'node_modules/core-js/client/shim.js',
 			'node_modules/reflect-metadata/Reflect.js',

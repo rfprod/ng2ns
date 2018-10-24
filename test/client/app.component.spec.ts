@@ -13,15 +13,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import '../../node_modules/hammerjs/hammer.js';
 import { CustomMaterialModule } from '../../public/app/modules/custom-material.module';
 
-import { DummyComponent, AppNavComponentMock, AppInfoComponentMock } from './mocks/index';
-
 import { AppComponent } from '../../public/app/app.component';
+
+import { DummyComponent, AppNavComponent, AppInfoComponent } from './mocks/index';
 
 describe('AppComponent', () => {
 
 	beforeEach((done) => {
 		TestBed.configureTestingModule({
-			declarations: [ AppComponent, AppNavComponentMock, AppInfoComponentMock, DummyComponent ],
+			declarations: [ AppComponent, AppNavComponent, AppInfoComponent, DummyComponent ],
 			imports: [ BrowserDynamicTestingModule, NoopAnimationsModule, CustomMaterialModule, FlexLayoutModule,
 				TranslateModule, RouterTestingModule.withRoutes([
 					{path: '', component: DummyComponent},

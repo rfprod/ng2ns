@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
 	selector: 'app-nav',
 	template: '<span></span>'
 })
-export class AppNavComponentMock {}
+export class AppNavComponent {}

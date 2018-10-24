@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
 	selector: 'app-info',
 	template: '<span></span>'
 })
-export class AppInfoComponentMock {}
+export class AppInfoComponent {}
