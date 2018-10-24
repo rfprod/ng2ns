@@ -38,10 +38,10 @@ RUN apt-get -y update --fix-missing; \
 	Xvfb :99 -screen 0 1680x1024x8 -nolisten tcp & sleep 2; \
 	sleep 1; \
 	npm install -g gulp-cli typescript; \
-	npm update --no-optional; \
+	npm update; \
 	npm rebuild node-sass --force; \
 	npm install --no-optional; \
-	gulp compile-and-build && gulp create-env-development; \
+	gulp compile-and-build && gulp create-env; \
 	sleep 1; \
 	gulp server & npm run server-test && npm run client-test && gulp client-e2e-test && gulp server-kill && npm run doc-docker; \
 	sleep 1; \

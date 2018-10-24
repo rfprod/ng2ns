@@ -117,6 +117,7 @@
 		"production-start": "gulp production-start",
 		"pretest": "npm install",
 		"test": "echo 'WARNING: npm test is not configured yet\nUse one of these depending on what do you want to test:\nnpm run client-test\nnpm run server-test' && exit 1",
+		"preclient-test": "mkdir -p ./logs/unit",
 		"client-test": "npm run clear-reports && gulp client-unit-test-single-run && npm run client-coverage-report",
 		"client-coverage-report": "remap-istanbul -i ./logs/coverage/coverage-final.json -o ./logs/coverage/html-report -t html && echo '# coverage html-report generated, path: ./logs/coverage/html-report'",
 		"clear-reports": "rm -rf ./logs/coverage ./logs/unit && echo '# coverage and unit reports cleared'",
