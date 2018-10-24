@@ -18,7 +18,7 @@ steps:
     npm install -g gulp-cli
     gulp compile-and-build
     gulp create-env
-    gulp server & gulp server-test && npm run client-test-single-run && gulp client-e2e-test && gulp server-kill
+    gulp server & gulp server-test && npm run client-test && gulp client-e2e-test && gulp server-kill
 
 - task: ArchiveFiles@2
   displayName: 'Archive files'

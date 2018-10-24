@@ -43,7 +43,7 @@ RUN apt-get -y update --fix-missing; \
 	npm install --no-optional; \
 	gulp compile-and-build && gulp create-env-development; \
 	sleep 1; \
-	gulp server & npm run server-test && npm run client-test-single-run && gulp client-e2e-test && gulp server-kill && npm run doc-docker; \
+	gulp server & npm run server-test && npm run client-test && gulp client-e2e-test && gulp server-kill && npm run doc-docker; \
 	sleep 1; \
 	npm prune --production --no-optional && \
 	npm uninstall @angular/animations @angular/cdk @angular/common @angular/compiler @angular/core \
