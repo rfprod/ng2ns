@@ -1,11 +1,12 @@
 const testUtils = require('./test-utils');
-const headlessChromeFlags = testUtils.protractorHeadlessChromeFlags();
+const headlessChromeFlags = testUtils.headlessChromeFlags();
 
 exports.config = {
 
 	useAllAngular2AppRoots: true,
 
 	onPrepare: function() {
+		testUtils.setJasmineDefaultInterval(20000);
 		browser.driver.get('http://localhost:8080/public/index.html');
 
 		return browser.getProcessedConfig().then((/*config*/) => {

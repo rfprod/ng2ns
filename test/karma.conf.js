@@ -1,8 +1,52 @@
 const testUtils = require('./test-utils');
-const headlessChromeFlags = testUtils.karmaHeadlessChromeFlags();
+const headlessChromeFlags = testUtils.headlessChromeFlags();
+const karmaBrowserTimeoutValue = testUtils.karmaBrowserTimeoutValue();
 
-module.exports = function(config){
-	config.set({
+const os = require('os');
+
+module.exports = function(config) {
+	/**
+	 * cpu cores for karma-parallel plugin
+	 */
+	const useCPUcores = Math.ceil(os.cpus().length / 2);
+
+	/**
+	 * Settings depending on tests execution envitonment:
+	 * frameworks, browsers, plugins, parallelOprions, browserConsoleLogOptions
+	 */
+	const conf = {
+		frameworks: testUtils.isDocker() || testUtils.isCI() ? ['sharding', 'jasmine'] : ['parallel', 'jasmine'],
+		browsers: testUtils.isDocker() || testUtils.isCI() ? Array.apply(null, Array(4)).map(String.prototype.valueOf, 'ChromeHeadless') : ['ChromeHeadless'],
+		plugins: testUtils.isDocker() || testUtils.isCI() ? [
+			'karma-sharding',
+			'karma-redirect-preprocessor',
+			'karma-chrome-launcher',
+			'karma-html-reporter',
+			'karma-sourcemap-loader',
+			'karma-coverage',
+			'karma-jasmine'
+		] : [
+			'karma-parallel',
+			'karma-redirect-preprocessor',
+			'karma-chrome-launcher',
+			'karma-html-reporter',
+			'karma-sourcemap-loader',
+			'karma-coverage',
+			'karma-jasmine'
+		],
+		parallelOptions: testUtils.isDocker() || testUtils.isCI() ? {} : {
+			executors: useCPUcores,
+			shardStrategy: 'description-length'
+		},
+		browserConsoleLogOptions: {
+			level: 'debug',
+			format: '%b %T %m',
+			path: 'logs/unit/browser-console.log',
+			terminal: testUtils.isDocker() ? true : false // don't show log when running tests locally, it is faster, but show in docker
+		}
+	};
+
+	const options = {
 
 		basePath : '../',
 		
@@ -38,6 +82,11 @@ module.exports = function(config){
 
 			'test/karma.test-shim.js',
 			{ pattern: 'test/client/**', included: false, watched: false },
+			/*
+			* SPEC ISOLATION
+			* to test an isolated spec comment out the previous line, and use the next one (set correct spec path)
+			*/
+			// { pattern: 'test/client/app-component.spec.js', included: false, watched: false },
 
 			{ pattern: 'public/app/**', included: false, watched: false },
 
@@ -56,10 +105,10 @@ module.exports = function(config){
 
 		// exclude: [],
 
-		frameworks: ['jasmine'],
+		frameworks: conf.frameworks,
 
-		browserNoActivityTimeout: 20000,
-		browserDisconnectTimeout: 20000,
+		browserNoActivityTimeout: karmaBrowserTimeoutValue,
+		browserDisconnectTimeout: karmaBrowserTimeoutValue,
 		customLaunchers: {
 			/*
 			*	this custom launcher requires setting env var CHROME_BIN=chromium-browser
@@ -71,16 +120,9 @@ module.exports = function(config){
 				flags: headlessChromeFlags
 			}
 		},
-		browsers: ['ChromeHeadless'],
+		browsers: conf.browsers,
 		
-		plugins: [
-			'karma-redirect-preprocessor',
-			'karma-chrome-launcher',
-			'karma-html-reporter',
-			'karma-sourcemap-loader',
-			'karma-coverage',
-			'karma-jasmine'
-		],
+		plugins: conf.plugins,
 
 		preprocessors: {
 			'public/**/*.html': ['redirect'],
@@ -119,8 +161,17 @@ module.exports = function(config){
 
 		autoWatch: true,
 		singleRun: true,
-		logLevel: config.LOG_DEBUG,
-		colors: true
+		colors: true,
 
-	});
+		logLevel: config.LOG_ERROR, // LOG_DISABLE, LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG
+		browserConsoleLogOptions: conf.browserConsoleLogOptions
+
+	};
+
+	if (!testUtils.isDocker() && !testUtils.isCI()) {
+		console.log(`Karma will use ${useCPUcores} cpu cores for parallel testing`);
+		options.parallelOptions = conf.parallelOptions;
+	}
+
+	config.set(options);
 };
