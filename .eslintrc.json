@@ -37,10 +37,9 @@
 		"angular": true,
 		"$": true,
 		"System": true,
-		// server tests
+		"jasmine": true,
 		"it": true,
 		"describe": true,
-		// e2e tests
 		"protractor": true,
 		"browser": true,
 		"expect": true,
