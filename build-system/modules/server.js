@@ -7,12 +7,36 @@
  */
 
 /**
+ * @member {Function}
+ * @summary Kills process by name.
+ */
+function killProcessByName(exec, name) {
+	exec('pgrep ' + name, (error, stdout, stderr) => {
+		if (error) {
+			console.log('killProcessByName, error', error);
+		}
+		if (stderr) console.log('stderr:', stderr);
+		if (stdout) {
+			const runningProcessesIDs = stdout.match(/\d{3,}/);
+			runningProcessesIDs.forEach((id) => {
+				exec('kill ' + id, (error, stdout, stderr) => {
+					if (error) throw error;
+					if (stderr) console.log('stdout:', stdout);
+					if (stdout) console.log('stderr:', stderr);
+				});
+			});
+		}
+	});
+}
+
+/**
  * Server handling tasks.
  * @param {Object} gulp Gulp
  * @param {Object} node NodeJS server instance
+ * @param {Object} exec NodeJS child process executor
  * @param {Object} spawn NodeJS child process spawner
  */
-module.exports = (gulp, node, spawn) => {
+module.exports = (gulp, node, exec, spawn) => {
 	/**
 	 * @name server
 	 * @member {Function}
@@ -38,6 +62,7 @@ module.exports = (gulp, node, spawn) => {
 	 */
 	gulp.task('server-kill', (done) => {
 		if (node) node.kill();
+		killProcessByName(exec, 'ng2nodestarter');
 		done();
 	});
 };

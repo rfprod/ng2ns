@@ -225,7 +225,7 @@ require('./build-system/modules/create-environment')(gulp, fs, crypto, config.en
  * @name Server handling tasks import
  * @see {@link module:build-system/modules/server}
  */
-require('./build-system/modules/server')(gulp, node, spawn);
+require('./build-system/modules/server')(gulp, node, exec, spawn);
 
 /**
  * @name tsc
