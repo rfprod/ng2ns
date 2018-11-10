@@ -382,44 +382,6 @@ gulp.task('build-system-js-app', () => {
 	return require('./build-system/tasks/build-system-js').app(gulp, systemjsBuilder, config.systemjs);
 });
 
-// TODO
-gulp.task('datamaps-rus-reference-and-worldTopo', () => {
-	/*
-	*
-	*	fixes topo data
-	* an incorrect an key for Russia map in datamaps.rus.js
-	*	changes Datamap.prototype.rusTopo -> substring 'RUS' -> 'rus'
-	*
-	*	adds worldTopo json as a value to respective variable in datamaps.rus.js
-	* replaces dummy string '__WORLD__' with json data from file worldTopo.json
-	*/
-	const worldTopoJSON = fs.readFileSync('./topoData/worldTopo.json', 'utf8').replace(/\n/, '');
-	return gulp.src('./node_modules/datamaps/dist/datamaps.rus.js')
-		.pipe(plumber())
-		.pipe(replace(/RUS/g, (match, offset) => {
-			console.log('Gulp replaced incorrect datamap key for Russia map, match', match, 'at offset', offset);
-			return 'rus';
-		}))
-		.pipe(replace(/RU."/g, (match, offset) => {
-			console.log('Gulp added code for Chukchi Autonomous Region in topo data for Russia, match', match, 'at offset', offset);
-			return 'RU.CHUK"';
-		}))
-		.pipe(replace(/RU./g, (match, offset) => {
-			console.log('Gulp replaced all dots between RU and region name for Russia, match', match, 'at offset', offset);
-			return 'RU-';
-		}))
-		.pipe(replace(/RU-VO/, (match, offset) => {
-			console.log('Gulp replaced erratic code for Arkhangel\'sk, for Russia map, match', match, 'at offset', offset);
-			return 'RU-ARKH';
-		}))
-		.pipe(replace(/.__WORLD__./, (match, offset) => {
-			console.log('Gulp replaced \'__WORLD__\' with worldTopo, match', match, 'at offset', offset);
-			return worldTopoJSON;
-		}))
-		.pipe(plumber.stop())
-		.pipe(gulp.dest('./topoData/'));
-});
-
 /**
  * @name pack-vendor-js
  * @member {Function}
@@ -548,7 +510,7 @@ gulp.task('compile-and-test', (done) => {
  * @description Builds client application from existing compiles ts-code.
  */
 gulp.task('build', (done) => {
-	runSequence('build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'datamaps-rus-reference-and-worldTopo', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
+	runSequence('build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
 });
 
 /**

@@ -64,7 +64,7 @@ function headlessChromeFlags() {
 		flags.push('--no-sandbox'); // required by Docker
 	}
 	return flags;
-};
+}
 
 module.exports = {
 	isDocker: isDocker,

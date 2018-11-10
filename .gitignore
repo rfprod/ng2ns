@@ -23,7 +23,6 @@ test/client/**/*.js
 test/client/**/*.js.map
 
 # built client app files
-topoData/*.js
 public/js/*.min.js
 public/css/*.min.css
 public/webfonts/*.*

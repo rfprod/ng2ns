@@ -6,7 +6,6 @@ import { AnonimousGuard } from '../../public/app/services/anonimous-guard.servic
 import { AppIntroComponent } from '../../public/app/components/app-intro.component';
 import { AppLoginComponent } from '../../public/app/components/app-login.component';
 import { DashboardDetailsComponent } from '../../public/app/components/dashboard-details.component';
-import { DashboardMapComponent } from '../../public/app/components/dashboard-map.component';
 
 describe('APP_ROUTES', () => {
 
@@ -24,7 +23,6 @@ describe('APP_ROUTES', () => {
 			{ path: 'intro', component: AppIntroComponent },
 			{ path: 'login', component: AppLoginComponent, canActivate: [AnonimousGuard] },
 			{ path: 'data', component: DashboardDetailsComponent, canActivate: [AuthGuardGeneral] },
-			{ path: 'map', component: DashboardMapComponent, canActivate: [AuthGuardGeneral] },
 			{ path: 'lazy', loadChildren: 'lazy.module#LazyModule', data: { preload: false } },
 			{ path: '', redirectTo: 'intro', pathMatch: 'full' },
 			{ path: '**', redirectTo: 'intro' }

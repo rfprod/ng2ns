@@ -150,16 +150,7 @@ module.exports = {
 					'./node_modules/zone.js/dist/zone.min.js',
 					'./node_modules/reflect-metadata/Reflect.js',
 
-					'./node_modules/d3/dist/d3.js',
-
-					// datamaps depends on topojson
-					'./node_modules/topojson/build/topojson.js',
-					/*
-					*	take edited and copied datamaps.rus.js instead of original
-					*	see task: datamaps-rus-reference-and-worldTopo
-					*/
-					// './node_modules/datamaps/dist/datamaps.rus.js'
-					'./topoData/datamaps.rus.js'
+					'./node_modules/d3/dist/d3.js'
 				],
 				dest: './public/js'
 			},

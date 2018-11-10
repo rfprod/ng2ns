@@ -28,7 +28,6 @@ import { AppInfoComponent } from './components/app-info.component';
 import { AppIntroComponent } from './components/app-intro.component';
 import { AppLoginComponent } from './components/app-login.component';
 import { DashboardDetailsComponent } from './components/dashboard-details.component';
-import { DashboardMapComponent } from './components/dashboard-map.component';
 
 import { TranslateModule } from './modules/translate/index';
 
@@ -45,7 +44,7 @@ import { PublicDataService } from './services/public-data.service';
 
 @NgModule({
 	declarations: [ AppComponent, AppNavComponent, AppInfoComponent, AppIntroComponent, AppLoginComponent,
-									DashboardDetailsComponent, DashboardMapComponent
+									DashboardDetailsComponent
 								],
 	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,
 									HttpClientModule, TranslateModule, AppRoutingModule
