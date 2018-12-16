@@ -14,7 +14,7 @@ steps:
     npm install -g npm@6.4.1
     npm update
     npm install
-    npm install -g gulp-cli@latest typescript@latest @compodoc/ngd-cli@latest
+    npm install -g gulp-cli@latest typescript@latest @compodoc/ngd-cli@latest sort-package-json@latest
     gulp compile-and-build
     gulp create-env
     gulp server & gulp server-test && npm run client-test && gulp client-e2e-test && gulp server-kill && exit 0

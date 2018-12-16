@@ -45,6 +45,7 @@ module.exports = (gulp, node, exec, spawn) => {
 	 */
 	gulp.task('server', (done) => {
 		if (node) node.kill();
+		killProcessByName(exec, 'ng2nodestarter');
 		node = spawn('node', ['server.js'], {stdio: 'inherit'});
 		node.on('close', (code) => {
 			if (code === 8) {

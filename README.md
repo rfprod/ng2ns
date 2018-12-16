@@ -16,7 +16,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./app/routes` - routes
   * `./app/utils` - utilities
 * `./build-system` - gulp-based build system modules, tasks
-* `./ci` - dockerfiles, related shell scripts
+* `./ci` - dockerfiles, related shell scripts, and configuration files
 * `./public` - client
   * `./public/app` - application scripts, templates, styles
     * `./public/app/components` - components (development)
