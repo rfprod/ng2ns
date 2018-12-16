@@ -327,8 +327,7 @@ gulp.task('client-unit-test-single-run', (done) => {
 	}
 });
 
-// TODO
-gulp.task('client-e2e-test', () => {
+gulp.task('client-e2e-test', (done) => {
 	if (protractor) protractor.kill();
 	protractor = spawn('npm', ['run', 'protractor'], {stdio: 'inherit'});
 	protractor.on('close', (code) => {
