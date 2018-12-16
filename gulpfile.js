@@ -331,6 +331,10 @@ gulp.task('client-unit-test-single-run', (done) => {
 gulp.task('client-e2e-test', () => {
 	if (protractor) protractor.kill();
 	protractor = spawn('npm', ['run', 'protractor'], {stdio: 'inherit'});
+	protractor.on('close', (code) => {
+		console.log(`protractor closed with code ${code}`);
+		done();
+	});
 });
 
 /**

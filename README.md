@@ -2,7 +2,7 @@
 
 ![TravisCI build status](https://travis-ci.org/rfprod/ng2ns.svg?branch=master)
 
-[![Azure Pipelines Build Status](https://rfprod.visualstudio.com/Ng2NodeStarter/_apis/build/status/Ng2NodeStarter-CI)](https://rfprod.visualstudio.com/Ng2NodeStarter/_build/latest?definitionId=5)
+[![Azure Pipelines Build Status](https://rfprod.visualstudio.com/Ng2NodeStarter/_apis/build/status/Ng2NodeStarter-GULP-CI?branchName=master)](https://rfprod.visualstudio.com/Ng2NodeStarter/_build/latest?definitionId=7?branchName=master)
 
 ## Overview
 
