@@ -9,9 +9,10 @@
 /**
  * Gulp tasks for electron distributions building.
  * @param {Object} gulp Gulp
- * @param {Function} runSequence Run sequence for gulp
+ * @param {Function} exec NodeJS child process executor
+ * @param {Function} cwd NodeJS currelt working directory
  */
-module.exports = (gulp, runSequence, exec, cwd) => {
+module.exports = (gulp, exec, cwd) => {
 
 	/*
 	* Electron application building.
@@ -240,9 +241,10 @@ module.exports = (gulp, runSequence, exec, cwd) => {
 	 * @description Builds electron application for windows: packages (creates portable build), creates installer.
 	 * @see {@link module:build-system/tasks/electron-installer}
 	 */
-	gulp.task('build-electron-win', (done) => {
-		runSequence('create-env-electron', 'electron-packager-win', 'electron-winstaller', done);
-	});
+	gulp.task('build-electron-win', gulp.series('create-env-electron', 'electron-packager-win', 'electron-winstaller', (done) => {
+		console.log('build-electron-win, done');
+		done();
+	}));
 
 	/**
 	 * @name build-electron-deb
@@ -251,9 +253,10 @@ module.exports = (gulp, runSequence, exec, cwd) => {
 	 * @description Builds electron application for debian linux: packages (creates portable build), creates installer.
 	 * @see {@link module:build-system/tasks/electron-installer}
 	 */
-	gulp.task('build-electron-deb', (done) => {
-		runSequence('create-env-electron', 'electron-packager-nix', 'electron-debinstaller', done);
-	});
+	gulp.task('build-electron-deb', gulp.series('create-env-electron', 'electron-packager-nix', 'electron-debinstaller', (done) => {
+		console.log('build-electron-deb, done');
+		done();
+	}));
 
 	/**
 	 * @name build-electron-osx
@@ -262,7 +265,8 @@ module.exports = (gulp, runSequence, exec, cwd) => {
 	 * @description Builds electron application for osx: packages (creates portable build), creates installer.
 	 * @see {@link module:build-system/tasks/electron-installer}
 	 */
-	gulp.task('build-electron-osx', (done) => {
-		runSequence('create-env-electron', 'electron-packager-osx', 'electron-dmginstaller', done);
-	});
+	gulp.task('build-electron-osx', gulp.series('create-env-electron', 'electron-packager-osx', 'electron-dmginstaller', (done) => {
+		console.log('build-electron-osx, done');
+		done();
+	}));
 };

@@ -27,14 +27,6 @@ const config = require('./build-system/config');
 const gulp = require('gulp');
 
 /**
- * @name runSequence
- * @constant
- * @summary Sequential runner for gulp
- * @description Sequential runner for gulp
- */
-const runSequence = require('run-sequence');
-
-/**
  * @name concat
  * @constant
  * @summary Gulp concat
@@ -73,14 +65,6 @@ const tslint = require('gulp-tslint');
  * @description Gulp plumber
  */
 const plumber = require('gulp-plumber');
-
-/**
- * @name replace
- * @constant
- * @summary Gulp replace
- * @description Gulp replace
- */
-const replace = require('gulp-replace');
 
 /**
  * @name mocha
@@ -456,9 +440,7 @@ gulp.task('tslint', () => {
  * @see {@link module:build-system/tasks/tslint}
  * @see {@link module:build-system/tasks/eslint}
  */
-gulp.task('lint', (done) => {
-	runSequence('eslint', 'tslint', done);
-});
+gulp.task('lint', gulp.parallel('eslint', 'tslint'));
 
 /**
  * @name watch
@@ -499,9 +481,10 @@ gulp.task('watch-client-and-test', () => {
  * @summary Compiles and tests client in signe run mode.
  * @description Compiles and tests client in signe run mode.
  */
-gulp.task('compile-and-test', (done) => {
-	runSequence('tsc', 'client-unit-test-single-run', done);
-});
+gulp.task('compile-and-test', gulp.series('tsc', 'client-unit-test-single-run', (done) => {
+	console.log('compile-and-test, done');
+	done();
+}));
 
 /**
  * @name build
@@ -509,9 +492,10 @@ gulp.task('compile-and-test', (done) => {
  * @summary Builds client application from existing compiles ts-code.
  * @description Builds client application from existing compiles ts-code.
  */
-gulp.task('build', (done) => {
-	runSequence('build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', done);
-});
+gulp.task('build', gulp.series('build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'pack-vendor-js', 'pack-vendor-css', 'move-vendor-fonts', 'sass-autoprefix-minify-css', 'hashsum', (done) => {
+	console.log('build, done');
+	done();
+}));
 
 /**
  * @name compile-and-build
@@ -519,9 +503,10 @@ gulp.task('build', (done) => {
  * @summary Compiles and builds client application.
  * @description Compiles and builds client application.
  */
-gulp.task('compile-and-build', (done) => {
-	runSequence('tsc', 'build', 'create-env', done);
-});
+gulp.task('compile-and-build', gulp.series('tsc', 'build', 'create-env', (done) => {
+	console.log('compile-and-build, done');
+	done();
+}));
 
 /**
  * @name compile-and-build-electron
@@ -529,9 +514,10 @@ gulp.task('compile-and-build', (done) => {
  * @summary Compiles and builds client application for electron environment.
  * @description Compiles and builds client application for electron environment.
  */
-gulp.task('compile-and-build-electron', (done) => {
-	runSequence('tsc', 'build', 'create-env-electron', done);
-});
+gulp.task('compile-and-build-electron', gulp.series('tsc', 'build', 'create-env-electron', (done) => {
+	console.log('compile-and-build-electron, done');
+	done();
+}));
 
 /**
  * @name rebuild-app
@@ -539,9 +525,10 @@ gulp.task('compile-and-build-electron', (done) => {
  * @summary Rebuilds (compiles and builds) client application.
  * @description Rebuilds (compiles and builds) client application.
  */
-gulp.task('rebuild-app', (done) => { // should be used in watcher to rebuild the app on *.ts file changes
-	runSequence('tslint', 'tsc', 'build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'hashsum', done);
-});
+gulp.task('rebuild-app', gulp.series('tslint', 'tsc', 'build-system-js-dependencies', 'build-system-js-lazy', 'build-system-js-app', 'hashsum', (done) => { // should be used in watcher to rebuild the app on *.ts file changes
+	console.log('rebuild-app, done');
+	done();
+}));
 
 /**
  * @name rebuildApp
@@ -571,15 +558,16 @@ gulp.task('spawn-rebuild-app', (done) => {
  * @see {@link module:gulpfile}
  * @see {@link module:build-system/tasks/watch}
  */
-gulp.task('default', (done) => {
-	runSequence('lint', 'compile-and-build', 'server', 'watch', done);
-});
+gulp.task('default', gulp.series('lint', 'compile-and-build', 'server', 'watch', (done) => {
+	console.log('default, done');
+	done();
+}));
 
 /**
  * @name electron-builds Electron build module import
  * @see {@link module:build-system/modules/electron-builds}
  */
-require('./build-system/modules/electron-builds')(gulp, runSequence, exec, cwd);
+require('./build-system/modules/electron-builds')(gulp, exec, cwd);
 
 process.on('exit', (code) => {
 	console.log(`PROCESS EXIT CODE ${code}`);

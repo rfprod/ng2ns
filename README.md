@@ -66,12 +66,28 @@ git clone https://github.com/rfprod/Ng2NS.git
 
 This will install the Ng2NS components into the `Ng2NS` directory in your projects folder.
 
-## Global dependencies
+### Global dependencies
 
-Install Typescript and Gulp CLI by executing
+Install Typescript, Gulp CLI, and NGD CLI by executing command
 
 ```
-sudo npm install -g gulp-cli typescript
+sudo npm install -g gulp-cli@latest typescript@latest @compodoc/ngd-cli@latest
+```
+
+or npm script
+
+```
+npm run install-global-dependencies
+```
+
+### Angular dependencies graph
+
+requires installation of global dependencies (see above)
+
+usage
+
+```
+npm run build-dependencies-graph
 ```
 
 ### Local Environment Variables

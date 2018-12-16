@@ -46,9 +46,13 @@ module.exports = (fs, done) => {
 				a {
 					text-transform: uppercase;
 				}
+				.graph-preview {
+					height: 100px;
+					width: 100px;
+				}
 			</style>
 		</head>
-		<body onload='fitIframeHeight()'>
+		<body>
 			<h1 class='flex-100'>Ng2NS Reports and Documentation Index</h1>
 
 			<h2 class='flex-100'>Reports</h2>
@@ -84,6 +88,36 @@ module.exports = (fs, done) => {
 				<span class='flex-item'>
 					<h3 class='flex-100'>Client</h3>
 					<a class='flex-item' href='typedoc/index.html' target=_blank>TypeDoc</a>
+				</span>
+
+				<h2 class='flex-100'>Angular Dependencies Graphs</h2>
+
+				<span class='flex-item'>
+					<h3 class='flex-100'>AppModule</h3>
+					<a class='flex-item' href='ngd/app/dependencies.html' title='AppModule dependencies graph' target=_blank>
+						<img src='ngd/app/dependencies.svg' class="graph-preview"></img>
+					</a>
+				</span>
+
+				<span class='flex-item'>
+					<h3 class='flex-100'>AppRoutingModule</h3>
+					<a class='flex-item' href='ngd/app-routing/dependencies.html' title='AppRoutingModule dependencies graph' target=_blank>
+						<img src='ngd/app-routing/dependencies.svg' class="graph-preview"></img>
+					</a>
+				</span>
+
+				<span class='flex-item'>
+					<h3 class='flex-100'>LazyModule</h3>
+					<a class='flex-item' href='ngd/lazy/dependencies.html' title='LazyModule dependencies graph' target=_blank>
+						<img src='ngd/lazy/dependencies.svg' class="graph-preview"></img>
+					</a>
+				</span>
+
+				<span class='flex-item'>
+					<h3 class='flex-100'>LazyRoutingModule</h3>
+					<a class='flex-item' href='ngd/lazy-routing/dependencies.html' title='LazyRoutingModule dependencies graph' target=_blank>
+						<img src='ngd/lazy-routing/dependencies.svg' class="graph-preview"></img>
+					</a>
 				</span>
 		</body>
 	</html>

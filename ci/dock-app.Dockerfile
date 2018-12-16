@@ -37,7 +37,7 @@ RUN apt-get -y update --fix-missing; \
 	sleep 1; \
 	Xvfb :99 -screen 0 1680x1024x8 -nolisten tcp & sleep 2; \
 	sleep 1; \
-	npm install -g gulp-cli typescript; \
+	npm install -g gulp-cli@lates typescript@latest @compodoc/ngd-cli@latest; \
 	npm update; \
 	npm rebuild node-sass --force; \
 	npm install --no-optional; \
@@ -51,11 +51,11 @@ RUN apt-get -y update --fix-missing; \
 	@angular/platform-browser @angular/platform-browser-dynamic @angular/router @types/core-js \
 	@types/hammerjs @types/jasmine @types/node components-font-awesome core-js d3 datamaps \
 	electron-squirrel-startup gulp gulp-autoprefixer gulp-concat gulp-cssnano gulp-eslint gulp-hashsum \
-	gulp-mocha gulp-plumber gulp-rename gulp-replace gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify \
+	gulp-mocha gulp-plumber gulp-rename gulp-sass gulp-systemjs-builder gulp-tslint gulp-uglify \
 	gulp-util hammerjs jasmine-core karma karma-redirect-preprocessor material-design-icon-fonts moment \
-	reflect-metadata run-sequence rxjs systemjs traceur tslib tslint typescript \
+	reflect-metadata rxjs systemjs traceur tslib tslint typescript \
 	zone.js --no-save --production --no-optional && \
-	npm uninstall -g gulp-cli typescript --save && \
+	npm uninstall -g gulp-cli typescript @compodoc/ngd-cli@latest --save && \
 	npm cache clean --force; \
 	sleep 1; \
 	rm -rf ./public/app/components ./public/app/directives ./public/app/interfaces ./public/app/modules \
