@@ -8,7 +8,7 @@ steps:
 - task: NodeTool@0
   displayName: 'Use specific node version'
   inputs:
-    version: '8.11.4'
+    versionSpec: '8.12.0'
 
 - script: |
     npm install -g npm@6.4.1

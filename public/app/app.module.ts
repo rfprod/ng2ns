@@ -43,18 +43,23 @@ import { ServerStaticDataService } from './services/server-static-data.service';
 import { PublicDataService } from './services/public-data.service';
 
 @NgModule({
-	declarations: [ AppComponent, AppNavComponent, AppInfoComponent, AppIntroComponent, AppLoginComponent,
-									DashboardDetailsComponent
-								],
-	imports 		: [ BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule, FormsModule, ReactiveFormsModule,
-									HttpClientModule, TranslateModule, AppRoutingModule
-								],
-	providers 	: [ { provide: APP_BASE_HREF, useValue: '/' }, { provide: LocationStrategy, useClass: PathLocationStrategy },
-									{ provide: 'Window', useValue: window }, CustomServiceWorkerService, CustomDeferredService,
-									CustomHttpHandlersService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral,
-									AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService
-								],
-	schemas 		: [ CUSTOM_ELEMENTS_SCHEMA ],
-	bootstrap 	: [ AppComponent ],
+	declarations: [
+		AppComponent, AppNavComponent, AppInfoComponent, AppIntroComponent, AppLoginComponent,
+		DashboardDetailsComponent
+	],
+	imports: [
+		BrowserModule, BrowserAnimationsModule, FlexLayoutModule, CustomMaterialModule,
+		FormsModule, ReactiveFormsModule, HttpClientModule, TranslateModule, AppRoutingModule
+	],
+	providers: [
+		{ provide: APP_BASE_HREF, useValue: '/' }, { provide: LocationStrategy, useClass: PathLocationStrategy },
+		{ provide: 'Window', useValue: window }, CustomServiceWorkerService, CustomDeferredService,
+		CustomHttpHandlersService, EventEmitterService, WebsocketService, UserService, AuthGuardGeneral,
+		AnonimousGuard, UsersListService, ServerStaticDataService, PublicDataService
+	],
+	schemas: [
+		CUSTOM_ELEMENTS_SCHEMA
+	],
+	bootstrap: [ AppComponent ]
 })
 export class AppModule {}

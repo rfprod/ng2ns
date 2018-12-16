@@ -54,8 +54,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	 */
 	private subscriptions: any[] = [];
 
+	/**
+	 * Indicates if app info should be shown.
+	 */
 	public showAppInfo: boolean = true;
 
+	/**
+	 * Indicates if spinner should be shown.
+	 */
 	public showSpinner: boolean = false;
 
 	/**
@@ -128,6 +134,9 @@ export class AppComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Lifecycle hook called on component initialization.
+	 */
 	public ngOnInit(): void {
 		console.log('ngOnInit: AppComponent initialized');
 
@@ -197,6 +206,9 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(sub);
 	}
 
+	/**
+	 * Lifecycle hook called on component destruction.
+	 */
 	public ngOnDestroy(): void {
 		console.log('ngOnDestroy: AppComponent destroyed');
 		this.emitter.emitEvent({serviceWorker: 'deinitialize'});
