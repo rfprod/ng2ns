@@ -30,6 +30,7 @@ Ng2NodeStarter - application core based on NodeJS and Angular.
   * `./public/img/` - images
   * `./public/webfonts/` - fonts
   * `./public/js/` - bundled scripts (production)
+* `./shell` - shell scripts used in the project except docker-related scripts
 * `./test` - client/server tests
   * `./test/client` - client tests
   * `./test/e2e` - end to end tests

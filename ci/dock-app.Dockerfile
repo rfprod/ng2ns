@@ -60,7 +60,7 @@ RUN apt-get -y update --fix-missing; \
 	sleep 1; \
 	rm -rf ./public/app/components ./public/app/directives ./public/app/interfaces ./public/app/modules \
 	./public/app/pipes ./public/app/services ./public/app/translate ./public/app/scss \
-	./test/client ./test/e2e ./build-system ./topoData && \
+	./test/client ./test/e2e ./build-system && \
 	find ./public/app/modules -type f -name "*.ts" -exec rm {} + && \
 	find ./public/app/modules -type f -name "*.scss" -exec rm {} + && \
 	find ./public/app -type f -name "*.ts" -exec rm {} + && \

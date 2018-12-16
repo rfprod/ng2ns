@@ -27,7 +27,7 @@
 		"clear-reports": "rm -rf ./logs/coverage ./logs/unit && echo '# coverage and unit reports cleared'",
 		"clear-ts-build": "find ./public/app/ ./test/client/ ./public/js/ -type f -name \"*.js\" -exec rm {} \\; && npm run clear-js-maps",
 		"client-coverage-report": "remap-istanbul -i ./logs/coverage/coverage-final.json -o ./logs/coverage/html-report -t html && echo '# coverage html-report generated, path: ./logs/coverage/html-report'",
-		"client-test": "npm run clear-reports; bash package-utils.sh mkdir-unit; gulp client-unit-test-single-run && npm run client-coverage-report",
+		"client-test": "npm run clear-reports; bash shell/package-utils.sh mkdir-unit; gulp client-unit-test-single-run && npm run client-coverage-report",
 		"doc": "npm run clear-doc && npm run logs-index && gulp jsdoc-server && gulp typedoc-client && npm run build-dependencies-graph",
 		"doc-docker": "npm run logs-index-docker && gulp jsdoc-server && gulp typedoc-client && npm run build-dependencies-graph",
 		"docker": "bash ci/docker.sh",

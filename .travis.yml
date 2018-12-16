@@ -19,7 +19,7 @@ cache:
     - "node_modules"
 # install global and local dependencies
 install:
-  - npm install -g gulp-cli typescript
+  - npm install -g gulp-cli@latest typescript@latest @compodoc/ngd-cli@latest
   - npm install
 # export required environment variables before running tests
 before_script:
@@ -36,3 +36,4 @@ script:
   - gulp server-test
   - gulp client-unit-test-single-run
   - gulp client-e2e-test
+  - gulp server-kill && exit 0
