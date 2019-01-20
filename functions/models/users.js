@@ -2,7 +2,7 @@
 
 /**
  * Users Mock module
- * @module app/mocks/users
+ * @module functions/mocks/users
  */
 
 module.exports = {

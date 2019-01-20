@@ -198,7 +198,7 @@ app.all('/*', function(req, res, next) {
  * @description Static, and dynamic server data
  * @see {@link module:app/utils/srv-info}
  */
-const SrvInfo = require('./app/utils/srv-info.js');
+const SrvInfo = require('./functions/utils/srv-info.js');
 /**
  * @name DBmocks
  * @constant
@@ -207,7 +207,7 @@ const SrvInfo = require('./app/utils/srv-info.js');
  * @see {@link module:app/mocks/users}
  */
 const DBmocks = {
-	users: require('./app/models/users').users()
+	users: require('./functions/models/users').users()
 };
 
 routes(app, cwd, fs, SrvInfo, DBmocks);
@@ -286,3 +286,8 @@ if (cluster.isMaster && process.env.DEV_MODE === 'true') {
 		console.log(`\n# > START > NO IP > Node.js listening on port ${port}...\n`);
 	});
 }
+
+/**
+ * Exports express application.
+ */
+module.exports.app = app;

@@ -1,9 +1,15 @@
 # dependencies
 node_modules/
+firebase/node_modules
+
+# firebase cache
+.firebase/
 
 # environment variables
 *.env
 .*.env
+functions/*.env
+functions/.*.env
 
 # logs
 *.log

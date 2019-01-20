@@ -20,10 +20,14 @@ function createEnvFile(fs, crypto, config, env, done) {
 		const hash = crypto.createHmac(config.hmacSHA, data.toString()).digest('hex');
 		console.log('BUILD_HASH', hash);
 		env += 'BUILD_HASH=' + hash + '\n';
-		fs.writeFile(config.envPath, env, (err) => {
+		fs.writeFile(config.envPath.express, env, (err) => {
 			if (err) throw err;
 			console.log('# > ENV > .env file was created');
-			done();
+			fs.writeFile(config.envPath.functions, env, (err) => {
+				if (err) throw err;
+				console.log('# > ENV > ./function/.env file was created');
+				done();
+			});
 		});
 	});
 }

@@ -1,0 +1,103 @@
+{
+	"hosting": {
+		"public": "",
+		"ignore": [
+			"firebase.json",
+			"**/.*",
+			"**/node_modules/**",
+			"build-system/**",
+			"ci/**",
+			"test/**",
+			"sessions/**",
+			"shell/**"
+		],
+		"headers": [
+			{
+				"source": "**",
+				"headers": [
+					{
+						"key": "Access-Control-Allow-Origin",
+						"value": "https://ngns-cfefa.firebaseapp.com"
+					},
+					{
+						"key": "Access-Control-Allow-Methods",
+						"value": "GET,PUT,POST,DELETE,OPTIONS,HEAD"
+					}
+				]
+			},
+			{
+				"source": "**/*.@(jpg|jpeg|gif|png|svg)",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "max-age=7200"
+					}
+				]
+			},
+			{
+				"source": "/",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "public, no-cache, no-store, must-ravalidate, max-age=0"
+					},
+					{
+						"key": "Expires",
+						"value": "-1"
+					},
+					{
+						"key": "Pragma",
+						"value": "no-cache"
+					}
+				]
+			},
+			{
+				"source": "/api/**",
+				"headers": [
+					{
+						"key": "Cache-Control",
+						"value": "public, no-cache, no-store, must-ravalidate, max-age=0"
+					},
+					{
+						"key": "Expires",
+						"value": "-1"
+					},
+					{
+						"key": "Pragma",
+						"value": "no-cache"
+					}
+				]
+			}
+		],
+		"rewrites": [
+			{
+				"source": "/api/app-diag/hashsum",
+				"function": "hashsum"
+			},
+			{
+				"source": "/api/app-diag/usage",
+				"function": "usage"
+			},
+			{
+				"source": "/api/app-diag/static",
+				"function": "static"
+			},
+			{
+				"source": "/api/app-diag/dynamic",
+				"function": "dynamic"
+			},
+			{
+				"source": "/api/users",
+				"function": "users"
+			},
+			{
+				"source": "/service-worker.js",
+				"destination": "/public/service-worker.js"
+			},
+			{
+				"source": "*",
+				"destination": "/public/index.html"
+			}
+		]
+	}
+}

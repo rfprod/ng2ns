@@ -104,7 +104,10 @@ module.exports = {
 	env: {
 		sha1SumsJson: './public/SHA1SUMS.json',
 		hmacSHA: 'sha256',
-		envPath: './.env',
+		envPath: {
+			express: './.env',
+			functions: './functions/.env'
+		},
 		port: '8080',
 		appUrl: 'http://localhost:8080',
 		appVersion: pkg.version

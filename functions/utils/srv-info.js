@@ -2,7 +2,7 @@
 
 /**
  * Server Info module
- * @module app/utils/srv-info
+ * @module functions/utils/srv-info
  */
 
 const os = require('os');
