@@ -17,7 +17,7 @@
 				"headers": [
 					{
 						"key": "Access-Control-Allow-Origin",
-						"value": "https://ngns-cfefa.firebaseapp.com"
+						"value": "https://ngns-cfefa.firebaseapp.com https://ngns-cfefa.web.app"
 					},
 					{
 						"key": "Access-Control-Allow-Methods",
